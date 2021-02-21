@@ -1,0 +1,24 @@
+## APIVersion: 100034
+## Title: |c9CD04CJack of all trades|r
+## Version: 1.4
+## AddOnVersion: 1
+## Author: @CyberOnEso
+## Description: |c9CD04CAutomatically adjusts your green champion bar depending on what you are doing, and sets it back to normal right after. |ceb1535Will not respec your champion points or charge you 3000 gold.
+## SavedVariables: JackOfAllTradesData
+## DependsOn: LibAddonMenu-2.0
+##
+## This Add-on is not created by, affiliated with or sponsored by ZeniMax Media
+## Inc. or its affiliates. The Elder Scrolls® and related logos are registered
+## trademarks or trademarks of ZeniMax Media Inc. in the United States and/or
+## other countries. All rights reserved
+##
+## You can read the full terms at https://account.elderscrollsonline.com/add-on-terms
+
+lang/en.lua
+lang/$(language).lua
+
+JackOfAllTrades.lua
+Skills.lua
+Events.lua
+Menu.lua
+SavedVariables.lua
