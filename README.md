@@ -2,18 +2,18 @@
 
 Automatically adjusts your green champion bar loadout depending on what you are attempting to achieve and restores back your old CP setup when you are done.
 
-Meticulous Dissasmebly
+# Meticulous Dissasmebly
 Whenever you interact with a crafting station that supports Meticulous Dissasmebly it will automatically be slotted onto your champion bar.
 Allowing you to refine materials with the buff always active.
 
-Treasure Hunter
+# Treasure Hunter
 Whenever you lockpick a chest it will automatically equip the Treasure Hunter skill.
 Ensuring your chests are always of the highest quality
 
-Gifted Rider & War Mount
+# Gifted Rider & War Mount
 Whenever you mount it will automatically equip the Gifted Rider & War Mount skills if you have them unlocked.
 
-Professional Upkeep
+# Professional Upkeep
 Whenever you interact with a merchant it will automatically equip Professional Upkeep, allowing you to always get the lowest repair cost on your gear.
 
 This addon will not respec your champion points, and will not charge you 3000 gold etc.
