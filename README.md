@@ -1,0 +1,2 @@
+# JackOfAllTrades
+ESO Addon
