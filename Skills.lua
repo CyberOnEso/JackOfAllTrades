@@ -121,9 +121,6 @@ local function AttemptToSlot(self)
 		}
 		self.oldSkill = JackOfAllTrades.CreateCPData(oldSkill)
 		JackOfAllTrades.savedVariables.oldSkill[self.skillIndexToReplace] = self.oldSkill.id
-		--local oldSkillId = championBar:GetSlot(self.skillIndexToReplace).championSkillData:GetId()
-		--JackOfAllTrades.savedVariables.oldSkillId = oldSkillId
-		--if JackOfAllTrades.savedVariables.debug then d(string.format("%s was set as the old skill for %s.", championBar:GetSlot(self.skillIndexToReplace).championSkillData:GetName(), self.name)) end
 	end
 	if self:slotCPNode() then
 		if JackOfAllTrades.savedVariables.debug then d(string.format("%s added", self.name)) end
@@ -166,7 +163,6 @@ function JackOfAllTrades.whenCombatEndsSlotSkill(eventcode, inCombat)
 			}
 			local oldSkill = JackOfAllTrades.CreateCPData(oldSkillData)
 			if oldSkill:AttemptToSlot() then successful = true end
-			--if JackOfAllTrades.AttemptToSlotId(skillId, skillIndex) then sucessful = true end
 		end
 	end
 	if successful == true then 

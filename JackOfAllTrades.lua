@@ -1,19 +1,4 @@
 -------------------------------------------------------------------------------------------------
--- 0.5 Changelog  --
--------------------------------------------------------------------------------------------------
--- When we are unable to slot CP points into a node, due to being in combat etc. We will attempt to slot the node again once combat ends.
--- Will remember which skill should be set back afer a reload ui! =D
--- Added method of finding names, discipline data automatically.
--- Improved localisation support
-
--------------------------------------------------------------------------------------------------
--- Todo list  --
--------------------------------------------------------------------------------------------------
--- Use ZOS CP class rather than your own???? 
--- skillIndexToReplace; automatically find out which skill to replace. Maybe add a menu option??
--- Flanking passive warning?
-
--------------------------------------------------------------------------------------------------
 -- Load in global variables --
 -------------------------------------------------------------------------------------------------
 JackOfAllTrades = {
@@ -28,6 +13,8 @@ JackOfAllTrades.colours = {
 	author = "|c235AC4"
 }
 
+local name = JackOfAllTrades.name
+
 -------------------------------------------------------------------------------------------------
 -- When player is activated --
 -------------------------------------------------------------------------------------------------
@@ -36,14 +23,13 @@ function JackOfAllTrades.playerActivated(eventcode)
 		return
 	end
 	JackOfAllTrades.OnReloadUI()
-	EVENT_MANAGER:UnregisterForEvent(JackOfAllTrades.name, EVENT_PLAYER_ACTIVATED)
+	EVENT_MANAGER:UnregisterForEvent(name, EVENT_PLAYER_ACTIVATED)
 end
 
 -------------------------------------------------------------------------------------------------
 -- When addon is first loaded --
 -------------------------------------------------------------------------------------------------
 function JackOfAllTrades.AddonLoaded(eventcode, addonName)
-	local name = JackOfAllTrades.name
 	if addonName ~= name then return end
 
 	if GetAPIVersion() < JackOfAllTrades.requiredAPIVersion then
