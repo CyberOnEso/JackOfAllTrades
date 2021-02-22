@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------------------------
--- 1.5 Changelog  --
+-- 0.5 Changelog  --
 -------------------------------------------------------------------------------------------------
 -- When we are unable to slot CP points into a node, due to being in combat etc. We will attempt to slot the node again once combat ends.
 -- Will remember which skill should be set back afer a reload ui! =D
@@ -19,7 +19,7 @@
 JackOfAllTrades = {
 	name = "JackOfAllTrades",
 	author = '@CyberOnEso',
-	version = '1.4',
+	version = '0.5',
 	requiredAPIVersion = 100034
 }
 

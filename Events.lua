@@ -14,7 +14,7 @@ end
 -- Meticulous Dissambly  --
 -------------------------------------------------------------------------------------------------
 function JackOfAllTrades.openCraftingStation(eventcode, station)
-	-- Check if we are a station that MeticulousDisassembly will affect
+	-- Check if we are a station that Meticulous Disassembly will affect
 	if not has_value(station, JackOfAllTrades.meticulousDisassemblyStations) then return end
 	if JackOfAllTrades.meticulousDisassembly:AttemptToSlot() == 1 then 
 		if JackOfAllTrades.savedVariables.warnings.meticulousDisassembly then CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.warnings.colour .. zo_strformat(SI_JACK_OF_ALL_TRADES_NOT_ENOUGH_POINTS_WARNING, JackOfAllTrades.meticulousDissasembly.name, GetString(SI_JACK_OF_ALL_TRADES_METICULOUS_DISASSEMBLY_BENEFIT))) end
@@ -22,7 +22,7 @@ function JackOfAllTrades.openCraftingStation(eventcode, station)
 end
 
 function JackOfAllTrades.closeCraftingStation(eventcode, station)
-	-- Check if we are a station that MeticulousDisassembly will affect
+	-- Check if we are a station that Meticulous Disassembly will affect
 	if not has_value(station, JackOfAllTrades.meticulousDisassemblyStations) then return end
 	JackOfAllTrades.meticulousDisassembly:AttemptToReturnSlot()
 end
