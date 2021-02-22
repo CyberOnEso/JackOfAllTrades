@@ -2,7 +2,6 @@
 -- Variable Version, update if we need to overwrite the users files --
 -------------------------------------------------------------------------------------------------
 JackOfAllTrades.variableVersion = 1
-
 -------------------------------------------------------------------------------------------------
 -- Default Data --
 -------------------------------------------------------------------------------------------------
@@ -20,8 +19,10 @@ JackOfAllTrades.defaultData = {
 -- Load in the saved variables  --
 -------------------------------------------------------------------------------------------------
 function JackOfAllTrades.InitSavedVariables()
+	-------------------------------------------------------------------------------------------------
+	-- Load in the savedVariables --
+	-------------------------------------------------------------------------------------------------
 	JackOfAllTrades.savedVariables = ZO_SavedVars:NewAccountWide("JackOfAllTradesData", JackOfAllTrades.variableVersion, nil, JackOfAllTrades.defaultData)
-
 	-------------------------------------------------------------------------------------------------
 	-- If we reloadui whilst in combat, we still need to return the skill after combat ends --
 	-------------------------------------------------------------------------------------------------

@@ -17,7 +17,7 @@ end
 -------------------------------------------------------------------------------------------------
 function JackOfAllTrades.InitMenu()
     local LAM = LibAddonMenu2
-    -- Initilize the menu if LAM is working correctly
+    -- If for whatever reason we can't find LAM then just don't initialize the menu 
     if LAM == nil then return end
     local panelName = "JackOfAllTradesSettings"
     local panelData = {
