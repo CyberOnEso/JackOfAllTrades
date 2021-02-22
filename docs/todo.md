@@ -1,0 +1,4 @@
+- [ ] Create classes when we need to slot the skill, not before.
+- [ ] Use ZOS CP class rather than our own?
+- [ ] skillIndexToReplace; automatically find out which skill to replace. Maybe add a menu option??
+- [ ] Flanking passive warning?
