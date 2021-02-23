@@ -13,7 +13,7 @@ JackOfAllTrades.SkillData = {
 	treasureHunter = {
 		id = 79,
 		skillIndexToReplace = 1
-	}
+	},
 	-------------------------------------------------------------------------------------------------
 	-- Constants for Gifted Rider --
 	-------------------------------------------------------------------------------------------------
@@ -80,6 +80,16 @@ local CP = GetCPConstant()
 local championBar = GetChampionBar()
 local CPData = GetCPDataConstant()
 
+local _, totalChampionBarSlots = GetAssignableChampionBarStartAndEndSlots()
+
+local function getNumDisciplines()
+	local numDisciplines = 0
+	for _ in pairs(championBar.disciplineCallouts) do numDisciplines = numDisciplines + 1 end
+	return numDisciplines
+end
+
+local numDisciplines = getNumDisciplines()
+
 -------------------------------------------------------------------------------------------------
 -- Main CP Utility Functions  --
 -------------------------------------------------------------------------------------------------
@@ -87,7 +97,7 @@ local function isCPSkillSlotted(self)
 	-- Gets either 1, 5, or 9 depending on which discipline we want to check in.
 	local firstIndex = championBar.firstSlotPerDiscipline[GetChampionDisciplineId(self.disciplineIndex)]
 	-- Itterates between the firstIndex of the segment of the bar we want to check and the last
-	for i=firstIndex, firstIndex+(JackOfAllTrades.totalChampionBarSlots/JackOfAllTrades.numDisciplines) do
+	for i=firstIndex, firstIndex+(totalChampionBarSlots/numDisciplines) do
 		if championBar:GetSlot(i).championSkillData then
 			if championBar:GetSlot(i).championSkillData:GetId() == self.id then
 				return true
@@ -216,7 +226,7 @@ local function isCPSkillSlotted(self)
 	-- Gets either 1, 5, or 9 depending on which discipline we want to check in.
 	local firstIndex = championBar.firstSlotPerDiscipline[GetChampionDisciplineId(self.disciplineIndex)]
 	-- Itterates between the firstIndex of the segment of the bar we want to check and the last
-	for i=firstIndex, firstIndex+(JackOfAllTrades.totalChampionBarSlots/JackOfAllTrades.numDisciplines) do
+	for i=firstIndex, firstIndex+(totalChampionBarSlots/numDisciplines) do
 		if championBar:GetSlot(i).championSkillData then
 			if championBar:GetSlot(i).championSkillData:GetId() == self.id then
 				return true
@@ -231,7 +241,6 @@ end
 -------------------------------------------------------------------------------------------------
 function JackOfAllTrades.CreateCPData(championSkillData)
 	return {
-	-- Data from the table above
 	name = GetChampionSkillName(championSkillData.id),
 	id = championSkillData.id,
 	disciplineIndex = CPData:GetChampionSkillData(championSkillData.id):GetChampionDisciplineData().disciplineIndex,
@@ -277,13 +286,6 @@ end
 -- Setup some constants and load in the skill  --
 -------------------------------------------------------------------------------------------------
 function JackOfAllTrades.InitSkills()
-	-- Load in constants that 'may' change between patches --
-	_, JackOfAllTrades.totalChampionBarSlots = GetAssignableChampionBarStartAndEndSlots()
-
-	local numDisciplines = 0
-	for _ in pairs(championBar.disciplineCallouts) do numDisciplines = numDisciplines + 1 end
-	JackOfAllTrades.numDisciplines = numDisciplines
-
 	-- Load the stations that Meticulous Disassembly works with globally so we can check for it in Events.lua
 	JackOfAllTrades.meticulousDisassemblyStations =  JackOfAllTrades.SkillData.meticulousDisassembly.stations
 
@@ -291,10 +293,17 @@ function JackOfAllTrades.InitSkills()
 end
 
 -------------------------------------------------------------------------------------------------
--- Workaround, but if it works it's not a hack  --
+-- Workarounds, but if they work it's not a hack  --
 -------------------------------------------------------------------------------------------------
 function JackOfAllTrades.OnReloadUI()
 	-- This is work around because after a reload UI the championBar will not initilize until you open the CP menu
 	-- Weirdly, it will initilize on first logon.
 	CP:PerformDeferredInitializationShared()
 end
+
+-- Fix for a bug introduced in 6.3.4 where it will throw an error whenever we open the CP menu after allocating a CP node not via the GUI
+-- This will, however, disable the weird camera wobble whenever you confirm a skill... which is good? As it looks terrible
+ZO_PreHook(CHAMPION_PERKS, "OnUpdate", function() 
+	CHAMPION_PERKS.firstStarConfirm = false
+	return false
+end)

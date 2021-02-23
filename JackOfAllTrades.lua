@@ -39,11 +39,11 @@ function JackOfAllTrades.AddonLoaded(eventcode, addonName)
 
 	JackOfAllTrades.InitSavedVariables()
 
-	JackOfAllTrades.InitEvents()
-
 	JackOfAllTrades.InitSkills()
 
-	EVENT_MANAGER:UnregisterForEvent(name, EVENT_ADD_ON_LOADED)
+	JackOfAllTrades.InitEvents()
 
 	JackOfAllTrades.InitMenu()
+
+	EVENT_MANAGER:UnregisterForEvent(name, EVENT_ADD_ON_LOADED)
 end
