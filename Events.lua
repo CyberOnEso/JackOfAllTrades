@@ -1,3 +1,4 @@
+local name = JackOfAllTrades.name
 -------------------------------------------------------------------------------------------------
 -- Utility to check if table has value  --
 -------------------------------------------------------------------------------------------------
@@ -71,15 +72,15 @@ local function RegisterEvents()
 	-------------------------------------------------------------------------------------------------
 	-- Register for Meticulous Dissambly Events  --
 	-------------------------------------------------------------------------------------------------
-	EVENT_MANAGER:RegisterForEvent(JackOfAllTrades.name, EVENT_CRAFTING_STATION_INTERACT, JackOfAllTrades.openCraftingStation)
-	EVENT_MANAGER:RegisterForEvent(JackOfAllTrades.name, EVENT_END_CRAFTING_STATION_INTERACT, JackOfAllTrades.closeCraftingStation)
+	EVENT_MANAGER:RegisterForEvent(name, EVENT_CRAFTING_STATION_INTERACT, JackOfAllTrades.openCraftingStation)
+	EVENT_MANAGER:RegisterForEvent(name, EVENT_END_CRAFTING_STATION_INTERACT, JackOfAllTrades.closeCraftingStation)
 	-------------------------------------------------------------------------------------------------
 	-- Register for Treasure Hunter Events  --
 	-------------------------------------------------------------------------------------------------
-	EVENT_MANAGER:RegisterForEvent(JackOfAllTrades.name,  EVENT_BEGIN_LOCKPICK, JackOfAllTrades.startLockpicking)
-	EVENT_MANAGER:RegisterForEvent(JackOfAllTrades.name,  EVENT_LOCKPICK_BROKE, JackOfAllTrades.stopLockpicking)
-	EVENT_MANAGER:RegisterForEvent(JackOfAllTrades.name,  EVENT_LOCKPICK_FAILED, JackOfAllTrades.stopLockpicking)
-	EVENT_MANAGER:RegisterForEvent(JackOfAllTrades.name,  EVENT_LOCKPICK_SUCCESS, JackOfAllTrades.stopLockpicking)
+	EVENT_MANAGER:RegisterForEvent(name,  EVENT_BEGIN_LOCKPICK, JackOfAllTrades.startLockpicking)
+	EVENT_MANAGER:RegisterForEvent(name,  EVENT_LOCKPICK_BROKE, JackOfAllTrades.stopLockpicking)
+	EVENT_MANAGER:RegisterForEvent(name,  EVENT_LOCKPICK_FAILED, JackOfAllTrades.stopLockpicking)
+	EVENT_MANAGER:RegisterForEvent(name,  EVENT_LOCKPICK_SUCCESS, JackOfAllTrades.stopLockpicking)
 	-------------------------------------------------------------------------------------------------
 	-- Register for Gifted Rider Events  --
 	-------------------------------------------------------------------------------------------------

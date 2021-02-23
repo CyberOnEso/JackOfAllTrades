@@ -18,7 +18,7 @@ lang/en.lua
 lang/$(language).lua
 
 JackOfAllTrades.lua
+SavedVariables.lua
 Skills.lua
 Events.lua
 Menu.lua
-SavedVariables.lua
