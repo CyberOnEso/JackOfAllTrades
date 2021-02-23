@@ -48,7 +48,7 @@ function JackOfAllTrades.Initialize()
 
 	JackOfAllTrades.InitEvents()
 
-	JackOfAllTrades.InitMenu()
+	JackOfAllTrades:InitMenu()
 
 	EVENT_MANAGER:UnregisterForEvent(name, EVENT_ADD_ON_LOADED)
 end

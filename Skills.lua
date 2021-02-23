@@ -78,12 +78,6 @@ local function AttemptToSlot(self)
 	-- If they have a node already in that slot save it so we can restore it later.
 	local oldSkillData = championBar:GetSlot(self.skillIndexToReplace).championSkillData
 	if oldSkillData then
-		--[[local oldSkill = {
-			id = championBar:GetSlot(self.skillIndexToReplace).championSkillData:GetId(),
-			skillIndexToReplace = self.skillIndexToReplace,
-			isOldSkill = true
-		}
-		self.oldSkill = JackOfAllTrades.CreateCPData(oldSkill)--]]
 		JackOfAllTrades.savedVariables.oldSkill[self.skillIndexToReplace] = oldSkillData:GetId()
 	end
 	-- Use a pcall for this in the future
@@ -213,8 +207,6 @@ function JackOfAllTrades.CreateCPData(championSkillData)
 	disciplineIndex = CPData:GetChampionSkillData(championSkillData.id):GetChampionDisciplineData().disciplineIndex,
 	requiredPointsToSlot = requiredPointsToSlot(championSkillData.Id),
 	skillIndexToReplace = championSkillData.skillIndexToReplace,
-	--oldSkill = nil,
-	--isOldSkill = championSkillData.isOldSkill,
 
 	-- Assign the utility functions
 	AttemptToSlot = AttemptToSlot,
