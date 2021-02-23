@@ -5,7 +5,7 @@ JackOfAllTrades.variableVersion = 1
 -------------------------------------------------------------------------------------------------
 -- Default Data --
 -------------------------------------------------------------------------------------------------
-JackOfAllTrades.defaultData = {
+local defaultData = {
 	debug = false,
 	warnings = {
 		colour = "|ce60000",
@@ -22,7 +22,7 @@ function JackOfAllTrades.InitSavedVariables()
 	-------------------------------------------------------------------------------------------------
 	-- Load in the savedVariables --
 	-------------------------------------------------------------------------------------------------
-	JackOfAllTrades.savedVariables = ZO_SavedVars:NewAccountWide("JackOfAllTradesData", JackOfAllTrades.variableVersion, nil, JackOfAllTrades.defaultData)
+	JackOfAllTrades.savedVariables = ZO_SavedVars:NewAccountWide("JackOfAllTradesData", JackOfAllTrades.variableVersion, nil, defaultData)
 	-------------------------------------------------------------------------------------------------
 	-- If we reloadui whilst in combat, we still need to return the skill after combat ends --
 	-------------------------------------------------------------------------------------------------

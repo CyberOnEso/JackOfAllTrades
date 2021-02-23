@@ -1,4 +1,53 @@
 local name = JackOfAllTrades.name
+
+local EM = EVENT_MANAGER
+
+local skillData = {
+	-------------------------------------------------------------------------------------------------
+	-- Constants for Meticulous Dissambly --
+	-------------------------------------------------------------------------------------------------
+	meticulousDisassembly = {
+		id = 83,
+		skillIndexToReplace = 1,
+		stations = {1,2,6,7}
+	},
+	-------------------------------------------------------------------------------------------------
+	-- Constants for Treasure Hunter --
+	-------------------------------------------------------------------------------------------------
+	treasureHunter = {
+		id = 79,
+		skillIndexToReplace = 1
+	},
+	-------------------------------------------------------------------------------------------------
+	-- Constants for Gifted Rider --
+	-------------------------------------------------------------------------------------------------
+	giftedRider = {
+		id = 92,
+		skillIndexToReplace = 1
+	},
+	-------------------------------------------------------------------------------------------------
+	-- Constants for War Mount --
+	-------------------------------------------------------------------------------------------------
+	warMount = {
+		id = 82,
+		skillIndexToReplace = 2
+	},
+	-------------------------------------------------------------------------------------------------
+	-- Constants for Professional Upkeep --
+	-------------------------------------------------------------------------------------------------
+	professionalUpkeep = {
+		id = 1,
+		skillIndexToReplace = 1
+	},
+	-------------------------------------------------------------------------------------------------
+	-- Constants for Sustaining Shadows --
+	-------------------------------------------------------------------------------------------------
+	sustainingShadows = {
+		id = 65,
+		skillIndexToReplace = 1
+	}
+}
+
 -------------------------------------------------------------------------------------------------
 -- Utility to check if table has value  --
 -------------------------------------------------------------------------------------------------
@@ -12,33 +61,55 @@ local function has_value (val, tab)
 end
 
 -------------------------------------------------------------------------------------------------
+-- Load in skill data  --
+-------------------------------------------------------------------------------------------------
+local meticulousDisassembly = JackOfAllTrades.CreateCPData(skillData.meticulousDisassembly)
+local treasureHunter = JackOfAllTrades.CreateCPData(skillData.treasureHunter)
+local giftedRider = JackOfAllTrades.CreateCPData(skillData.giftedRider)
+local warMount = JackOfAllTrades.CreateCPData(skillData.warMount)
+local professionalUpkeep = JackOfAllTrades.CreateCPData(skillData.professionalUpkeep)
+
+-------------------------------------------------------------------------------------------------
+-- Load in skill data  --
+-------------------------------------------------------------------------------------------------
+function JackOfAllTrades.GetSkillId(str)
+	if str == "Meticulous Disassembly" then return skillData.meticulousDisassembly.id 
+	elseif str == "Treasure Hunter" then return skillData.treasureHunter.id
+	elseif str == "Gifted Rider" then return skillData.giftedRider.id
+	elseif str == "War Mount" then return skillData.warMount.id
+	elseif str == "Professional Upkeep" then return skillData.professionalUpkeep.id
+	elseif str == "Sustaining Shadows" then return skillData.sustainingShadows.id
+	end
+end
+
+-------------------------------------------------------------------------------------------------
 -- Meticulous Dissambly  --
 -------------------------------------------------------------------------------------------------
 function JackOfAllTrades.openCraftingStation(eventcode, station)
 	-- Check if we are a station that Meticulous Disassembly will affect
-	if not has_value(station, JackOfAllTrades.meticulousDisassemblyStations) then return end
-	if JackOfAllTrades.meticulousDisassembly:AttemptToSlot() == 1 then 
+	if not has_value(station, skillData.meticulousDisassembly.stations) then return end
+	if meticulousDisassembly:AttemptToSlot() == 1 then 
 		if JackOfAllTrades.savedVariables.warnings.meticulousDisassembly then CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.warnings.colour .. zo_strformat(SI_JACK_OF_ALL_TRADES_NOT_ENOUGH_POINTS_WARNING, JackOfAllTrades.meticulousDissasembly.name, GetString(SI_JACK_OF_ALL_TRADES_METICULOUS_DISASSEMBLY_BENEFIT))) end
 	end
 end
 
 function JackOfAllTrades.closeCraftingStation(eventcode, station)
 	-- Check if we are a station that Meticulous Disassembly will affect
-	if not has_value(station, JackOfAllTrades.meticulousDisassemblyStations) then return end
-	JackOfAllTrades.meticulousDisassembly:AttemptToReturnSlot()
+	if not has_value(station, skillData.meticulousDisassembly.stations) then return end
+	meticulousDisassembly:AttemptToReturnSlot()
 end
 
 -------------------------------------------------------------------------------------------------
 -- Treasure Hunter  --
 -------------------------------------------------------------------------------------------------
 function JackOfAllTrades.startLockpicking(eventcode)
-	if JackOfAllTrades.treasureHunter:AttemptToSlot() == 1 then
+	if treasureHunter:AttemptToSlot() == 1 then
 		if JackOfAllTrades.savedVariables.warnings.treasureHunter then CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.warnings.colour .. zo_strformat(SI_JACK_OF_ALL_TRADES_NOT_ENOUGH_POINTS_WARNING, JackOfAllTrades.treasureHunter.name, GetString(SI_JACK_OF_ALL_TRADES_TREASURE_HUNTER_BENEFIT))) end
 	end
 end
 
 function JackOfAllTrades.stopLockpicking(eventcode)
-	JackOfAllTrades.treasureHunter:AttemptToReturnSlot()
+	treasureHunter:AttemptToReturnSlot()
 end
 
 -------------------------------------------------------------------------------------------------
@@ -46,11 +117,11 @@ end
 -------------------------------------------------------------------------------------------------
 function JackOfAllTrades.mountStateChanged(eventcode, mounted)
 	if mounted then
-		JackOfAllTrades.giftedRider:AttemptToSlot()
-		JackOfAllTrades.warMount:AttemptToSlot()
+		giftedRider:AttemptToSlot()
+		warMount:AttemptToSlot()
 	else
-		JackOfAllTrades.giftedRider:AttemptToReturnSlot()
-		JackOfAllTrades.warMount:AttemptToReturnSlot()
+		giftedRider:AttemptToReturnSlot()
+		warMount:AttemptToReturnSlot()
 	end
 end
 
@@ -58,38 +129,33 @@ end
 -- Professional Upkeep  --
 -------------------------------------------------------------------------------------------------
 function JackOfAllTrades.openStore(eventcode)
-	JackOfAllTrades.professionalUpkeep:AttemptToSlot()
+	professionalUpkeep:AttemptToSlot()
 end
 
 function JackOfAllTrades.closeStore(eventcode)
-	JackOfAllTrades.professionalUpkeep:AttemptToReturnSlot()
+	professionalUpkeep:AttemptToReturnSlot()
 end
 
 -------------------------------------------------------------------------------------------------
 -- Register for events, we only want to do so if the API version is high enough  --
 -------------------------------------------------------------------------------------------------
 local function RegisterEvents()
-	-------------------------------------------------------------------------------------------------
-	-- Register for Meticulous Dissambly Events  --
-	-------------------------------------------------------------------------------------------------
-	EVENT_MANAGER:RegisterForEvent(name, EVENT_CRAFTING_STATION_INTERACT, JackOfAllTrades.openCraftingStation)
-	EVENT_MANAGER:RegisterForEvent(name, EVENT_END_CRAFTING_STATION_INTERACT, JackOfAllTrades.closeCraftingStation)
-	-------------------------------------------------------------------------------------------------
-	-- Register for Treasure Hunter Events  --
-	-------------------------------------------------------------------------------------------------
-	EVENT_MANAGER:RegisterForEvent(name,  EVENT_BEGIN_LOCKPICK, JackOfAllTrades.startLockpicking)
-	EVENT_MANAGER:RegisterForEvent(name,  EVENT_LOCKPICK_BROKE, JackOfAllTrades.stopLockpicking)
-	EVENT_MANAGER:RegisterForEvent(name,  EVENT_LOCKPICK_FAILED, JackOfAllTrades.stopLockpicking)
-	EVENT_MANAGER:RegisterForEvent(name,  EVENT_LOCKPICK_SUCCESS, JackOfAllTrades.stopLockpicking)
-	-------------------------------------------------------------------------------------------------
-	-- Register for Gifted Rider Events  --
-	-------------------------------------------------------------------------------------------------
-	EVENT_MANAGER:RegisterForEvent(JackOfAllTrades.name, EVENT_MOUNTED_STATE_CHANGED, JackOfAllTrades.mountStateChanged)
-	-------------------------------------------------------------------------------------------------
-	-- Register for Professional Upkeep Events  --
-	-------------------------------------------------------------------------------------------------
-	EVENT_MANAGER:RegisterForEvent(JackOfAllTrades.name, EVENT_OPEN_STORE, JackOfAllTrades.openStore)
-	EVENT_MANAGER:RegisterForEvent(JackOfAllTrades.name, EVENT_CLOSE_STORE, JackOfAllTrades.closeStore)
+	-- Meticulous Dissambly Events
+	EM:RegisterForEvent(name, EVENT_CRAFTING_STATION_INTERACT, JackOfAllTrades.openCraftingStation)
+	EM:RegisterForEvent(name, EVENT_END_CRAFTING_STATION_INTERACT, JackOfAllTrades.closeCraftingStation)
+	
+	-- Treasure Hunter Events
+	EM:RegisterForEvent(name,  EVENT_BEGIN_LOCKPICK, JackOfAllTrades.startLockpicking)
+	EM:RegisterForEvent(name,  EVENT_LOCKPICK_BROKE, JackOfAllTrades.stopLockpicking)
+	EM:RegisterForEvent(name,  EVENT_LOCKPICK_FAILED, JackOfAllTrades.stopLockpicking)
+	EM:RegisterForEvent(name,  EVENT_LOCKPICK_SUCCESS, JackOfAllTrades.stopLockpicking)
+
+	-- Gifted Rider Events
+	EM:RegisterForEvent(JackOfAllTrades.name, EVENT_MOUNTED_STATE_CHANGED, JackOfAllTrades.mountStateChanged)
+
+	-- Professional Upkeep Events
+	EM:RegisterForEvent(JackOfAllTrades.name, EVENT_OPEN_STORE, JackOfAllTrades.openStore)
+	EM:RegisterForEvent(JackOfAllTrades.name, EVENT_CLOSE_STORE, JackOfAllTrades.closeStore)
 end
 
 
@@ -100,5 +166,5 @@ end
 -------------------------------------------------------------------------------------------------
 -- Register for General Events  --
 -------------------------------------------------------------------------------------------------
-EVENT_MANAGER:RegisterForEvent(JackOfAllTrades.name, EVENT_ADD_ON_LOADED, JackOfAllTrades.AddonLoaded)
-EVENT_MANAGER:RegisterForEvent(JackOfAllTrades.name, EVENT_PLAYER_ACTIVATED, JackOfAllTrades.playerActivated)
+EM:RegisterForEvent(JackOfAllTrades.name, EVENT_ADD_ON_LOADED, JackOfAllTrades.AddonLoaded)
+EM:RegisterForEvent(JackOfAllTrades.name, EVENT_PLAYER_ACTIVATED, JackOfAllTrades.playerActivated)

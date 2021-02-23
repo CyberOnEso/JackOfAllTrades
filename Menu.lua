@@ -45,14 +45,14 @@ function JackOfAllTrades.InitMenu()
     	},
         {
             type = "checkbox",
-            name = GetChampionSkillName(JackOfAllTrades.SkillData.meticulousDisassembly.id),
+            name = GetChampionSkillName(JackOfAllTrades.GetSkillId("Meticulous Disassembly")),
             getFunc = function() return JackOfAllTrades.savedVariables.warnings.meticulousDisassembly end,
             setFunc = function(value) JackOfAllTrades.savedVariables.warnings.meticulousDisassembly = value end,
             width = "full"
         },
         {
             type = "checkbox",
-            name = GetChampionSkillName(JackOfAllTrades.SkillData.treasureHunter.id),
+            name = GetChampionSkillName(JackOfAllTrades.GetSkillId("Treasure Hunter")),
             getFunc = function() return JackOfAllTrades.savedVariables.warnings.treasureHunter end,
             setFunc = function(value) JackOfAllTrades.savedVariables.warnings.treasureHunter = value end,
             width = "full"

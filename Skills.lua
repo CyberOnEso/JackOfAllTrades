@@ -1,49 +1,3 @@
-JackOfAllTrades.SkillData = {
-	-------------------------------------------------------------------------------------------------
-	-- Constants for Meticulous Dissambly --
-	-------------------------------------------------------------------------------------------------
-	meticulousDisassembly = {
-		id = 83,
-		skillIndexToReplace = 1,
-		stations = {1,2,6,7}
-	},
-	-------------------------------------------------------------------------------------------------
-	-- Constants for Treasure Hunter --
-	-------------------------------------------------------------------------------------------------
-	treasureHunter = {
-		id = 79,
-		skillIndexToReplace = 1
-	},
-	-------------------------------------------------------------------------------------------------
-	-- Constants for Gifted Rider --
-	-------------------------------------------------------------------------------------------------
-	giftedRider = {
-		id = 92,
-		skillIndexToReplace = 1
-	},
-	-------------------------------------------------------------------------------------------------
-	-- Constants for War Mount --
-	-------------------------------------------------------------------------------------------------
-	warMount = {
-		id = 82,
-		skillIndexToReplace = 2
-	},
-	-------------------------------------------------------------------------------------------------
-	-- Constants for Professional Upkeep --
-	-------------------------------------------------------------------------------------------------
-	professionalUpkeep = {
-		id = 1,
-		skillIndexToReplace = 1
-	},
-	-------------------------------------------------------------------------------------------------
-	-- Constants for Sustaining Shadows --
-	-------------------------------------------------------------------------------------------------
-	sustainingShadows = {
-		id = 65,
-		skillIndexToReplace = 1
-	}
-}
-
 -------------------------------------------------------------------------------------------------
 -- Only return the CP constants if we are using CP 2.0 --
 -------------------------------------------------------------------------------------------------
@@ -111,27 +65,28 @@ end
 -- If we need to slot the node and that we have enough points into the skill then slot it  --
 -------------------------------------------------------------------------------------------------
 local function AttemptToSlot(self)
-	-- If the skill is already slotten then we don't need to do anything.
+	-- If the skill is already slotted then we don't need to do anything.
 	if self:isCPSkillSlotted() then 
 		if JackOfAllTrades.savedVariables.debug then d(string.format("%s is already slotted so we don't need to do anything.", self.name)) end
 		return true 
 	end
-	-- We don't want to redistrube someone's champion points and make them spend 3000 gold everytime they interact with a crafting station, that is not a good idea at all.
-	--if GetNumPointsSpentOnChampionSkill(self.id) < self.requiredPoints then 
+	-- We don't want to redistrube someone's champion points and make them spend 3000 gold everytime they interact with a crafting station.
 	if not CPData:GetChampionSkillData(self.id):CanBeSlotted() then
 		if JackOfAllTrades.savedVariables.debug then d(string.format("You not have enough points in %s for us to slot it.", self.name)) end
-		return 1 
+		return 1 -- In case they do not have enough points into the node, we can maybe use a pcall for this.
 	end
 	-- If they have a node already in that slot save it so we can restore it later.
-	if championBar:GetSlot(self.skillIndexToReplace).championSkillData and not self.isOldSkill then
-		local oldSkill = {
+	local oldSkillData = championBar:GetSlot(self.skillIndexToReplace).championSkillData
+	if oldSkillData then
+		--[[local oldSkill = {
 			id = championBar:GetSlot(self.skillIndexToReplace).championSkillData:GetId(),
 			skillIndexToReplace = self.skillIndexToReplace,
 			isOldSkill = true
 		}
-		self.oldSkill = JackOfAllTrades.CreateCPData(oldSkill)
-		JackOfAllTrades.savedVariables.oldSkill[self.skillIndexToReplace] = self.oldSkill.id
+		self.oldSkill = JackOfAllTrades.CreateCPData(oldSkill)--]]
+		JackOfAllTrades.savedVariables.oldSkill[self.skillIndexToReplace] = oldSkillData:GetId()
 	end
+	-- Use a pcall for this in the future
 	if self:slotCPNode() then
 		if JackOfAllTrades.savedVariables.debug then d(string.format("%s added", self.name)) end
 		return true
@@ -146,7 +101,12 @@ end
 local function AttemptToReturnSlot(self)
 	if JackOfAllTrades.savedVariables.oldSkill[self.skillIndexToReplace] then
 		-- CreateCPData for the old skill we want to slot, then attempt to slot it
-		if JackOfAllTrades.CreateCPData({id = JackOfAllTrades.savedVariables.oldSkill[self.skillIndexToReplace], skillIndexToReplace = self.skillIndexToReplace}):AttemptToSlot() then
+		local oldSkill = {
+			id = JackOfAllTrades.savedVariables.oldSkill[self.skillIndexToReplace], 
+			skillIndexToReplace = self.skillIndexToReplace
+		}
+		-- Use a pcall in the future
+		if JackOfAllTrades.CreateCPData(oldSkill):AttemptToSlot() then
 			if JackOfAllTrades.savedVariables.debug then d(string.format("%s removed.", GetChampionSkillName(self.id))) end
 			-- Now we know the swap was successful we can remove the old skill from savedVariables.
 			JackOfAllTrades.savedVariables.oldSkill[self.skillIndexToReplace] = nil
@@ -163,7 +123,9 @@ end
 -------------------------------------------------------------------------------------------------
 function JackOfAllTrades.whenCombatEndsSlotSkill(eventcode, inCombat)
 	if inCombat then return end
+	-- successful will be true if we have returned a skill, therefore we can unregister from the combat event.
 	local successful = false
+	-- Itterates across all the old skills we have saved and attemts to slot each of them.
 	for skillIndex, skillId in pairs(JackOfAllTrades.savedVariables.oldSkill) do
 		if skillId then
 			if JackOfAllTrades.savedVariables.debug then d(string.format("Attempting to slot %s as combat has ended.", GetChampionSkillName(skillId))) end
@@ -175,6 +137,7 @@ function JackOfAllTrades.whenCombatEndsSlotSkill(eventcode, inCombat)
 			if oldSkill:AttemptToSlot() then successful = true end
 		end
 	end
+	-- We have been able to slot the skills the player wanted back, so we no longer care about the combat state.
 	if successful == true then 
 		if JackOfAllTrades.savedVariables.debug then d(string.format("Unregistered from the out of combat event.")) end
 		JackOfAllTrades.savedVariables.inCombatDuringReloadUI = false
@@ -186,10 +149,11 @@ end
 -- Slots the CP node if we pass the checks by ZOS  --
 -------------------------------------------------------------------------------------------------
 local function slotCPNode(self)
-	PrepareChampionPurchaseRequest(false)
+	PrepareChampionPurchaseRequest(false) -- We don't need to spend gold on this respec so we pass in false
 	AddHotbarSlotToChampionPurchaseRequest(self.skillIndexToReplace, self.id)
 	local championPurchaseAvailability = GetChampionPurchaseAvailability()
 	local expectedResultForChampionPurchaseRequest = GetExpectedResultForChampionPurchaseRequest()
+	-- If ZOS is telling us we shouldn't get errors from this purchase, then we can make it.
 	if championPurchaseAvailability == 0 and expectedResultForChampionPurchaseRequest == 0 then
 		SendChampionPurchaseRequest()
 		return true
@@ -198,8 +162,9 @@ local function slotCPNode(self)
 		if expectedResultForChampionPurchaseRequest == CHAMPION_PURCHASE_IN_COMBAT then
 			JackOfAllTrades.savedVariables.oldSkill[self.skillIndexToReplace] = self.id
 			if JackOfAllTrades.savedVariables.debug then d(string.format("Registered %s to be slotted in slot: %s when combat ends", self.name, self.skillIndexToReplace)) end
+			-- This will be kept open until we can next slot a skill, i.e. when we are out of combat.
 			EVENT_MANAGER:RegisterForEvent(JackOfAllTrades.name, EVENT_PLAYER_COMBAT_STATE, JackOfAllTrades.whenCombatEndsSlotSkill)
-			-- If we reload ui when in combat, for some reason... IDFK why this may be taking it to the nth degree. But y'know Cyrodiil keep you in combat forever..
+			-- Ensures that the combat event will be reopened if we reloadui whilst in combat.
 			JackOfAllTrades.savedVariables.inCombatDuringReloadUI = true
 		end
 		if JackOfAllTrades.savedVariables.debug then
@@ -212,8 +177,10 @@ end
 -------------------------------------------------------------------------------------------------
 -- Utility function to get the minimum number of points required to slot the skill  --
 -------------------------------------------------------------------------------------------------
-local function RequiredPoints(championSkillId)
+local function requiredPointsToSlot(championSkillId)
+	-- If there are no jump points then we know that slotting 1 point into the skill we be enough for us to slot it.
 	if not DoesChampionSkillHaveJumpPoints(championSkillId) then return 1 end
+	-- If it does have jump points then we know that we can slot it by putting in only upto the first jump point worth of points.
 	local firstJumpPoint
 	_, firstJumpPoint = GetChampionSkillJumpPoints(championSkillId)
 	return firstJumpPoint
@@ -227,7 +194,7 @@ local function isCPSkillSlotted(self)
 	local firstIndex = championBar.firstSlotPerDiscipline[GetChampionDisciplineId(self.disciplineIndex)]
 	-- Itterates between the firstIndex of the segment of the bar we want to check and the last
 	for i=firstIndex, firstIndex+(totalChampionBarSlots/numDisciplines) do
-		if championBar:GetSlot(i).championSkillData then
+		if championBar:GetSlot(i).championSkillData then -- If anything is slotted into that index
 			if championBar:GetSlot(i).championSkillData:GetId() == self.id then
 				return true
 			end
@@ -244,10 +211,10 @@ function JackOfAllTrades.CreateCPData(championSkillData)
 	name = GetChampionSkillName(championSkillData.id),
 	id = championSkillData.id,
 	disciplineIndex = CPData:GetChampionSkillData(championSkillData.id):GetChampionDisciplineData().disciplineIndex,
-	requiredPoints = RequiredPoints(championSkillData.Id),
+	requiredPointsToSlot = requiredPointsToSlot(championSkillData.Id),
 	skillIndexToReplace = championSkillData.skillIndexToReplace,
-	oldSkill = nil,
-	isOldSkill = championSkillData.isOldSkill,
+	--oldSkill = nil,
+	--isOldSkill = championSkillData.isOldSkill,
 
 	-- Assign the utility functions
 	AttemptToSlot = AttemptToSlot,
@@ -256,17 +223,6 @@ function JackOfAllTrades.CreateCPData(championSkillData)
 	slotCPNode = slotCPNode,
 	slotOldCPNode = slotOldCPNode,
 	}
-end
-
--------------------------------------------------------------------------------------------------
--- Load in all the CP skill data we need  --
--------------------------------------------------------------------------------------------------
-local function LoadInSkills()
-	JackOfAllTrades.meticulousDisassembly = JackOfAllTrades.CreateCPData(JackOfAllTrades.SkillData.meticulousDisassembly)
-	JackOfAllTrades.treasureHunter = JackOfAllTrades.CreateCPData(JackOfAllTrades.SkillData.treasureHunter)
-	JackOfAllTrades.giftedRider = JackOfAllTrades.CreateCPData(JackOfAllTrades.SkillData.giftedRider)
-	JackOfAllTrades.warMount = JackOfAllTrades.CreateCPData(JackOfAllTrades.SkillData.warMount)
-	JackOfAllTrades.professionalUpkeep = JackOfAllTrades.CreateCPData(JackOfAllTrades.SkillData.professionalUpkeep)
 end
 
 -------------------------------------------------------------------------------------------------
@@ -280,16 +236,6 @@ function JackOfAllTrades.AttemptToSlotId(championSkillId, skillIndexToReplace)
 	}
 	local skill = JackOfAllTrades.CreateCPData(skillData)
 	skill:AttemptToSlot()
-end
-
--------------------------------------------------------------------------------------------------
--- Setup some constants and load in the skill  --
--------------------------------------------------------------------------------------------------
-function JackOfAllTrades.InitSkills()
-	-- Load the stations that Meticulous Disassembly works with globally so we can check for it in Events.lua
-	JackOfAllTrades.meticulousDisassemblyStations =  JackOfAllTrades.SkillData.meticulousDisassembly.stations
-
-	LoadInSkills()
 end
 
 -------------------------------------------------------------------------------------------------
