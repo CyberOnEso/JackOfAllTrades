@@ -1,4 +1,4 @@
-![JackOfAllTrades Logo](https://i.imgur.com/EcATikB.png)
+![JackOfAllTrades Logo](https://i.imgur.com/EcATikB.png) ![Current Version](https://img.shields.io/github/v/release/CyberOnEso/JackOfAllTrades?include_prereleases&label=Version)
 
 Automatically adjusts your green champion bar loadout depending on what you are attempting to achieve and restores back your old CP setup when you are done.
 
