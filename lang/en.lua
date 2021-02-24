@@ -13,3 +13,15 @@ ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_WARNING", "Warning")
 ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_WARNING_TEXT_COLOUR", "<<C:1>> text colour")
 ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_DEBUG", "Debug")
 ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_ENABLE_MODE", "Enable <<z:1>> mode")
+
+-------------------------------------------------------------------------------------------------
+-- Interact Text Strings (If you can find these in the files please let me know)  --
+-------------------------------------------------------------------------------------------------
+ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_INTERACT_MINE", "Mine")
+ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_INTERACT_CUT", "CUT")
+ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_INTERACT_COLLECT", "Collect")
+ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_INTERACT_HARVEST", "Harvest")
+ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_INTERACT_UNLOCK", "Unlock")
+ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_INTERACT_CHEST", "Chest")
+ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_INTERACT_USE", "Use")
+

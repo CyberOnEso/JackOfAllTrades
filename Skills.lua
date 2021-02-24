@@ -73,7 +73,7 @@ local function AttemptToSlot(self)
 	-- We don't want to redistrube someone's champion points and make them spend 3000 gold everytime they interact with a crafting station.
 	if not CPData:GetChampionSkillData(self.id):CanBeSlotted() then
 		if JackOfAllTrades.savedVariables.debug then d(string.format("You not have enough points in %s for us to slot it.", self.name)) end
-		return 1 -- In case they do not have enough points into the node, we can maybe use a pcall for this.
+		return nil -- In case they do not have enough points into the node, we can maybe use a pcall for this.
 	end
 	-- If they have a node already in that slot save it so we can restore it later.
 	local oldSkillData = championBar:GetSlot(self.skillIndexToReplace).championSkillData
