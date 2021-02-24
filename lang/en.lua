@@ -8,6 +8,7 @@ ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_NOT_ENOUGH_POINTS_WARNING", "You don't 
 -------------------------------------------------------------------------------------------------
 -- Menu strings  --
 -------------------------------------------------------------------------------------------------
+ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_TOGGLE", "Toggle automatically slotting stars")
 ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_MENU_WARNING_DESCRIPTION", "Show warning if you do not have enough points allocated into the following CP Stars when they would be useful.")
 ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_WARNING", "Warning")
 ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_WARNING_TEXT_COLOUR", "<<C:1>> text colour")

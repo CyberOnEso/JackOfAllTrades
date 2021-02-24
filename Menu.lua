@@ -33,6 +33,75 @@ function JackOfAllTrades:InitMenu()
 
     local panel = LAM:RegisterAddonPanel(panelName, panelData)
     local optionsData = {
+        {   
+            type = "submenu",
+            name = SI_JACK_OF_ALL_TRADES_TOGGLE,
+            controls = {
+                {
+                    type = "checkbox",
+                    name = GetChampionSkillName(self.GetSkillId("Meticulous Disassembly")),
+                    getFunc = function() return self.savedVariables.enable.meticulousDisassembly end,
+                    setFunc = function(value) self.savedVariables.enable.meticulousDisassembly = value end,
+                    width = "half"
+                },
+                {
+                    type = "checkbox",
+                    name = GetChampionSkillName(self.GetSkillId("Treasure Hunter")),
+                    getFunc = function() return self.savedVariables.enable.treasureHunter end,
+                    setFunc = function(value) self.savedVariables.enable.treasureHunter = value end,
+                    width = "half"
+                },
+                {
+                    type = "checkbox",
+                    name = GetChampionSkillName(self.GetSkillId("Gifted Rider")),
+                    getFunc = function() return self.savedVariables.enable.giftedRider end,
+                    setFunc = function(value) self.savedVariables.enable.giftedRider = value end,
+                    width = "half"
+                },
+                {
+                    type = "checkbox",
+                    name = GetChampionSkillName(self.GetSkillId("War Mount")),
+                    getFunc = function() return self.savedVariables.enable.warMount end,
+                    setFunc = function(value) self.savedVariables.enable.warMount = value end,
+                    width = "half"
+                },
+                {
+                    type = "checkbox",
+                    name = GetChampionSkillName(self.GetSkillId("Reel Technique")),
+                    getFunc = function() return self.savedVariables.enable.reelTechnique end,
+                    setFunc = function(value) self.savedVariables.enable.reelTechnique = value end,
+                    width = "half"
+                },
+                {
+                    type = "checkbox",
+                    name = GetChampionSkillName(self.GetSkillId("Anglers Instincts")),
+                    getFunc = function() return self.savedVariables.enable.anglersInstincts end,
+                    setFunc = function(value) self.savedVariables.enable.anglersInstincts = value end,
+                    width = "half"
+                },
+                {
+                    type = "checkbox",
+                    name = GetChampionSkillName(self.GetSkillId("Master Gatherer")),
+                    getFunc = function() return self.savedVariables.enable.masterGatherer end,
+                    setFunc = function(value) self.savedVariables.enable.masterGatherer = value end,
+                    width = "half"
+                },
+                {
+                    type = "checkbox",
+                    name = GetChampionSkillName(self.GetSkillId("Plentiful Harvest")),
+                    getFunc = function() return self.savedVariables.enable.plentifulHarvest end,
+                    setFunc = function(value) self.savedVariables.enable.plentifulHarvest = value end,
+                    width = "half"
+                },
+                {
+                    type = "checkbox",
+                    name = GetChampionSkillName(self.GetSkillId("Professional Upkeep")),
+                    getFunc = function() return self.savedVariables.enable.professionalUpkeep end,
+                    setFunc = function(value) self.savedVariables.enable.professionalUpkeep = value end,
+                    width = "half"
+                },
+            }
+        },
         {
             type = "header",
             name = SI_JACK_OF_ALL_TRADES_WARNING,

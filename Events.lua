@@ -115,6 +115,10 @@ function JackOfAllTrades.GetSkillId(str)
 	elseif str == "War Mount" then return skillData.warMount.id
 	elseif str == "Professional Upkeep" then return skillData.professionalUpkeep.id
 	elseif str == "Sustaining Shadows" then return skillData.sustainingShadows.id
+	elseif str == "Reel Technique" then return skillData.reelTechnique.id
+	elseif str == "Anglers Instincts" then return skillData.anglersInstincts.id
+	elseif str == "Master Gatherer" then return skillData.masterGatherer.id
+	elseif str == "Plentiful Harvest" then return skillData.plentifulHarvest.id
 	end
 end
 
@@ -122,6 +126,7 @@ end
 -- Meticulous Dissambly  --
 -------------------------------------------------------------------------------------------------
 function JackOfAllTrades.openCraftingStation(eventcode, station)
+	if not JackOfAllTrades.savedVariables.enable.meticulousDisassembly then return end
 	-- Check if we are a station that Meticulous Disassembly will affect
 	if not has_value(station, skillData.meticulousDisassembly.stations) then return end
 	if meticulousDisassembly:AttemptToSlot() == nil then 
@@ -146,6 +151,7 @@ local function StopOpeningChest()
 end
 
 local function StartOpeningChest()
+	if not JackOfAllTrades.savedVariables.enable.treasureHunter then return end
 	local result = treasureHunter:AttemptToSlot()
 	if result then
 		zo_callLater(StopOpeningChest, 3000)
@@ -159,8 +165,8 @@ end
 -------------------------------------------------------------------------------------------------
 function JackOfAllTrades.mountStateChanged(eventcode, mounted)
 	if mounted then
-		giftedRider:AttemptToSlot()
-		warMount:AttemptToSlot()
+		if JackOfAllTrades.savedVariables.enable.giftedRider then giftedRider:AttemptToSlot() end
+		if JackOfAllTrades.savedVariables.enable.warMount then warMount:AttemptToSlot() end
 	else
 		giftedRider:AttemptToReturnSlot()
 		warMount:AttemptToReturnSlot()
@@ -171,6 +177,7 @@ end
 -- Professional Upkeep  --
 -------------------------------------------------------------------------------------------------
 function JackOfAllTrades.openStore(eventcode)
+	if not JackOfAllTrades.savedVariables.enable.professionalUpkeep then return end
 	professionalUpkeep:AttemptToSlot()
 end
 
@@ -182,10 +189,14 @@ end
 -- Fishing --
 -------------------------------------------------------------------------------------------------
 local function startFishing()
-	reelTechnique:AttemptToSlot()
-    anglersInstincts:AttemptToSlot()
+	local reelTechnique = JackOfAllTrades.savedVariables.enable.reelTechnique
+	local anglersInstincts = JackOfAllTrades.savedVariables.enable.anglersInstincts
+	if not reelTechnique and not anglersInstincts then return end
+	if reelTechnique then reelTechnique:AttemptToSlot() end
+    if anglersInstincts then anglersInstincts:AttemptToSlot() end
     -- This will check every 2 seconds if we are still fishing, if we are not then return the CP
     -- If you know a better way of doing this please let me know Cyber#0042 on discord.
+
     EM:RegisterForUpdate(name .. "FishingCheck", delay, function()
     	local interactText = select(1, GetGameCameraInteractableActionInfo())
     	if interactText ~= GetString(SI_GAMECAMERAACTIONTYPE17) then
@@ -205,6 +216,14 @@ local function stopGathering()
 end
 
 local function startGathering()
+	local masterGatherer = JackOfAllTrades.savedVariables.enable.masterGatherer
+	local plentifulHarvest = JackOfAllTrades.savedVariables.enable.plentifulHarvest
+
+	if not masterGatherer and not plentifulHarvest then return end
+
+	if masterGatherer then masterGatherer:AttemptToSlot() end
+    if plentifulHarvest then plentifulHarvest:AttemptToSlot() end
+    
 	-- If we have enough points into either of them 
 	if masterGatherer:AttemptToSlot() or plentifulHarvest:AttemptToSlot() then
 		zo_callLater(stopGathering, 3000)

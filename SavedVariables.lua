@@ -12,6 +12,17 @@ local defaultData = {
 		meticulousDisassembly = false,
 		treasureHunter = false,
 	},
+	enable = {
+		meticulousDisassembly = true,
+		treasureHunter = true,
+		giftedRider = true,
+		warMount = true,
+		professionalUpkeep = true,
+		reelTechnique = true,
+		anglersInstincts = true,
+		masterGatherer = true,
+		plentifulHarvest = true
+	},
 	oldSkill = {}
 }
 
