@@ -129,8 +129,10 @@ function JackOfAllTrades.openCraftingStation(eventcode, station)
 	if not JackOfAllTrades.savedVariables.enable.meticulousDisassembly then return end
 	-- Check if we are a station that Meticulous Disassembly will affect
 	if not has_value(station, skillData.meticulousDisassembly.stations) then return end
-	if meticulousDisassembly:AttemptToSlot() == nil then 
-		if JackOfAllTrades.savedVariables.warnings.meticulousDisassembly then CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.warnings.colour .. zo_strformat(SI_JACK_OF_ALL_TRADES_NOT_ENOUGH_POINTS_WARNING, JackOfAllTrades.meticulousDissasembly.name, GetString(SI_JACK_OF_ALL_TRADES_METICULOUS_DISASSEMBLY_BENEFIT))) end
+	local result = meticulousDisassembly:AttemptToSlot()
+	if result then 
+		if JackOfAllTrades.savedVariables.notification.meticulousDisassembly then CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.notifications .. GetChampionSkillName(meticulousDisassembly.id) .. " " .. GetString(SI_JACK_OF_ALL_TRADES_SLOTTED) .. ".") end
+	elseif JackOfAllTrades.savedVariables.warnings.meticulousDisassembly then CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.warnings .. zo_strformat(SI_JACK_OF_ALL_TRADES_NOT_ENOUGH_POINTS_WARNING, JackOfAllTrades.meticulousDissasembly.name, GetString(SI_JACK_OF_ALL_TRADES_METICULOUS_DISASSEMBLY_BENEFIT)))
 	end
 end
 
@@ -154,9 +156,10 @@ local function StartOpeningChest()
 	if not JackOfAllTrades.savedVariables.enable.treasureHunter then return end
 	local result = treasureHunter:AttemptToSlot()
 	if result then
+		if JackOfAllTrades.savedVariables.notification.treasureHunter then CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.notifications .. GetChampionSkillName(treasureHunter.id) .. " " .. GetString(SI_JACK_OF_ALL_TRADES_SLOTTED) .. ".") end
 		zo_callLater(StopOpeningChest, 3000)
 	elseif result == nil then 
-		if JackOfAllTrades.savedVariables.warnings.treasureHunter then CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.warnings.colour .. zo_strformat(SI_JACK_OF_ALL_TRADES_NOT_ENOUGH_POINTS_WARNING, JackOfAllTrades.treasureHunter.name, GetString(SI_JACK_OF_ALL_TRADES_TREASURE_HUNTER_BENEFIT))) end	
+		if JackOfAllTrades.savedVariables.warnings.treasureHunter then CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.warnings .. zo_strformat(SI_JACK_OF_ALL_TRADES_NOT_ENOUGH_POINTS_WARNING, JackOfAllTrades.treasureHunter.name, GetString(SI_JACK_OF_ALL_TRADES_TREASURE_HUNTER_BENEFIT))) end	
 	end
 end
 
@@ -165,8 +168,16 @@ end
 -------------------------------------------------------------------------------------------------
 function JackOfAllTrades.mountStateChanged(eventcode, mounted)
 	if mounted then
-		if JackOfAllTrades.savedVariables.enable.giftedRider then giftedRider:AttemptToSlot() end
-		if JackOfAllTrades.savedVariables.enable.warMount then warMount:AttemptToSlot() end
+		if JackOfAllTrades.savedVariables.enable.giftedRider then 
+			if giftedRider:AttemptToSlot() then
+				if JackOfAllTrades.savedVariables.notification.giftedRider then CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.notifications .. GetChampionSkillName(giftedRider.id) .. " " .. GetString(SI_JACK_OF_ALL_TRADES_SLOTTED) .. ".") end
+			end
+		end
+		if JackOfAllTrades.savedVariables.enable.warMount then 
+			if warMount:AttemptToSlot() then
+				if JackOfAllTrades.savedVariables.notification.warMount then CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.notifications .. GetChampionSkillName(warMount.id) .. " " .. GetString(SI_JACK_OF_ALL_TRADES_SLOTTED) .. ".") end
+			end
+		end
 	else
 		giftedRider:AttemptToReturnSlot()
 		warMount:AttemptToReturnSlot()
@@ -178,7 +189,9 @@ end
 -------------------------------------------------------------------------------------------------
 function JackOfAllTrades.openStore(eventcode)
 	if not JackOfAllTrades.savedVariables.enable.professionalUpkeep then return end
-	professionalUpkeep:AttemptToSlot()
+	if professionalUpkeep:AttemptToSlot() then 
+		if JackOfAllTrades.savedVariables.notification.professionalUpkeep then CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.notifications .. GetChampionSkillName(professionalUpkeep.id) .. " " .. GetString(SI_JACK_OF_ALL_TRADES_SLOTTED) .. ".") end
+	end
 end
 
 function JackOfAllTrades.closeStore(eventcode)
@@ -192,8 +205,16 @@ local function startFishing()
 	local reelTechnique = JackOfAllTrades.savedVariables.enable.reelTechnique
 	local anglersInstincts = JackOfAllTrades.savedVariables.enable.anglersInstincts
 	if not reelTechnique and not anglersInstincts then return end
-	if reelTechnique then reelTechnique:AttemptToSlot() end
-    if anglersInstincts then anglersInstincts:AttemptToSlot() end
+	if reelTechnique then 
+		if reelTechnique:AttemptToSlot() then
+			if JackOfAllTrades.savedVariables.notification.reelTechnique then CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.notifications .. GetChampionSkillName(reelTechnique.id) .. " " .. GetString(SI_JACK_OF_ALL_TRADES_SLOTTED) .. ".") end
+		end
+	end
+    if anglersInstincts then 
+    	if anglersInstincts:AttemptToSlot() then
+    		if JackOfAllTrades.savedVariables.notification.anglersInstincts then CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.notifications .. GetChampionSkillName(anglersInstincts.id) .. " " .. GetString(SI_JACK_OF_ALL_TRADES_SLOTTED) .. ".") end
+    	end
+    end
     -- This will check every 2 seconds if we are still fishing, if we are not then return the CP
     -- If you know a better way of doing this please let me know Cyber#0042 on discord.
 
@@ -207,6 +228,9 @@ local function startFishing()
     end)
 end
 
+-------------------------------------------------------------------------------------------------
+-- Gathering --
+-------------------------------------------------------------------------------------------------
 local function stopGathering()
 	--[[ If the player is mounted we don't want to replace their nodes with their standard ones again otherwise their mount speed would go down.
 	This function is called 3 seconds after harvesting begins, so in theory players could start gathering, cancel the action and then mount. --]]
@@ -221,8 +245,16 @@ local function startGathering()
 
 	if not masterGatherer and not plentifulHarvest then return end
 
-	if masterGatherer then masterGatherer:AttemptToSlot() end
-    if plentifulHarvest then plentifulHarvest:AttemptToSlot() end
+	if masterGatherer then 
+		if masterGatherer:AttemptToSlot() then 
+			if JackOfAllTrades.savedVariables.notification.masterGatherer then CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.notifications .. GetChampionSkillName(masterGatherer.id) .. " " .. GetString(SI_JACK_OF_ALL_TRADES_SLOTTED) .. ".") end
+		end
+	end
+    if plentifulHarvest then 
+    	if plentifulHarvest:AttemptToSlot() then 
+			if JackOfAllTrades.savedVariables.notification.plentifulHarvest then CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.notifications .. GetChampionSkillName(plentifulHarvest.id) .. " " .. GetString(SI_JACK_OF_ALL_TRADES_SLOTTED) .. ".") end
+    	end
+    end
     
 	-- If we have enough points into either of them 
 	if masterGatherer:AttemptToSlot() or plentifulHarvest:AttemptToSlot() then
@@ -248,34 +280,6 @@ local function OnInteractKeyPressed()
 	end
 end
 
-local function onReticleInteractUpdate()
-	if delay == 0 then return end
-    EVENT_MANAGER:RegisterForUpdate(name .. "Delay", delay, function()
-        delay = 300
-        EVENT_MANAGER:UnregisterForUpdate(name .. "Delay")
-    end)
-    delay = 0
-	local additionalInfo = select(5, GetGameCameraInteractableActionInfo())
-    if additionalInfo == ADDITIONAL_INTERACT_INFO_FISHING_NODE then
-    	isFishing = true
-     	if not isFishingNodeSlotted then
-     		reelTechnique:AttemptToSlot()
-     		anglersInstincts:AttemptToSlot()
-     		isFishing = false
-     		if registedDelay then
-	     		EVENT_MANAGER:RegisterForUpdate(name, fishingDelay, function() 
-	     			if not isFishing then
-	     				reelTechnique:AttemptToReturnSlot()
-	     				anglersInstincts:AttemptToReturnSlot()
-	     			end
-	     		end)
-	     	end
-     	end
-    elseif additionalInfo == ADDITIONAL_INTERACT_INFO_PICKPOCKET_CHANCE then
-    	-- TODO: Add curpurses' art
-    end
-end
-
 -------------------------------------------------------------------------------------------------
 -- Register for events, we only want to do so if the API version is high enough  --
 -------------------------------------------------------------------------------------------------
@@ -283,12 +287,6 @@ local function RegisterEvents()
 	-- Meticulous Dissambly Events
 	EM:RegisterForEvent(name, EVENT_CRAFTING_STATION_INTERACT, JackOfAllTrades.openCraftingStation)
 	EM:RegisterForEvent(name, EVENT_END_CRAFTING_STATION_INTERACT, JackOfAllTrades.closeCraftingStation)
-	
-	-- Treasure Hunter Events
-	--EM:RegisterForEvent(name,  EVENT_BEGIN_LOCKPICK, JackOfAllTrades.startLockpicking)
-	--EM:RegisterForEvent(name,  EVENT_LOCKPICK_BROKE, JackOfAllTrades.stopLockpicking)
-	--EM:RegisterForEvent(name,  EVENT_LOCKPICK_FAILED, JackOfAllTrades.stopLockpicking)
-	--EM:RegisterForEvent(name,  EVENT_LOCKPICK_SUCCESS, JackOfAllTrades.stopLockpicking)
 
 	-- Gifted Rider & War Mount Events
 	EM:RegisterForEvent(name, EVENT_MOUNTED_STATE_CHANGED, JackOfAllTrades.mountStateChanged)

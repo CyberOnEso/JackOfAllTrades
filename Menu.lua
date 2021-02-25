@@ -35,7 +35,7 @@ function JackOfAllTrades:InitMenu()
     local optionsData = {
         {   
             type = "submenu",
-            name = SI_JACK_OF_ALL_TRADES_TOGGLE,
+            name = SI_JACK_OF_ALL_TRADES_MENU_TOGGLE,
             controls = {
                 {
                     type = "checkbox",
@@ -100,7 +100,124 @@ function JackOfAllTrades:InitMenu()
                     setFunc = function(value) self.savedVariables.enable.professionalUpkeep = value end,
                     width = "half"
                 },
-            }
+            },
+        },
+        {
+            type = "header",
+            name = SI_JACK_OF_ALL_TRADES_MENU_NOTIFICATIONS,
+            width = "full"
+        },
+        {
+            type = "description",
+            text = SI_JACK_OF_ALL_TRADES_MENU_NOTIFICATIONS_DESCRIPTION_GLOBAL,
+            width = "full"
+        },
+        {   
+            type = "checkbox",
+            name = SI_JACK_OF_ALL_TRADES_MENU_NOTIFICATIONS_GLOBAL,
+            -- If all nodes are true, set to True, else false
+            getFunc = function() 
+                        for node, state in pairs(self.savedVariables.notification) do 
+                            if self.savedVariables.notification[node] == false then 
+                                return false 
+                            end 
+                        end 
+                        return true
+                    end,
+            -- Set all nodes to this value
+            setFunc = function(value)
+                        for node, state in pairs(self.savedVariables.notification) do 
+                            self.savedVariables.notification[node] = value
+                        end 
+                    end,
+            width = "full"
+        },
+        {   
+            type = "submenu",
+            name = SI_JACK_OF_ALL_TRADES_MENU_NOTIFICATIONS_INDIVIDUAL,
+            controls = {
+                {   
+                    type = "checkbox",
+                    name = GetChampionSkillName(self.GetSkillId("Meticulous Disassembly")),
+                    getFunc = function() return self.savedVariables.notification.meticulousDisassembly end,
+                    setFunc = function(value) self.savedVariables.notification.meticulousDisassembly = value end,
+                    width = "half"
+                },
+                {
+                    type = "checkbox",
+                    name = GetChampionSkillName(self.GetSkillId("Treasure Hunter")),
+                    getFunc = function() return self.savedVariables.notification.treasureHunter end,
+                    setFunc = function(value) self.savedVariables.notification.treasureHunter = value end,
+                    width = "half"
+                },
+                {
+                    type = "checkbox",
+                    name = GetChampionSkillName(self.GetSkillId("Gifted Rider")),
+                    getFunc = function() return self.savedVariables.notification.giftedRider end,
+                    setFunc = function(value) self.savedVariables.notification.giftedRider = value end,
+                    width = "half"
+                },
+                {
+                    type = "checkbox",
+                    name = GetChampionSkillName(self.GetSkillId("War Mount")),
+                    getFunc = function() return self.savedVariables.notification.warMount end,
+                    setFunc = function(value) self.savedVariables.notification.warMount = value end,
+                    width = "half"
+                },
+                {
+                    type = "checkbox",
+                    name = GetChampionSkillName(self.GetSkillId("Reel Technique")),
+                    getFunc = function() return self.savedVariables.notification.reelTechnique end,
+                    setFunc = function(value) self.savedVariables.notification.reelTechnique = value end,
+                    width = "half"
+                },
+                {
+                    type = "checkbox",
+                    name = GetChampionSkillName(self.GetSkillId("Anglers Instincts")),
+                    getFunc = function() return self.savedVariables.notification.anglersInstincts end,
+                    setFunc = function(value) self.savedVariables.notification.anglersInstincts = value end,
+                    width = "half"
+                },
+                {
+                    type = "checkbox",
+                    name = GetChampionSkillName(self.GetSkillId("Master Gatherer")),
+                    getFunc = function() return self.savedVariables.notification.masterGatherer end,
+                    setFunc = function(value) self.savedVariables.notification.masterGatherer = value end,
+                    width = "half"
+                },
+                {
+                    type = "checkbox",
+                    name = GetChampionSkillName(self.GetSkillId("Plentiful Harvest")),
+                    getFunc = function() return self.savedVariables.notification.plentifulHarvest end,
+                    setFunc = function(value) self.savedVariables.notification.plentifulHarvest = value end,
+                    width = "half"
+                },
+                {
+                    type = "checkbox",
+                    name = GetChampionSkillName(self.GetSkillId("Professional Upkeep")),
+                    getFunc = function() return self.savedVariables.notification.professionalUpkeep end,
+                    setFunc = function(value) self.savedVariables.notification.professionalUpkeep = value end,
+                    width = "half"
+                },
+            },
+        },
+        {
+            type = "colorpicker",
+            name = zo_strformat(SI_JACK_OF_ALL_TRADES_TEXT_COLOUR, GetString(SI_JACK_OF_ALL_TRADES_NOTIFICATION)), -- or string id or function returning a string
+            getFunc = function()
+                        return ConvertHexToRGB(self.savedVariables.colour.notifications)
+                    end, -- (alpha is optional)
+            setFunc = function(r,g,b) 
+                        self.savedVariables.colour.notifications = ConvertRGBToHex(r, g, b)
+                    end, -- (alpha is optional)
+            disabled = function() 
+                        for node, state in pairs(self.savedVariables.notification) do 
+                            if self.savedVariables.notification[node] == true then 
+                                return false 
+                            end 
+                        end 
+                        return true
+                    end
         },
         {
             type = "header",
@@ -109,7 +226,7 @@ function JackOfAllTrades:InitMenu()
         },
     	{
     	    type = "description",
-    	    text = SI_JACK_OF_ALL_TRADES_MENU_WARNING_DESCRIPTION, -- or string id or function returning a string
+    	    text = SI_JACK_OF_ALL_TRADES_MENU_WARNING_DESCRIPTION,
             width = "full"
     	},
         {
@@ -128,12 +245,12 @@ function JackOfAllTrades:InitMenu()
         },
         {
             type = "colorpicker",
-            name = zo_strformat(SI_JACK_OF_ALL_TRADES_WARNING_TEXT_COLOUR, GetString(SI_JACK_OF_ALL_TRADES_WARNING)), -- or string id or function returning a string
+            name = zo_strformat(SI_JACK_OF_ALL_TRADES_TEXT_COLOUR, GetString(SI_JACK_OF_ALL_TRADES_WARNING)), -- or string id or function returning a string
             getFunc = function()
-                        return ConvertHexToRGB(self.savedVariables.warnings.colour)
+                        return ConvertHexToRGB(self.savedVariables.colour.warnings)
                     end, -- (alpha is optional)
             setFunc = function(r,g,b) 
-                        self.savedVariables.warnings.colour = ConvertRGBToHex(r, g, b)
+                        self.savedVariables.colour.warnings = ConvertRGBToHex(r, g, b)
                     end, -- (alpha is optional)
             disabled = function() return not self.savedVariables.warnings.treasureHunter and not JackOfAllTrades.savedVariables.warnings.meticulousDisassembly end
         },

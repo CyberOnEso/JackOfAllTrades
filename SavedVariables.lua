@@ -7,8 +7,11 @@ JackOfAllTrades.variableVersion = 1
 -------------------------------------------------------------------------------------------------
 local defaultData = {
 	debug = false,
+	colour = {
+		warnings = "|ce60000",
+		notifications = "|c557C29"
+	},
 	warnings = {
-		colour = "|ce60000",
 		meticulousDisassembly = false,
 		treasureHunter = false,
 	},
@@ -22,6 +25,17 @@ local defaultData = {
 		anglersInstincts = true,
 		masterGatherer = true,
 		plentifulHarvest = true
+	},
+	notification = {
+		meticulousDisassembly = false,
+		treasureHunter = false,
+		giftedRider = false,
+		warMount = false,
+		professionalUpkeep = false,
+		reelTechnique = false,
+		anglersInstincts = false,
+		masterGatherer = false,
+		plentifulHarvest = false
 	},
 	oldSkill = {}
 }
