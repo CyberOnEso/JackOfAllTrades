@@ -23,9 +23,9 @@ function JackOfAllTrades:InitMenu()
     local panelData = {
         type = "panel",
         name = "Jack of all Trades",
-        displayName = string.format("%sJack of all Trades", self.colours.greenCP),
+        displayName = string.format("%s%s|u5:0::Jack of all Trades|u", "|t32:32:esoui/art/champion/champion_points_stamina_icon-hud-32.dds|t", ""),
         author = string.format("%s@CyberOnEso|r", self.colours.author),
-        website = "https://www.esoui.com/forums/showthread.php?p=43242",
+        --website = "https://www.esoui.com/forums/showthread.php?p=43242",
         version = self.version,
         slashCommand = "/jackofalltrades",
         registerForRefresh = true

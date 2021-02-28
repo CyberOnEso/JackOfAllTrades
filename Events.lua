@@ -182,7 +182,7 @@ end
 local function SendNotification(variableSkillName)
 	if JackOfAllTrades.savedVariables.notification[variableSkillName] then 
 		local texture = CPTexture.craft
-		CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.notifications .. texture  .. GetChampionSkillName(skillData[variableSkillName].id) .. " " .. GetString(SI_JACK_OF_ALL_TRADES_SLOTTED) .. ".") 
+		CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.notifications .. texture .. GetChampionSkillName(skillData[variableSkillName].id) .. " " .. GetString(SI_JACK_OF_ALL_TRADES_SLOTTED) .. ".") 
 	end
 end
 
