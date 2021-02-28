@@ -4,13 +4,13 @@
 JackOfAllTrades = {
 	name = "JackOfAllTrades",
 	author = '@CyberOnEso',
-	version = '0.5',
+	version = '0.7',
 	requiredAPIVersion = 100034
 }
 
 JackOfAllTrades.colours = {
 	greenCP = "|c557C29",
-	author = "|c235AC4"
+	author = "|c5959D5"
 }
 
 local name = JackOfAllTrades.name

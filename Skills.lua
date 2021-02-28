@@ -61,6 +61,23 @@ local function isCPSkillSlotted(self)
 	return false
 end
 
+-- This just makes i
+local slotInUse = nil
+-- Returns the index for the first empty slot in a given discipline of the players championBar.
+-- If the player doesn't have any slots return nil.
+local function getFirstEmptySlot(disciplineIndex)
+	local firstIndex = championBar.firstSlotPerDiscipline[GetChampionDisciplineId(disciplineIndex)] 
+	for i=firstIndex, (firstIndex+(totalChampionBarSlots/numDisciplines))-1 do
+		if i ~= slotInUse then 
+			if not championBar:GetSlot(i).championSkillData then
+				slotInUse = i
+				return i
+			end
+		end
+	end
+	return nil
+end
+
 -------------------------------------------------------------------------------------------------
 -- If we need to slot the node and that we have enough points into the skill then slot it  --
 -------------------------------------------------------------------------------------------------
@@ -68,20 +85,29 @@ local function AttemptToSlot(self)
 	-- If the skill is already slotted then we don't need to do anything.
 	if self:isCPSkillSlotted() then 
 		if JackOfAllTrades.savedVariables.debug then d(string.format("%s is already slotted so we don't need to do anything.", self.name)) end
-		return true 
+		return false 
 	end
 	-- We don't want to redistrube someone's champion points and make them spend 3000 gold everytime they interact with a crafting station.
 	if not CPData:GetChampionSkillData(self.id):CanBeSlotted() then
 		if JackOfAllTrades.savedVariables.debug then d(string.format("You not have enough points in %s for us to slot it.", self.name)) end
 		return nil -- In case they do not have enough points into the node, we can maybe use a pcall for this.
 	end
-	-- If they have a node already in that slot save it so we can restore it later.
-	local oldSkillData = championBar:GetSlot(self.skillIndexToReplace).championSkillData
-	if oldSkillData then
-		JackOfAllTrades.savedVariables.oldSkill[self.skillIndexToReplace] = oldSkillData:GetId()
+
+	-- Short circuit logic, will set the slot to the first empty slot if there is one or to the primary slot if there isn't an empty slot.
+	local skillIndexToReplace = getFirstEmptySlot(self.disciplineIndex) or JackOfAllTrades.savedVariables.skillIndexToReplace[self.skillIndexToReplace]
+
+	if not self.isOldSkill then
+		-- If they have a node already in that slot save it so we can restore it later.
+		--local slotIndex = JackOfAllTrades.savedVariables.skillIndexToReplace[self.skillIndexToReplace]
+		local slotIndex = skillIndexToReplace
+		local oldSkillData = championBar:GetSlot(slotIndex).championSkillData
+		if oldSkillData then
+			--JackOfAllTrades.savedVariables.oldSkill[JackOfAllTrades.savedVariables.skillIndexToReplace[self.skillIndexToReplace]] = oldSkillData:GetId()
+			JackOfAllTrades.savedVariables.oldSkill[skillIndexToReplace] = oldSkillData:GetId()
+		end
 	end
 	-- Use a pcall for this in the future
-	if self:slotCPNode() then
+	if self:slotCPNode(skillIndexToReplace) then
 		if JackOfAllTrades.savedVariables.debug then d(string.format("%s added", self.name)) end
 		return true
 	else 
@@ -93,23 +119,31 @@ end
 -- If we need to reslot a node then do so  --
 -------------------------------------------------------------------------------------------------
 local function AttemptToReturnSlot(self)
-	if JackOfAllTrades.savedVariables.oldSkill[self.skillIndexToReplace] then
-		-- CreateCPData for the old skill we want to slot, then attempt to slot it
-		local oldSkill = {
-			id = JackOfAllTrades.savedVariables.oldSkill[self.skillIndexToReplace], 
-			skillIndexToReplace = self.skillIndexToReplace
-		}
-		-- Use a pcall in the future
-		if JackOfAllTrades.CreateCPData(oldSkill):AttemptToSlot() then
-			if JackOfAllTrades.savedVariables.debug then d(string.format("%s removed.", GetChampionSkillName(self.id))) end
-			-- Now we know the swap was successful we can remove the old skill from savedVariables.
-			JackOfAllTrades.savedVariables.oldSkill[self.skillIndexToReplace] = nil
+	if JackOfAllTrades.savedVariables.oldSkill then
+		local wasSlottingSuccessful = false
+		for index, id in pairs(JackOfAllTrades.savedVariables.oldSkill) do
+			local oldSkillData = {
+				id = id, 
+				skillIndexToReplace = index,
+				isOldSkill = true
+			}
+			local oldSkill = JackOfAllTrades.CreateCPData(oldSkillData)
+			-- Then we know we have an old skill which isn't currently slotted, so lets slot it
+			if not oldSkill:isCPSkillSlotted() then 
+				if oldSkill:AttemptToSlot() then
+					if JackOfAllTrades.savedVariables.debug then d(string.format("%s added back to slot: %s.", GetChampionSkillName(oldSkill.id), oldSkill.skillIndexToReplace)) end
+					-- Now we know the swap was successful we can remove the old skill from savedVariables.
+					JackOfAllTrades.savedVariables.oldSkill[index] = nil
+					wasSlottingSuccessful = true
+				end
+			end
 		end
-		return true
-	else
-		if JackOfAllTrades.savedVariables.debug then d(string.format("No old skill found for %s, will not attempt to slot one.", self.name)) end
-		return false
+		if wasSlottingSuccessful then
+			slotInUse = nil
+			return true
+		end
 	end
+	return false
 end
 
 -------------------------------------------------------------------------------------------------
@@ -125,7 +159,8 @@ function JackOfAllTrades.whenCombatEndsSlotSkill(eventcode, inCombat)
 			if JackOfAllTrades.savedVariables.debug then d(string.format("Attempting to slot %s as combat has ended.", GetChampionSkillName(skillId))) end
 			local oldSkillData = {
 				id = skillId,
-				skillIndexToReplace = skillIndex
+				skillIndexToReplace = skillIndex,
+				isOldSkill = true
 			}
 			local oldSkill = JackOfAllTrades.CreateCPData(oldSkillData)
 			if oldSkill:AttemptToSlot() then successful = true end
@@ -142,9 +177,17 @@ end
 -------------------------------------------------------------------------------------------------
 -- Slots the CP node if we pass the checks by ZOS  --
 -------------------------------------------------------------------------------------------------
-local function slotCPNode(self)
+local function slotCPNode(self, skillIndexToReplace)
 	PrepareChampionPurchaseRequest(false) -- We don't need to spend gold on this respec so we pass in false
-	AddHotbarSlotToChampionPurchaseRequest(self.skillIndexToReplace, self.id)
+	if self.isOldSkill then 
+		AddHotbarSlotToChampionPurchaseRequest(self.skillIndexToReplace, self.id) 
+	else
+		-- Short circuit logic, will set the slot to the first empty slot if there is one or to the primary slot if there isn't an empty slot.
+		if skillIndexToReplace == nil then 
+			skillIndexToReplace = JackOfAllTrades.savedVariables.skillIndexToReplace[self.skillIndexToReplace]
+		end
+		AddHotbarSlotToChampionPurchaseRequest(skillIndexToReplace, self.id) 
+	end
 	local championPurchaseAvailability = GetChampionPurchaseAvailability()
 	local expectedResultForChampionPurchaseRequest = GetExpectedResultForChampionPurchaseRequest()
 	-- If ZOS is telling us we shouldn't get errors from this purchase, then we can make it.
@@ -153,9 +196,9 @@ local function slotCPNode(self)
 		return true
 	else
 		-- If we are in combat then we cannot slot a CP node, so we will wait until we are out of combat to try again.
-		if expectedResultForChampionPurchaseRequest == CHAMPION_PURCHASE_IN_COMBAT then
-			JackOfAllTrades.savedVariables.oldSkill[self.skillIndexToReplace] = self.id
-			if JackOfAllTrades.savedVariables.debug then d(string.format("Registered %s to be slotted in slot: %s when combat ends", self.name, self.skillIndexToReplace)) end
+		if expectedResultForChampionPurchaseRequest == CHAMPION_PURCHASE_IN_COMBAT and self.isOldSkill then
+			JackOfAllTrades.savedVariables.oldSkill[skillIndexToReplace] = self.id
+			if JackOfAllTrades.savedVariables.debug then d(string.format("Registered %s to be slotted in slot: %s when combat ends", self.name, skillIndexToReplace)) end
 			-- This will be kept open until we can next slot a skill, i.e. when we are out of combat.
 			EVENT_MANAGER:RegisterForEvent(JackOfAllTrades.name, EVENT_PLAYER_COMBAT_STATE, JackOfAllTrades.whenCombatEndsSlotSkill)
 			-- Ensures that the combat event will be reopened if we reloadui whilst in combat.
@@ -207,6 +250,7 @@ function JackOfAllTrades.CreateCPData(championSkillData)
 	disciplineIndex = CPData:GetChampionSkillData(championSkillData.id):GetChampionDisciplineData().disciplineIndex,
 	requiredPointsToSlot = requiredPointsToSlot(championSkillData.Id),
 	skillIndexToReplace = championSkillData.skillIndexToReplace,
+	isOldSkill = championSkillData.isOldSkill,
 
 	-- Assign the utility functions
 	AttemptToSlot = AttemptToSlot,

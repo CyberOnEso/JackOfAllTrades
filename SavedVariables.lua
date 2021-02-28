@@ -8,12 +8,29 @@ JackOfAllTrades.variableVersion = 1
 local defaultData = {
 	debug = false,
 	colour = {
-		warnings = "|ce60000",
-		notifications = "|c557C29"
+		warnings = "|cba6a1a",
+		notifications = "|c638C29"
+	},
+	skillIndexToReplace = {
+		[1] = 1,
+		[2] = 2,
+		[3] = 3
 	},
 	warnings = {
 		meticulousDisassembly = false,
 		treasureHunter = false,
+		giftedRider = false,
+		warMount = false,
+		professionalUpkeep = false,
+		reelTechnique = false,
+		anglersInstincts = false,
+		masterGatherer = false,
+		plentifulHarvest = false,
+		cutpursesArt = false,
+		shadowstrike = false,
+		infamous = false,
+		homemaker = false,
+		sustainingShadows = false
 	},
 	enable = {
 		meticulousDisassembly = true,
@@ -24,7 +41,12 @@ local defaultData = {
 		reelTechnique = true,
 		anglersInstincts = true,
 		masterGatherer = true,
-		plentifulHarvest = true
+		plentifulHarvest = true,
+		cutpursesArt = true,
+		shadowstrike = true,
+		infamous = true,
+		homemaker = true,
+		sustainingShadows = true
 	},
 	notification = {
 		meticulousDisassembly = false,
@@ -35,7 +57,12 @@ local defaultData = {
 		reelTechnique = false,
 		anglersInstincts = false,
 		masterGatherer = false,
-		plentifulHarvest = false
+		plentifulHarvest = false,
+		cutpursesArt = false,
+		shadowstrike = false,
+		infamous = false,
+		homemaker = false,
+		sustainingShadows = false
 	},
 	oldSkill = {}
 }
@@ -54,4 +81,8 @@ function JackOfAllTrades.InitSavedVariables()
 	if JackOfAllTrades.savedVariables.inCombatDuringReloadUI then
 		EVENT_MANAGER:RegisterForEvent(JackOfAllTrades.name, EVENT_PLAYER_COMBAT_STATE, JackOfAllTrades.whenCombatEndsSlotSkill)
 	end
+end
+
+function JackOfAllTrades.ResetSavedVariables()
+	JackOfAllTrades.savedVariables = defaultData
 end
