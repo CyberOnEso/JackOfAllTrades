@@ -59,4 +59,7 @@ img {
 header {
   display: none;
 }
+.markdown-body h1 {
+  display: none; 
+}
 </style>
