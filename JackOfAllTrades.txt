@@ -2,8 +2,8 @@
 ## Title: |c9CD04CJack of all trades|r
 ## Version: 0.6
 ## AddOnVersion: 1
-## Author: |c235AC4@CyberOnEso|r
-## Description: |c9CD04CAutomatically adjusts your green champion bar depending on what you are doing, and sets it back to normal right after. |rWill not respec your champion points or charge you 3000 gold.
+## Author: |c5959D5@CyberOnEso|r
+## Description: |c9CD04CAutomatically adjusts your green champion bar depending on what you are doing, and sets it back to normal right after.         |rWill not respec your champion points or charge you 3000 gold.
 ## SavedVariables: JackOfAllTradesData
 ## DependsOn: LibAddonMenu-2.0
 ##
