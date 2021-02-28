@@ -32,7 +32,7 @@ It is intended to be a seamless quality of life improvement, not a CP respec add
 
 ## Optional Features
 - Get a notification whenver any skill you wish to be notifed for is slotted
-- Recieve a warning message whenever you don't have enough points into a star for it to be automatically slotted
+- Receive a warning message whenever you don't have enough points into a star for it to be automatically slotted
 - Disable automatically slotting any skill you wish
 - Remap where on your champion bar skills will be automatically slotted to.
 
