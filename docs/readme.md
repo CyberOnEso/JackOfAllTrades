@@ -4,31 +4,34 @@
 
 Automatically adjusts your green champion bar loadout depending on what you are attempting to achieve and restores back your old CP setup when you are done.
 
-### Meticulous Dissasmebly
-Whenever you interact with a crafting station that supports Meticulous Dissasmebly it will automatically be slotted onto your champion bar.
-Allowing you to refine materials with the buff always active.
+## Crafting
+- Automatically slots Master Gatherer and Plentiful Harvest when you start harvesting a crafting node.
+- Automaitcally slots Meticulous Disassembly when you start crafting, ensuring you always get optimal refining results!
 
-### Treasure Hunter
-Whenever you lockpick a chest it will automatically equip the Treasure Hunter skill.
-Ensuring your chests are always of the highest quality
+## Riding
+- Automatically slots Gifted Rider, and War Mount whenever your mount up!
 
-### Gifted Rider & War Mount
-Whenever you mount it will automatically equip the Gifted Rider & War Mount skills if you have them unlocked.
+## Looting
+- Automatically slots Treasure Hunter, and Homemaker whenver you are looting the relevant container.
 
-### Professional Upkeep
-Whenever you interact with a merchant it will automatically equip Professional Upkeep, allowing you to always get the lowest repair cost on your gear.
+## Fishing
+- Slots Reel Technique and Angler's Instincts whenever you start fishing.
 
-## Reel Technique & Angler's Instinct
-Whenever you start fishing will equip these stars thus giving you faster fishing speed and increases the chance of catching higher quality fish.
+## Thieving
+- Slots Sustaing Shadows whenever you start sneaking, keeping you in the dark for longer!
+- Slots Infamous whenever you interact with a fence, helping you always get the best selling price.
+- Slots Cutpurse's Art whenever you pickpocket someone.
+- Slots shadowstrike when you can use the Blade of Woe.
 
-## Master Gatherer & Plentiful Harvest
-Whenever you start gatering a crafting node will equip these stars thus giving you faster harvesting speeds and double drop chances.
+It will only equip the skills if you have enough points into them already. This addon will not charge you 3000 gold etc.
 
-This addon will not respec your champion points, and will not charge you 3000 gold etc.
-It will only equip the skills if you have enough points into them already.
 It is intended to be a seamless quality of life improvement, not a CP respec addon.
 
-You can choose to disable automatic slotting of any CP stars at any time.
+## Optional Features
+- Get a notification whenver any skill you wish to be notifed for is slotted
+- Recieve a warning message whenever you don't have enough points into a star for it to be automatically slotted
+- Disable automatically slotting any skill you wish
+- Remap where on your champion bar skills will be automatically slotted to.
 
 If anyone has time to test this addon or can provide me with any thoughts, additions, or improvements I would be very grateful.
 
