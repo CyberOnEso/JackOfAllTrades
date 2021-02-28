@@ -46,4 +46,7 @@ body {
   color:  rgb(201,209,211);
   background-color: rgb(13,17,23);
 }
+header {
+  display: none;
+}
 </style>
