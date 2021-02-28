@@ -6,13 +6,13 @@ Automatically adjusts your green champion bar loadout depending on what you are 
 
 ## Crafting
 - Automatically slots Master Gatherer and Plentiful Harvest when you start harvesting a crafting node.
-- Automaitcally slots Meticulous Disassembly when you start crafting, ensuring you always get optimal refining results!
+- Automatically slots Meticulous Disassembly when you start crafting, ensuring you always get optimal refining results!
 
 ## Riding
 - Automatically slots Gifted Rider, and War Mount whenever your mount up!
 
 ## Looting
-- Automatically slots Treasure Hunter, and Homemaker whenver you are looting the relevant container.
+- Automatically slots Treasure Hunter, and Homemaker whenever you are looting the relevant container.
 
 ## Fishing
 - Slots Reel Technique and Angler's Instincts whenever you start fishing.
@@ -22,6 +22,9 @@ Automatically adjusts your green champion bar loadout depending on what you are 
 - Slots Infamous whenever you interact with a fence, helping you always get the best selling price.
 - Slots Cutpurse's Art whenever you pickpocket someone.
 - Slots shadowstrike when you can use the Blade of Woe.
+
+## Miscellaneous
+- Slots Professional Upkeep when you talk with a merchant, ensuring you always get your gear repaired for less!
 
 It will only equip the skills if you have enough points into them already. This addon will not charge you 3000 gold etc.
 
