@@ -53,6 +53,9 @@ body {
 img {
   background-color: transparent;
 }
+.markdown-body img {
+  background-color: transparent; 
+}
 header {
   display: none;
 }
