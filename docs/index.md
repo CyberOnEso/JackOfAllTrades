@@ -49,6 +49,8 @@ body {
   color:  rgb(201,209,211);
   background-color: transparent;
 }
+img {
+   background-color: transparent;
 }
 header {
   display: none;
