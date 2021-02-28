@@ -51,7 +51,7 @@ body {
   background-color: transparent;
 }
 img {
-   background-color: transparent;
+  background-color: transparent;
 }
 header {
   display: none;
