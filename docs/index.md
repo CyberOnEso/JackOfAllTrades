@@ -42,6 +42,9 @@ Many thanks
 
 
 <style>
+* {
+  background-color: rgb(201,209,211);
+}
 body {
   color:  rgb(201,209,211);
   background-color: rgb(13,17,23);
