@@ -1005,7 +1005,10 @@ function JackOfAllTrades:InitMenu()
                     choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
                     choicesValues = {1, 2, 3, 4},
                     getFunc = function() return self.savedVariables.category.giftedRider end,
-                    setFunc = function(value) self.savedVariables.category.giftedRider = value end,
+                    setFunc = function(value) 
+                                self.savedVariables.category.giftedRider = value 
+                                JackOfAllTrades.UpdateSkillCategory('giftedRider')
+                            end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("giftedRider"), 1000),
                     sort = "numericvalue-up",
                     requiresReload = true,
@@ -1018,7 +1021,10 @@ function JackOfAllTrades:InitMenu()
                     choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
                     choicesValues = {1, 2, 3, 4},
                     getFunc = function() return self.savedVariables.category.warMount end,
-                    setFunc = function(value) self.savedVariables.category.warMount = value end,
+                    setFunc = function(value) 
+                                self.savedVariables.category.warMount = value 
+                                JackOfAllTrades.UpdateSkillCategory('warMount')
+                            end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("warMount"), 1000),
                     sort = "numericvalue-up",
                     requiresReload = true,
@@ -1048,7 +1054,10 @@ function JackOfAllTrades:InitMenu()
                     choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
                     choicesValues = {1, 2, 3, 4},
                     getFunc = function() return self.savedVariables.category.masterGatherer end,
-                    setFunc = function(value) self.savedVariables.category.masterGatherer = value end,
+                    setFunc = function(value) 
+                                self.savedVariables.category.masterGatherer = value 
+                                JackOfAllTrades.UpdateSkillCategory('masterGatherer')
+                            end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("masterGatherer"), 1000),
                     sort = "numericvalue-up",
                     requiresReload = true,
@@ -1060,7 +1069,10 @@ function JackOfAllTrades:InitMenu()
                     choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
                     choicesValues = {1, 2, 3, 4},
                     getFunc = function() return self.savedVariables.category.plentifulHarvest end,
-                    setFunc = function(value) self.savedVariables.category.plentifulHarvest = value end,
+                    setFunc = function(value) 
+                                self.savedVariables.category.plentifulHarvest = value 
+                                JackOfAllTrades.UpdateSkillCategory('plentifulHarvest')
+                            end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("plentifulHarvest"), 1000),
                     sort = "numericvalue-up",
                     requiresReload = true,
@@ -1072,7 +1084,10 @@ function JackOfAllTrades:InitMenu()
                     choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
                     choicesValues = {1, 2, 3, 4},
                     getFunc = function() return self.savedVariables.category.meticulousDisassembly end,
-                    setFunc = function(value) self.savedVariables.category.meticulousDisassembly = value end,
+                    setFunc = function(value) 
+                                self.savedVariables.category.meticulousDisassembly = value 
+                                JackOfAllTrades.UpdateSkillCategory('meticulousDisassembly') 
+                            end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("meticulousDisassembly"), 1000),
                     sort = "numericvalue-up",
                     requiresReload = true,
@@ -1102,7 +1117,10 @@ function JackOfAllTrades:InitMenu()
                     choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
                     choicesValues = {1, 2, 3, 4},
                     getFunc = function() return self.savedVariables.category.treasureHunter end,
-                    setFunc = function(value) self.savedVariables.category.treasureHunter = value end,
+                    setFunc = function(value) 
+                                self.savedVariables.category.treasureHunter = value
+                                JackOfAllTrades.UpdateSkillCategory('treasureHunter') 
+                            end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("treasureHunter"), 1000),
                     sort = "numericvalue-up",
                     requiresReload = true,
@@ -1114,7 +1132,10 @@ function JackOfAllTrades:InitMenu()
                     choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
                     choicesValues = {1, 2, 3, 4},
                     getFunc = function() return self.savedVariables.category.homemaker end,
-                    setFunc = function(value) self.savedVariables.category.homemaker = value end,
+                    setFunc = function(value) 
+                                self.savedVariables.category.homemaker = value 
+                                JackOfAllTrades.UpdateSkillCategory('homemaker')
+                            end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("homemaker"), 1000),
                     sort = "numericvalue-up",
                     requiresReload = true,
@@ -1144,7 +1165,10 @@ function JackOfAllTrades:InitMenu()
                     choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
                     choicesValues = {1, 2, 3, 4},
                     getFunc = function() return self.savedVariables.category.reelTechnique end,
-                    setFunc = function(value) self.savedVariables.category.reelTechnique = value end,
+                    setFunc = function(value) 
+                                self.savedVariables.category.reelTechnique = value 
+                                JackOfAllTrades.UpdateSkillCategory('reelTechnique')
+                            end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("reelTechnique"), 1000),
                     sort = "numericvalue-up",
                     requiresReload = true,
@@ -1156,7 +1180,10 @@ function JackOfAllTrades:InitMenu()
                     choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
                     choicesValues = {1, 2, 3, 4},
                     getFunc = function() return self.savedVariables.category.anglersInstincts end,
-                    setFunc = function(value) self.savedVariables.category.anglersInstincts = value end,
+                    setFunc = function(value) 
+                                self.savedVariables.category.anglersInstincts = value 
+                                JackOfAllTrades.UpdateSkillCategory('anglersInstincts')
+                            end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("anglersInstincts"), 1000),
                     sort = "numericvalue-up",
                     requiresReload = true,
@@ -1186,7 +1213,10 @@ function JackOfAllTrades:InitMenu()
                     choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
                     choicesValues = {1, 2, 3, 4},
                     getFunc = function() return self.savedVariables.category.infamous end,
-                    setFunc = function(value) self.savedVariables.category.infamous = value end,
+                    setFunc = function(value) 
+                                self.savedVariables.category.infamous = value 
+                                JackOfAllTrades.UpdateSkillCategory('infamous')
+                            end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("infamous"), 1000),
                     sort = "numericvalue-up",
                     requiresReload = true,
@@ -1198,7 +1228,10 @@ function JackOfAllTrades:InitMenu()
                     choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
                     choicesValues = {1, 2, 3, 4},
                     getFunc = function() return self.savedVariables.category.cutpursesArt end,
-                    setFunc = function(value) self.savedVariables.category.cutpursesArt = value end,
+                    setFunc = function(value) 
+                                self.savedVariables.category.cutpursesArt = value 
+                                JackOfAllTrades.UpdateSkillCategory('cutpursesArt')
+                            end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("cutpursesArt"), 1000),
                     sort = "numericvalue-up",
                     requiresReload = true,
@@ -1210,7 +1243,10 @@ function JackOfAllTrades:InitMenu()
                     choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
                     choicesValues = {1, 2, 3, 4},
                     getFunc = function() return self.savedVariables.category.shadowstrike end,
-                    setFunc = function(value) self.savedVariables.category.shadowstrike = value end,
+                    setFunc = function(value) 
+                                self.savedVariables.category.shadowstrike = value 
+                                JackOfAllTrades.UpdateSkillCategory('shadowstrike')
+                            end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("shadowstrike"), 1000),
                     sort = "numericvalue-up",
                     requiresReload = true,
@@ -1222,7 +1258,10 @@ function JackOfAllTrades:InitMenu()
                     getFunc = function() return self.savedVariables.category.sustainingShadows end,
                     choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
                     choicesValues = {1, 2, 3, 4},
-                    setFunc = function(value) self.savedVariables.category.sustainingShadows = value end,
+                    setFunc = function(value) 
+                                self.savedVariables.category.sustainingShadows = value 
+                                JackOfAllTrades.UpdateSkillCategory('sustainingShadows')
+                            end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("sustainingShadows"), 1000),
                     sort = "numericvalue-up",
                     requiresReload = true,
@@ -1234,7 +1273,10 @@ function JackOfAllTrades:InitMenu()
                     choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
                     choicesValues = {1, 2, 3, 4},
                     getFunc = function() return self.savedVariables.category.fadeAway end,
-                    setFunc = function(value) self.savedVariables.category.fadeAway = value end,
+                    setFunc = function(value) 
+                                self.savedVariables.category.fadeAway = value 
+                                JackOfAllTrades.UpdateSkillCategory('fadeAway')
+                            end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("fadeAway"), 1000),
                     sort = "numericvalue-up",
                     requiresReload = true,
@@ -1264,10 +1306,12 @@ function JackOfAllTrades:InitMenu()
                     choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
                     choicesValues = {1, 2, 3, 4},
                     getFunc = function() return self.savedVariables.category.professionalUpkeep end,
-                    setFunc = function(value) self.savedVariables.category.professionalUpkeep = value end,
+                    setFunc = function(value) 
+                                self.savedVariables.category.professionalUpkeep = value 
+                                JackOfAllTrades.UpdateSkillCategory('professionalUpkeep')
+                            end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("professionalUpkeep"), 1000),
                     sort = "numericvalue-up",
-                    requiresReload = true,
                     width = "half"
                 },
             },

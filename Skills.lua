@@ -241,6 +241,21 @@ local function isCPSkillSlotted(self)
 end
 
 -------------------------------------------------------------------------------------------------
+-- Change skill to repace  --
+-------------------------------------------------------------------------------------------------
+local function ChangeSkillCategory()
+	-- Gets either 1, 5, or 9 depending on which discipline we want to check in.
+	local firstIndex = championBar.firstSlotPerDiscipline[GetChampionDisciplineId(self.disciplineIndex)]
+	if newSkillCategory <= firstIndex and newSkillCategory >= firstIndex+(totalChampionBarSlots/numDisciplines) then
+		self.skillIndexToReplace = newSkillCategory
+	end
+end
+
+function JackOfAllTrades.updateSkillCategory()
+	ChangeSkillCategory
+end
+
+-------------------------------------------------------------------------------------------------
 -- Constructor  --
 -------------------------------------------------------------------------------------------------
 function JackOfAllTrades.CreateCPData(championSkillData)
@@ -261,6 +276,7 @@ function JackOfAllTrades.CreateCPData(championSkillData)
 	isCPSkillSlotted = isCPSkillSlotted,
 	slotCPNode = slotCPNode,
 	slotOldCPNode = slotOldCPNode,
+	ChangeSkillCategory = ChangeSkillCategory
 	}
 end
 

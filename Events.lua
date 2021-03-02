@@ -171,36 +171,51 @@ end
 
 -------------------------------------------------------------------------------------------------
 -- Load in skill data  --
+------------------------------------------------------------------------------------------------- 
+local skill = {
+	meticulousDisassembly = JackOfAllTrades.CreateCPData(skillData.meticulousDisassembly),
+	treasureHunter = JackOfAllTrades.CreateCPData(skillData.treasureHunter),
+
+	giftedRider = JackOfAllTrades.CreateCPData(skillData.giftedRider),
+	warMount = JackOfAllTrades.CreateCPData(skillData.warMount),
+
+	professionalUpkeep = JackOfAllTrades.CreateCPData(skillData.professionalUpkeep),
+	infamous = JackOfAllTrades.CreateCPData(skillData.infamous),
+
+	reelTechnique = JackOfAllTrades.CreateCPData(skillData.reelTechnique),
+	anglersInstincts = JackOfAllTrades.CreateCPData(skillData.anglersInstincts),
+
+	masterGatherer = JackOfAllTrades.CreateCPData(skillData.masterGatherer),
+	plentifulHarvest = JackOfAllTrades.CreateCPData(skillData.plentifulHarvest),
+
+	cutpursesArt = JackOfAllTrades.CreateCPData(skillData.cutpursesArt),
+	shadowstrike = JackOfAllTrades.CreateCPData(skillData.shadowstrike),
+
+	homemaker = JackOfAllTrades.CreateCPData(skillData.homemaker),
+
+	sustainingShadows = JackOfAllTrades.CreateCPData(skillData.sustainingShadows),
+
+	fadeAway = JackOfAllTrades.CreateCPData(skillData.fadeAway)
+}
+
 -------------------------------------------------------------------------------------------------
-local function LoadInSkillData()
-	JackOfAllTrades.meticulousDisassembly = JackOfAllTrades.CreateCPData(skillData.meticulousDisassembly)
-	JackOfAllTrades.treasureHunter = JackOfAllTrades.CreateCPData(skillData.treasureHunter)
-
-	JackOfAllTrades.giftedRider = JackOfAllTrades.CreateCPData(skillData.giftedRider)
-	JackOfAllTrades.warMount = JackOfAllTrades.CreateCPData(skillData.warMount)
-
-	JackOfAllTrades.professionalUpkeep = JackOfAllTrades.CreateCPData(skillData.professionalUpkeep)
-	JackOfAllTrades.infamous = JackOfAllTrades.CreateCPData(skillData.infamous)
-
-	JackOfAllTrades.reelTechnique = JackOfAllTrades.CreateCPData(skillData.reelTechnique)
-	JackOfAllTrades.anglersInstincts = JackOfAllTrades.CreateCPData(skillData.anglersInstincts)
-
-	JackOfAllTrades.masterGatherer = JackOfAllTrades.CreateCPData(skillData.masterGatherer)
-	JackOfAllTrades.plentifulHarvest = JackOfAllTrades.CreateCPData(skillData.plentifulHarvest)
-
-	JackOfAllTrades.cutpursesArt = JackOfAllTrades.CreateCPData(skillData.cutpursesArt)
-
-	JackOfAllTrades.shadowstrike = JackOfAllTrades.CreateCPData(skillData.shadowstrike)
-
-	JackOfAllTrades.homemaker = JackOfAllTrades.CreateCPData(skillData.homemaker)
-
-	JackOfAllTrades.sustainingShadows = JackOfAllTrades.CreateCPData(skillData.sustainingShadows)
-
-	JackOfAllTrades.fadeAway = JackOfAllTrades.CreateCPData(skillData.fadeAway)
+-- Assign skill category data, this has to be called after addon has been initzilized  --
+------------------------------------------------------------------------------------------------- 
+local function AssignSkillCategoryData()
+	for star, key in pairs(skillData) do
+		skill[star.rawName]:ChangeSkillCategory(JackOfAllTrades.savedVariables.category[star.rawName])
+	end
 end
 
 -------------------------------------------------------------------------------------------------
--- Load in skill data  --
+-- Update skill category data, this will be called when the user alters the menu --
+------------------------------------------------------------------------------------------------- 
+function JackOfAllTrades.UpdateSkillCategory(rawName)
+	skill[rawName]:ChangeSkillCategory(JackOfAllTrades.savedVariables.category[star.rawName])
+end
+
+-------------------------------------------------------------------------------------------------
+-- Get id of a known skill rawName  --
 -------------------------------------------------------------------------------------------------
 function JackOfAllTrades.GetSkillId(str) -- TODO: Use a for loop + pairs and a lookup table.
 	return skillData[str].id
@@ -227,7 +242,7 @@ function JackOfAllTrades.openCraftingStation(eventcode, station)
 	if not JackOfAllTrades.savedVariables.enable.meticulousDisassembly then return end
 	-- Check if we are a station that Meticulous Disassembly will affect
 	if not has_value(station, skillData.meticulousDisassembly.stations) then return end
-	local result = JackOfAllTrades.meticulousDisassembly:AttemptToSlot()
+	local result = meticulousDisassembly:AttemptToSlot()
 	if result then 
 		SendNotification('meticulousDisassembly')
 	elseif JackOfAllTrades.savedVariables.warnings.meticulousDisassembly then 
@@ -238,7 +253,7 @@ end
 function JackOfAllTrades.closeCraftingStation(eventcode, station)
 	-- Check if we are a station that Meticulous Disassembly will affect
 	if not has_value(station, skillData.meticulousDisassembly.stations) then return end
-	JackOfAllTrades.meticulousDisassembly:AttemptToReturnSlot()
+	meticulousDisassembly:AttemptToReturnSlot()
 end
 
 -------------------------------------------------------------------------------------------------
@@ -248,12 +263,12 @@ local function StopOpeningChest()
 	--[[ If the player is mounted we don't want to replace their nodes with their standard ones again otherwise their mount speed would go down.
 	This function is called 3 seconds after harvesting begins, so in theory players could start gathering, cancel the action and then mount. --]]
 	if IsMounted() then return end
-	JackOfAllTrades.treasureHunter:AttemptToReturnSlot()
+	treasureHunter:AttemptToReturnSlot()
 end
 
 local function StartOpeningChest()
 	if not JackOfAllTrades.savedVariables.enable.treasureHunter then return end
-	local result = JackOfAllTrades.treasureHunter:AttemptToSlot()
+	local result = treasureHunter:AttemptToSlot()
 	if result then
 		SendNotification('treasureHunter')
 		zo_callLater(StopOpeningChest, 3000)
@@ -270,7 +285,7 @@ end
 function JackOfAllTrades.mountStateChanged(eventcode, mounted)
 	if mounted then
 		if JackOfAllTrades.savedVariables.enable.giftedRider then 
-			local giftedRiderResult = JackOfAllTrades.giftedRider:AttemptToSlot()
+			local giftedRiderResult = giftedRider:AttemptToSlot()
 			if giftedRiderResult then
 				SendNotification('giftedRider')
 			elseif giftedRiderResult == nil then
@@ -278,7 +293,7 @@ function JackOfAllTrades.mountStateChanged(eventcode, mounted)
 			end
 		end
 		if JackOfAllTrades.savedVariables.enable.warMount then 
-			local warMountResult = JackOfAllTrades.warMount:AttemptToSlot()
+			local warMountResult = warMount:AttemptToSlot()
 			if warMountResult then
 				SendNotification('warMount')
 			elseif warMountResult == nil then
@@ -286,7 +301,7 @@ function JackOfAllTrades.mountStateChanged(eventcode, mounted)
 			end
 		end
 	else
-		JackOfAllTrades.giftedRider:AttemptToReturnSlot()
+		giftedRider:AttemptToReturnSlot()
 	end
 end
 
@@ -295,7 +310,7 @@ end
 -------------------------------------------------------------------------------------------------
 function JackOfAllTrades.openStore(eventcode)
 	if not JackOfAllTrades.savedVariables.enable.professionalUpkeep then return end
-	local result = JackOfAllTrades.professionalUpkeep:AttemptToSlot()
+	local result = professionalUpkeep:AttemptToSlot()
 	if result then 
 		SendNotification('professionalUpkeep')
 	elseif result == nil then
@@ -304,7 +319,7 @@ function JackOfAllTrades.openStore(eventcode)
 end
 
 function JackOfAllTrades.closeStore(eventcode)
-	JackOfAllTrades.professionalUpkeep:AttemptToReturnSlot()
+	professionalUpkeep:AttemptToReturnSlot()
 end
 
 -------------------------------------------------------------------------------------------------
@@ -317,7 +332,7 @@ local function startFishing()
 	local isAnglersInstinctsEnabled = JackOfAllTrades.savedVariables.enable.anglersInstincts
 	if not reelTechnique and not anglersInstincts then return end
 	if isReelTechniqueEnabled then 
-		local reelTechniqueResult = JackOfAllTrades.reelTechnique:AttemptToSlot()
+		local reelTechniqueResult = reelTechnique:AttemptToSlot()
 		if reelTechniqueResult then
 			SendNotification('reelTechnique')
 		elseif reelTechniqueResult == nil then
@@ -325,7 +340,7 @@ local function startFishing()
 		end
 	end
     if isAnglersInstinctsEnabled then 
-    	local anglersInstinctsResult = JackOfAllTrades.anglersInstincts:AttemptToSlot()
+    	local anglersInstinctsResult = anglersInstincts:AttemptToSlot()
     	if anglersInstinctsResult then
     		SendNotification('anglersInstincts')
     	elseif anglersInstinctsResult == nil then 
@@ -338,7 +353,7 @@ local function startFishing()
     EM:RegisterForUpdate(name .. "FishingCheck", delay, function()
     	local interactText = select(1, GetGameCameraInteractableActionInfo())
     	if interactText ~= GetString(SI_GAMECAMERAACTIONTYPE17) then
-    		JackOfAllTrades.reelTechnique:AttemptToReturnSlot()
+    		reelTechnique:AttemptToReturnSlot()
     		EM:UnregisterForUpdate(name .. "FishingCheck")
     	end
     end)
@@ -351,8 +366,7 @@ local function stopGathering()
 	--[[ If the player is mounted we don't want to replace their nodes with their standard ones again otherwise their mount speed would go down.
 	This function is called 3 seconds after harvesting begins, so in theory players could start gathering, cancel the action and then mount. --]]
 	if IsMounted() then return end
-	JackOfAllTrades.masterGatherer:AttemptToReturnSlot()
-	--plentifulHarvest:AttemptToReturnSlot()
+	masterGatherer:AttemptToReturnSlot()
 end
 
 local function startGathering()
@@ -362,7 +376,7 @@ local function startGathering()
 	if not isMasterGathererEnabled and not isPlentifulHarvestEnabled then return end
 
 	if isMasterGathererEnabled then 
-		local masterGathererResult = JackOfAllTrades.masterGatherer:AttemptToSlot()
+		local masterGathererResult = masterGatherer:AttemptToSlot()
 		if masterGathererResult then 
 			SendNotification('masterGatherer')
 		elseif masterGathererResult == nil then
@@ -370,7 +384,7 @@ local function startGathering()
 		end
 	end
     if isPlentifulHarvestEnabled then 
-    	local plentifulHarvestResult = JackOfAllTrades.plentifulHarvest:AttemptToSlot()
+    	local plentifulHarvestResult = plentifulHarvest:AttemptToSlot()
     	if plentifulHarvestResult then 
 			SendNotification('plentifulHarvest')
     	elseif plentifulHarvestResult == nil then
@@ -379,7 +393,7 @@ local function startGathering()
     end
     
 	-- If we have enough points into either of them 
-	if JackOfAllTrades.masterGatherer:AttemptToSlot() or JackOfAllTrades.plentifulHarvest:AttemptToSlot() then
+	if masterGatherer:AttemptToSlot() or plentifulHarvest:AttemptToSlot() then
 		zo_callLater(stopGathering, 3000)
 	end
 end
@@ -391,12 +405,12 @@ local function StopPickpocketing()
 	--[[ If the player is mounted we don't want to replace their nodes with their standard ones again otherwise their mount speed would go down.
 	This function is called 3 seconds after harvesting begins, so in theory players could start gathering, cancel the action and then mount. --]]
 	if IsMounted() then return end
-	JackOfAllTrades.cutpursesArt:AttemptToReturnSlot()
+	cutpursesArt:AttemptToReturnSlot()
 end
 
 local function StartPickpocketing()
 	if not JackOfAllTrades.savedVariables.enable.cutpursesArt then return end
-	local result = JackOfAllTrades.cutpursesArt:AttemptToSlot()
+	local result = cutpursesArt:AttemptToSlot()
 	if result then
 		SendNotification('cutpursesArt')
 		zo_callLater(StopPickpocketing, 3000)
@@ -414,14 +428,14 @@ local isBladeOfWoeSlotted = false -- This is only for if the addon has slotted i
 local bladeOfWoECheckCountdown = 10 -- Check if we should reslot the players old skill after 10 seconds
 
 local function StopBladeOfWoe()
-	if JackOfAllTrades.shadowstrike:AttemptToReturnSlot() then 
+	if shadowstrike:AttemptToReturnSlot() then 
 		isBladeOfWoeSlotted = false 
 	end
 end
 
 local function StartBladeOfWoe()
 	if not JackOfAllTrades.savedVariables.enable.shadowstrike then return end
-	local result = JackOfAllTrades.shadowstrike:AttemptToSlot()
+	local result = shadowstrike:AttemptToSlot()
 	if result then
 		SendNotification('shadowstrike')
 		isBladeOfWoeSlotted = true
@@ -452,7 +466,7 @@ end
 -------------------------------------------------------------------------------------------------
 function JackOfAllTrades.OpenFence(_, _, _)
 	if not JackOfAllTrades.savedVariables.enable.infamous then return end
-	local result = JackOfAllTrades.infamous:AttemptToSlot()
+	local result = infamous:AttemptToSlot()
 	if result then 
 		SendNotification('infamous')
 	elseif result == nil then
@@ -472,7 +486,7 @@ local function StopLooting()
 		homemakerSlotted = false
 		return 
 	end
-	if JackOfAllTrades.homemaker:AttemptToReturnSlot() then
+	if homemaker:AttemptToReturnSlot() then
 		homemakerSlotted = false
 	else 
 		EM:RegisterForUpdate(name .. "HomemakerCombatCheck", 5000, function()
@@ -488,7 +502,7 @@ end
 
 local function StartLooting()
 	if not JackOfAllTrades.savedVariables.enable.homemaker then return end
-	local result = JackOfAllTrades.homemaker:AttemptToSlot()
+	local result = homemaker:AttemptToSlot()
 	if result then
 		SendNotification('homemaker')
 		if not homemakerSlotted then
@@ -519,7 +533,7 @@ function JackOfAllTrades.stealthStateChanged(eventcode, unitTag, stealth)
 					SendWarning('sustainingShadows')
 				end
 			elseif isSustainingShadowsSlotted then
-				if JackOfAllTrades.sustainingShadows:AttemptToReturnSlot() then
+				if sustainingShadows:AttemptToReturnSlot() then
 					isSustainingShadowsSlotted = false
 				end
 			end
@@ -539,7 +553,7 @@ local function StopFadeAway()
 		fadeAwaySlotted = false
 		return 
 	end
-	if JackOfAllTrades.fadeAway:AttemptToReturnSlot() then
+	if fadeAway:AttemptToReturnSlot() then
 		fadeAwaySlotted = false
 	else 
 		EM:RegisterForUpdate(name .. "FadeAwayCombatCheck", 5000, function()
@@ -555,7 +569,7 @@ end
 
 local function StartFadeAway()
 	if not JackOfAllTrades.savedVariables.enable.fadeAway then return end
-	local result = JackOfAllTrades.fadeAway:AttemptToSlot()
+	local result = fadeAway:AttemptToSlot()
 	if result then
 		SendNotification('fadeAway')
 		if not fadeAwaySlotted then
@@ -637,7 +651,7 @@ end
 
 function JackOfAllTrades.InitEvents()
 	RegisterEvents()
-	LoadInSkillData()
+	AssignSkillCategoryData()
 end
 
 -------------------------------------------------------------------------------------------------
