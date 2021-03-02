@@ -202,8 +202,8 @@ local skill = {
 -- Assign skill category data, this has to be called after addon has been initzilized  --
 ------------------------------------------------------------------------------------------------- 
 local function AssignSkillCategoryData()
-	for star, key in pairs(skillData) do
-		skill[star.rawName]:ChangeSkillCategory(JackOfAllTrades.savedVariables.category[star.rawName])
+	for _, star in pairs(skillData) do
+		skill[star.rawName].skillIndexToReplace = JackOfAllTrades.savedVariables.category[star.rawName]
 	end
 end
 
@@ -211,7 +211,7 @@ end
 -- Update skill category data, this will be called when the user alters the menu --
 ------------------------------------------------------------------------------------------------- 
 function JackOfAllTrades.UpdateSkillCategory(rawName)
-	skill[rawName]:ChangeSkillCategory(JackOfAllTrades.savedVariables.category[star.rawName])
+	skill[rawName]:ChangeSkillCategory(JackOfAllTrades.savedVariables.category[rawName])
 end
 
 -------------------------------------------------------------------------------------------------
@@ -242,7 +242,7 @@ function JackOfAllTrades.openCraftingStation(eventcode, station)
 	if not JackOfAllTrades.savedVariables.enable.meticulousDisassembly then return end
 	-- Check if we are a station that Meticulous Disassembly will affect
 	if not has_value(station, skillData.meticulousDisassembly.stations) then return end
-	local result = meticulousDisassembly:AttemptToSlot()
+	local result = skill.meticulousDisassembly:AttemptToSlot()
 	if result then 
 		SendNotification('meticulousDisassembly')
 	elseif JackOfAllTrades.savedVariables.warnings.meticulousDisassembly then 
@@ -253,7 +253,7 @@ end
 function JackOfAllTrades.closeCraftingStation(eventcode, station)
 	-- Check if we are a station that Meticulous Disassembly will affect
 	if not has_value(station, skillData.meticulousDisassembly.stations) then return end
-	meticulousDisassembly:AttemptToReturnSlot()
+	skill.meticulousDisassembly:AttemptToReturnSlot()
 end
 
 -------------------------------------------------------------------------------------------------
@@ -263,12 +263,12 @@ local function StopOpeningChest()
 	--[[ If the player is mounted we don't want to replace their nodes with their standard ones again otherwise their mount speed would go down.
 	This function is called 3 seconds after harvesting begins, so in theory players could start gathering, cancel the action and then mount. --]]
 	if IsMounted() then return end
-	treasureHunter:AttemptToReturnSlot()
+	skill.treasureHunter:AttemptToReturnSlot()
 end
 
 local function StartOpeningChest()
 	if not JackOfAllTrades.savedVariables.enable.treasureHunter then return end
-	local result = treasureHunter:AttemptToSlot()
+	local result = skill.treasureHunter:AttemptToSlot()
 	if result then
 		SendNotification('treasureHunter')
 		zo_callLater(StopOpeningChest, 3000)
@@ -285,7 +285,7 @@ end
 function JackOfAllTrades.mountStateChanged(eventcode, mounted)
 	if mounted then
 		if JackOfAllTrades.savedVariables.enable.giftedRider then 
-			local giftedRiderResult = giftedRider:AttemptToSlot()
+			local giftedRiderResult = skill.giftedRider:AttemptToSlot()
 			if giftedRiderResult then
 				SendNotification('giftedRider')
 			elseif giftedRiderResult == nil then
@@ -293,7 +293,7 @@ function JackOfAllTrades.mountStateChanged(eventcode, mounted)
 			end
 		end
 		if JackOfAllTrades.savedVariables.enable.warMount then 
-			local warMountResult = warMount:AttemptToSlot()
+			local warMountResult = skill.warMount:AttemptToSlot()
 			if warMountResult then
 				SendNotification('warMount')
 			elseif warMountResult == nil then
@@ -301,7 +301,7 @@ function JackOfAllTrades.mountStateChanged(eventcode, mounted)
 			end
 		end
 	else
-		giftedRider:AttemptToReturnSlot()
+		skill.giftedRider:AttemptToReturnSlot()
 	end
 end
 
@@ -310,7 +310,7 @@ end
 -------------------------------------------------------------------------------------------------
 function JackOfAllTrades.openStore(eventcode)
 	if not JackOfAllTrades.savedVariables.enable.professionalUpkeep then return end
-	local result = professionalUpkeep:AttemptToSlot()
+	local result = skill.professionalUpkeep:AttemptToSlot()
 	if result then 
 		SendNotification('professionalUpkeep')
 	elseif result == nil then
@@ -319,7 +319,7 @@ function JackOfAllTrades.openStore(eventcode)
 end
 
 function JackOfAllTrades.closeStore(eventcode)
-	professionalUpkeep:AttemptToReturnSlot()
+	skill.professionalUpkeep:AttemptToReturnSlot()
 end
 
 -------------------------------------------------------------------------------------------------
@@ -332,7 +332,7 @@ local function startFishing()
 	local isAnglersInstinctsEnabled = JackOfAllTrades.savedVariables.enable.anglersInstincts
 	if not reelTechnique and not anglersInstincts then return end
 	if isReelTechniqueEnabled then 
-		local reelTechniqueResult = reelTechnique:AttemptToSlot()
+		local reelTechniqueResult = skill.reelTechnique:AttemptToSlot()
 		if reelTechniqueResult then
 			SendNotification('reelTechnique')
 		elseif reelTechniqueResult == nil then
@@ -340,7 +340,7 @@ local function startFishing()
 		end
 	end
     if isAnglersInstinctsEnabled then 
-    	local anglersInstinctsResult = anglersInstincts:AttemptToSlot()
+    	local anglersInstinctsResult = skill.anglersInstincts:AttemptToSlot()
     	if anglersInstinctsResult then
     		SendNotification('anglersInstincts')
     	elseif anglersInstinctsResult == nil then 
@@ -353,7 +353,7 @@ local function startFishing()
     EM:RegisterForUpdate(name .. "FishingCheck", delay, function()
     	local interactText = select(1, GetGameCameraInteractableActionInfo())
     	if interactText ~= GetString(SI_GAMECAMERAACTIONTYPE17) then
-    		reelTechnique:AttemptToReturnSlot()
+    		skill.reelTechnique:AttemptToReturnSlot()
     		EM:UnregisterForUpdate(name .. "FishingCheck")
     	end
     end)
@@ -366,7 +366,7 @@ local function stopGathering()
 	--[[ If the player is mounted we don't want to replace their nodes with their standard ones again otherwise their mount speed would go down.
 	This function is called 3 seconds after harvesting begins, so in theory players could start gathering, cancel the action and then mount. --]]
 	if IsMounted() then return end
-	masterGatherer:AttemptToReturnSlot()
+	skill.masterGatherer:AttemptToReturnSlot()
 end
 
 local function startGathering()
@@ -376,7 +376,7 @@ local function startGathering()
 	if not isMasterGathererEnabled and not isPlentifulHarvestEnabled then return end
 
 	if isMasterGathererEnabled then 
-		local masterGathererResult = masterGatherer:AttemptToSlot()
+		local masterGathererResult = skill.masterGatherer:AttemptToSlot()
 		if masterGathererResult then 
 			SendNotification('masterGatherer')
 		elseif masterGathererResult == nil then
@@ -384,7 +384,7 @@ local function startGathering()
 		end
 	end
     if isPlentifulHarvestEnabled then 
-    	local plentifulHarvestResult = plentifulHarvest:AttemptToSlot()
+    	local plentifulHarvestResult = skill.plentifulHarvest:AttemptToSlot()
     	if plentifulHarvestResult then 
 			SendNotification('plentifulHarvest')
     	elseif plentifulHarvestResult == nil then
@@ -393,7 +393,7 @@ local function startGathering()
     end
     
 	-- If we have enough points into either of them 
-	if masterGatherer:AttemptToSlot() or plentifulHarvest:AttemptToSlot() then
+	if skill.masterGatherer:AttemptToSlot() or skill.plentifulHarvest:AttemptToSlot() then
 		zo_callLater(stopGathering, 3000)
 	end
 end
@@ -405,12 +405,12 @@ local function StopPickpocketing()
 	--[[ If the player is mounted we don't want to replace their nodes with their standard ones again otherwise their mount speed would go down.
 	This function is called 3 seconds after harvesting begins, so in theory players could start gathering, cancel the action and then mount. --]]
 	if IsMounted() then return end
-	cutpursesArt:AttemptToReturnSlot()
+	skill.cutpursesArt:AttemptToReturnSlot()
 end
 
 local function StartPickpocketing()
 	if not JackOfAllTrades.savedVariables.enable.cutpursesArt then return end
-	local result = cutpursesArt:AttemptToSlot()
+	local result = skill.cutpursesArt:AttemptToSlot()
 	if result then
 		SendNotification('cutpursesArt')
 		zo_callLater(StopPickpocketing, 3000)
@@ -428,14 +428,14 @@ local isBladeOfWoeSlotted = false -- This is only for if the addon has slotted i
 local bladeOfWoECheckCountdown = 10 -- Check if we should reslot the players old skill after 10 seconds
 
 local function StopBladeOfWoe()
-	if shadowstrike:AttemptToReturnSlot() then 
+	if skill.shadowstrike:AttemptToReturnSlot() then 
 		isBladeOfWoeSlotted = false 
 	end
 end
 
 local function StartBladeOfWoe()
 	if not JackOfAllTrades.savedVariables.enable.shadowstrike then return end
-	local result = shadowstrike:AttemptToSlot()
+	local result = skill.shadowstrike:AttemptToSlot()
 	if result then
 		SendNotification('shadowstrike')
 		isBladeOfWoeSlotted = true
@@ -466,7 +466,7 @@ end
 -------------------------------------------------------------------------------------------------
 function JackOfAllTrades.OpenFence(_, _, _)
 	if not JackOfAllTrades.savedVariables.enable.infamous then return end
-	local result = infamous:AttemptToSlot()
+	local result = skill.infamous:AttemptToSlot()
 	if result then 
 		SendNotification('infamous')
 	elseif result == nil then
@@ -486,7 +486,7 @@ local function StopLooting()
 		homemakerSlotted = false
 		return 
 	end
-	if homemaker:AttemptToReturnSlot() then
+	if skill.homemaker:AttemptToReturnSlot() then
 		homemakerSlotted = false
 	else 
 		EM:RegisterForUpdate(name .. "HomemakerCombatCheck", 5000, function()
@@ -502,7 +502,7 @@ end
 
 local function StartLooting()
 	if not JackOfAllTrades.savedVariables.enable.homemaker then return end
-	local result = homemaker:AttemptToSlot()
+	local result = skill.homemaker:AttemptToSlot()
 	if result then
 		SendNotification('homemaker')
 		if not homemakerSlotted then
@@ -525,7 +525,7 @@ function JackOfAllTrades.stealthStateChanged(eventcode, unitTag, stealth)
 	if unitTag ~= 'player' then return end
 		if JackOfAllTrades.savedVariables.enable.giftedRider then 
 			if stealth ~= 0 then
-				local sustainingShadowsResult = sustainingShadows:AttemptToSlot()
+				local sustainingShadowsResult = skill.sustainingShadows:AttemptToSlot()
 				if sustainingShadowsResult then
 					isSustainingShadowsSlotted = true
 					SendNotification('sustainingShadows')
@@ -533,7 +533,7 @@ function JackOfAllTrades.stealthStateChanged(eventcode, unitTag, stealth)
 					SendWarning('sustainingShadows')
 				end
 			elseif isSustainingShadowsSlotted then
-				if sustainingShadows:AttemptToReturnSlot() then
+				if skill.sustainingShadows:AttemptToReturnSlot() then
 					isSustainingShadowsSlotted = false
 				end
 			end
@@ -553,7 +553,7 @@ local function StopFadeAway()
 		fadeAwaySlotted = false
 		return 
 	end
-	if fadeAway:AttemptToReturnSlot() then
+	if skill.fadeAway:AttemptToReturnSlot() then
 		fadeAwaySlotted = false
 	else 
 		EM:RegisterForUpdate(name .. "FadeAwayCombatCheck", 5000, function()
@@ -569,7 +569,7 @@ end
 
 local function StartFadeAway()
 	if not JackOfAllTrades.savedVariables.enable.fadeAway then return end
-	local result = fadeAway:AttemptToSlot()
+	local result = skill.fadeAway:AttemptToSlot()
 	if result then
 		SendNotification('fadeAway')
 		if not fadeAwaySlotted then
@@ -582,8 +582,20 @@ local function StartFadeAway()
 	end
 end
 
+local clemencyCheckTime = 16 -- You can only stay in the window for 15 seconds
 function JackOfAllTrades.BeingArrested(e, quitGame)
 	StartFadeAway()
+	if GetTimeToClemencyResetInSeconds() == 0 then
+		EM:RegisterForUpdate(name .. "ClemancyCheck", 1000, function() 
+			if GetTimeToClemencyResetInSeconds() > 0 then
+				StopFadeAway()
+			end
+			clemencyCheckTime = clemencyCheckTime - 1
+			if clemencyCheckTime < 0 then
+				EM:UnregisterForUpdate(name .. "ClemancyCheck")
+			end
+		end)
+	end
 end
 
 function JackOfAllTrades.InfamyUpdated(e, old, new, oldThreshold, newThreshold)

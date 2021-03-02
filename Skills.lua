@@ -94,15 +94,14 @@ local function AttemptToSlot(self)
 	end
 
 	-- Short circuit logic, will set the slot to the first empty slot if there is one or to the primary slot if there isn't an empty slot.
+	--local skillIndexToReplace = getFirstEmptySlot(self.disciplineIndex) or JackOfAllTrades.savedVariables.skillIndexToReplace[self.skillIndexToReplace]
 	local skillIndexToReplace = getFirstEmptySlot(self.disciplineIndex) or JackOfAllTrades.savedVariables.skillIndexToReplace[self.skillIndexToReplace]
 
 	if not self.isOldSkill then
 		-- If they have a node already in that slot save it so we can restore it later.
-		--local slotIndex = JackOfAllTrades.savedVariables.skillIndexToReplace[self.skillIndexToReplace]
 		local slotIndex = skillIndexToReplace
 		local oldSkillData = championBar:GetSlot(slotIndex).championSkillData
 		if oldSkillData then
-			--JackOfAllTrades.savedVariables.oldSkill[JackOfAllTrades.savedVariables.skillIndexToReplace[self.skillIndexToReplace]] = oldSkillData:GetId()
 			JackOfAllTrades.savedVariables.oldSkill[skillIndexToReplace] = oldSkillData:GetId()
 		end
 	end
@@ -243,7 +242,7 @@ end
 -------------------------------------------------------------------------------------------------
 -- Change skill to repace  --
 -------------------------------------------------------------------------------------------------
-local function ChangeSkillCategory()
+local function ChangeSkillCategory(self, newSkillCategory)
 	-- Gets either 1, 5, or 9 depending on which discipline we want to check in.
 	local firstIndex = championBar.firstSlotPerDiscipline[GetChampionDisciplineId(self.disciplineIndex)]
 	if newSkillCategory <= firstIndex and newSkillCategory >= firstIndex+(totalChampionBarSlots/numDisciplines) then
@@ -251,17 +250,13 @@ local function ChangeSkillCategory()
 	end
 end
 
-function JackOfAllTrades.updateSkillCategory()
-	ChangeSkillCategory
-end
-
 -------------------------------------------------------------------------------------------------
 -- Constructor  --
 -------------------------------------------------------------------------------------------------
 function JackOfAllTrades.CreateCPData(championSkillData)
-	if JackOfAllTrades.savedVariables.category[championSkillData.rawName] then
+--[[	if JackOfAllTrades.savedVariables.category[championSkillData.rawName] then
 		championSkillData.skillIndexToReplace = JackOfAllTrades.savedVariables.category[championSkillData.rawName]
-	end
+	end--]]
 	return {
 	name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(championSkillData.id)),
 	id = championSkillData.id,
