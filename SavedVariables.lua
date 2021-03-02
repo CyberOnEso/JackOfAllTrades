@@ -14,7 +14,8 @@ local defaultData = {
 	skillIndexToReplace = {
 		[1] = 1,
 		[2] = 2,
-		[3] = 3
+		[3] = 3,
+		[4] = 4
 	},
 	warnings = {
 		meticulousDisassembly = false,
@@ -30,7 +31,8 @@ local defaultData = {
 		shadowstrike = false,
 		infamous = false,
 		homemaker = false,
-		sustainingShadows = false
+		sustainingShadows = false,
+		fadeAway = false
 	},
 	enable = {
 		meticulousDisassembly = true,
@@ -46,7 +48,8 @@ local defaultData = {
 		shadowstrike = true,
 		infamous = true,
 		homemaker = true,
-		sustainingShadows = true
+		sustainingShadows = true,
+		fadeAway = true
 	},
 	notification = {
 		meticulousDisassembly = false,
@@ -62,7 +65,25 @@ local defaultData = {
 		shadowstrike = false,
 		infamous = false,
 		homemaker = false,
-		sustainingShadows = false
+		sustainingShadows = false,
+		fadeAway = false
+	},
+	category = {
+		meticulousDisassembly = 1,
+		treasureHunter = 1,
+		giftedRider = 1,
+		warMount = 2,
+		professionalUpkeep = 1,
+		reelTechnique = 1,
+		anglersInstincts = 2,
+		masterGatherer = 2,
+		plentifulHarvest = 1,
+		cutpursesArt = 2,
+		shadowstrike = 3,
+		infamous = 1,
+		homemaker = 2,
+		sustainingShadows = 1,
+		fadeAway = 4
 	},
 	oldSkill = {}
 }

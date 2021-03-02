@@ -131,7 +131,7 @@ local function AttemptToReturnSlot(self)
 			-- Then we know we have an old skill which isn't currently slotted, so lets slot it
 			if not oldSkill:isCPSkillSlotted() then 
 				if oldSkill:AttemptToSlot() then
-					if JackOfAllTrades.savedVariables.debug then d(string.format("%s added back to slot: %s.", GetChampionSkillName(oldSkill.id), oldSkill.skillIndexToReplace)) end
+					if JackOfAllTrades.savedVariables.debug then d(string.format("%s added back to slot: %s.", ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(oldSkill.id)), oldSkill.skillIndexToReplace)) end
 					-- Now we know the swap was successful we can remove the old skill from savedVariables.
 					JackOfAllTrades.savedVariables.oldSkill[index] = nil
 					wasSlottingSuccessful = true
@@ -156,7 +156,7 @@ function JackOfAllTrades.whenCombatEndsSlotSkill(eventcode, inCombat)
 	-- Itterates across all the old skills we have saved and attemts to slot each of them.
 	for skillIndex, skillId in pairs(JackOfAllTrades.savedVariables.oldSkill) do
 		if skillId then
-			if JackOfAllTrades.savedVariables.debug then d(string.format("Attempting to slot %s as combat has ended.", GetChampionSkillName(skillId))) end
+			if JackOfAllTrades.savedVariables.debug then d(string.format("Attempting to slot %s as combat has ended.", ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(skillId)))) end
 			local oldSkillData = {
 				id = skillId,
 				skillIndexToReplace = skillIndex,
@@ -244,8 +244,11 @@ end
 -- Constructor  --
 -------------------------------------------------------------------------------------------------
 function JackOfAllTrades.CreateCPData(championSkillData)
+	if JackOfAllTrades.savedVariables.category[championSkillData.rawName] then
+		championSkillData.skillIndexToReplace = JackOfAllTrades.savedVariables.category[championSkillData.rawName]
+	end
 	return {
-	name = GetChampionSkillName(championSkillData.id),
+	name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(championSkillData.id)),
 	id = championSkillData.id,
 	disciplineIndex = CPData:GetChampionSkillData(championSkillData.id):GetChampionDisciplineData().disciplineIndex,
 	requiredPointsToSlot = requiredPointsToSlot(championSkillData.Id),

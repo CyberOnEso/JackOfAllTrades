@@ -24,6 +24,7 @@ ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_MENU_SKILL_INDEX_SLIDER", "<<C:1>> skil
 ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_MENU_PRIMARY", "Primary")
 ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_MENU_SECONDARY", "Secondary")
 ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_MENU_TERTIARY", "Tertiary")
+ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY", "Quaternary")
 ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_WARNING", "Warning")
 ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_NOTIFICATION", "Notification")
 ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_TEXT_COLOUR", "<<C:1>> text colour")
@@ -31,6 +32,7 @@ ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_DEBUG", "Debug")
 ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_ENABLE_MODE", "Enable <<z:1>> mode")
 ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_DEBUG_RESET", "Reset saved variables")
 ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_DEBUG_RESET_SKILLS", "Reset old skill data")
+ZO_CreateStringId("SI_JACK_OF_ALL_TADES_SKILLS_ARE", "<<1>> skills are: ")
 
 -------------------------------------------------------------------------------------------------
 -- Interact Text Strings (If you can find these in the files please let me know)  --
@@ -43,4 +45,7 @@ ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_INTERACT_LOOT", "Loot")
 ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_INTERACT_UNLOCK", "Unlock")
 ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_INTERACT_CHEST", "Chest")
 ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_INTERACT_USE", "Use")
-
+ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_INTERACT_STEALFROM", "Steal from")
+ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_INTERACT_SEARCH", "Search")
+ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_INTERACT_PICKPOCKET", "Pickpocket")
+ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_INTERACT_BOOKSHELF", "Bookshelf")
