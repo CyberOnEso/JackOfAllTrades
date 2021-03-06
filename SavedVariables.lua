@@ -83,7 +83,7 @@ local defaultData = {
 		infamous = 1,
 		homemaker = 2,
 		sustainingShadows = 1,
-		fadeAway = 4
+		fadeAway = 2
 	},
 	oldSkill = {}
 }
@@ -106,4 +106,8 @@ end
 
 function JackOfAllTrades.ResetSavedVariables()
 	JackOfAllTrades.savedVariables = defaultData
+end
+
+function JackOfAllTrades.ResetSkillCategories()
+	JackOfAllTrades.savedVariables.category = defaultData.category
 end

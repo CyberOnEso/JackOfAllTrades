@@ -137,7 +137,7 @@ local skillData = {
 		rawName = 'fadeAway',
 		id = 84,
 		isOldSkill = false,
-		skillIndexToReplace = 4 
+		skillIndexToReplace = 2
 	}
 }
 
@@ -211,7 +211,7 @@ end
 -- Update skill category data, this will be called when the user alters the menu --
 ------------------------------------------------------------------------------------------------- 
 function JackOfAllTrades.UpdateSkillCategory(rawName)
-	skill[rawName]:ChangeSkillCategory(JackOfAllTrades.savedVariables.category[rawName])
+	skill[rawName].skillIndexToReplace = JackOfAllTrades.savedVariables.category[rawName]
 end
 
 -------------------------------------------------------------------------------------------------
@@ -521,6 +521,8 @@ end
 -------------------------------------------------------------------------------------------------
 local isSustainingShadowsSlotted = false
 
+local isBeingArrested = false -- This will be set true for a few seconds if we are being arrested to prevent Sustaing Shadows from being unslotted, as we are likely to sneak again after fleeing from a guard
+
 function JackOfAllTrades.stealthStateChanged(eventcode, unitTag, stealth)
 	if unitTag ~= 'player' then return end
 		if JackOfAllTrades.savedVariables.enable.giftedRider then 
@@ -533,8 +535,10 @@ function JackOfAllTrades.stealthStateChanged(eventcode, unitTag, stealth)
 					SendWarning('sustainingShadows')
 				end
 			elseif isSustainingShadowsSlotted then
-				if skill.sustainingShadows:AttemptToReturnSlot() then
-					isSustainingShadowsSlotted = false
+				if not isBeingArrested then
+					if skill.sustainingShadows:AttemptToReturnSlot() then
+						isSustainingShadowsSlotted = false
+					end
 				end
 			end
 		end
@@ -557,7 +561,7 @@ local function StopFadeAway()
 		fadeAwaySlotted = false
 	else 
 		EM:RegisterForUpdate(name .. "FadeAwayCombatCheck", 5000, function()
-    	if not JackOfAllTrades.fadeAway:isCPSkillSlotted() then 
+    	if not skill.fadeAway:isCPSkillSlotted() then 
     		fadeAwaySlotted = false
     		EM:UnregisterForUpdate(name .. "FadeAwayCombatCheck")
     	end
@@ -583,12 +587,19 @@ local function StartFadeAway()
 end
 
 local clemencyCheckTime = 16 -- You can only stay in the window for 15 seconds
+local sustainingShadowsCheckTime = 20 -- Unsure of this value but going to go with it for now. Let me know if you think it should be reduced/ increased
+
 function JackOfAllTrades.BeingArrested(e, quitGame)
+	-- Prevent Sustaing Shadows from being unlslotted for 20 seconds.
+	isBeingArrested = true
+	zo_callLater(function() isBeingArrested = false end, sustainingShadowsCheckTime*1000)
+
 	StartFadeAway()
 	if GetTimeToClemencyResetInSeconds() == 0 then
 		EM:RegisterForUpdate(name .. "ClemancyCheck", 1000, function() 
 			if GetTimeToClemencyResetInSeconds() > 0 then
 				StopFadeAway()
+				EM:UnregisterForUpdate(name .. "ClemancyCheck")
 			end
 			clemencyCheckTime = clemencyCheckTime - 1
 			if clemencyCheckTime < 0 then

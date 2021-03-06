@@ -24,6 +24,88 @@ local function GetFormattedChampionSkillName(skillId)
     return ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(skillId))
 end
 
+-----------------------------------------------------------------------------------------------------------------------------
+-- Ensures that overlapping skills don't get set to the same category --
+-- Many thanks to Gabriel_H for suggesting the feature to remap skills and providing the code below to resolve any conflicsts
+-----------------------------------------------------------------------------------------------------------------------------
+local choiceConflicts = {
+  [1]                 = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(1)),   rawName = "professionalUpkeep",     conNum = {}},
+  [65]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(65)),  rawName = "sustainingShadows",      conNum = {80, 84, 90}},
+  [77]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(77)),  rawName = "infamous",               conNum = {}},
+  [78]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(78)),  rawName = "masterGatherer",         conNum = {81}},
+  [79]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(79)),  rawName = "treasureHunter",         conNum = {91}},
+  [80]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(80)),  rawName = "shadowstrike",           conNum = {65, 90}},
+  [81]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(81)),  rawName = "plentifulHarvest",       conNum = {78}},
+  [82]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(82)),  rawName = "warMount",               conNum = {92}},
+  [83]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(83)),  rawName = "meticulousDisassembly",  conNum = {}},
+  [84]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(84)),  rawName = "fadeAway",               conNum = {65}},
+  [88]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(88)),  rawName = "reelTechnique",          conNum = {89}},
+  [89]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(89)),  rawName = "anglersInstincts",       conNum = {88}},
+  [90]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(90)),  rawName = "cutpursesArt",           conNum = {65, 80}},
+  [91]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(91)),  rawName = "homemaker",              conNum = {79}},
+  [92]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(92)),  rawName = "giftedRider",            conNum = {82}}}
+
+local function choiceConflict(skillName, string)
+  local choicesValue = {1, 2, 3, 4}
+  local choicesName = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)}
+    
+  local skillId = JackOfAllTrades.GetSkillId(skillName)
+  local conNum = choiceConflicts[skillId].conNum
+
+  if #conNum == 0 then
+  else  
+    for i = 1, #conNum do
+      local conflictId = conNum[i]
+      local rawName = choiceConflicts[conflictId].rawName
+      for j = 1, #choicesValue do
+        if choicesValue[j] == JackOfAllTrades.savedVariables.category[rawName] then
+          table.remove(choicesValue, j)
+          table.remove(choicesName, j)
+          break
+        end
+      end
+    end
+  end
+  
+  if string then return choicesName else return choicesValue end
+end
+
+local function refreshConflict(skillName)
+  local controls = LibAddonMenu2.currentAddonPanel.controlsToRefresh
+  local skillId = JackOfAllTrades.GetSkillId(skillName)
+  local conNum = choiceConflicts[skillId].conNum
+
+  if #conNum == 0 then
+  else 
+    for num, control in pairs(controls) do
+      local data = control.data
+      if data.type == "dropdown" then
+        for i = 1, #conNum do
+          local conflictId = conNum[i]
+          local conName = choiceConflicts[conflictId].Name
+          if conName == data.name then
+            local comboBox = control.dropdown
+            local rawName = choiceConflicts[conflictId].rawName
+            local newChoicesName = choiceConflict(rawName, true)
+            local newChoicesValues = choiceConflict(rawName, false)
+            data.choices = newChoicesName
+            data.choicesValues = newChoicesValues
+            comboBox:ClearItems()
+            for i = 1, #newChoicesName do
+              local listItem = comboBox:CreateItemEntry(newChoicesName[i], function() data.setFunc(newChoicesValues[i]) end)
+              comboBox:AddItem(listItem)
+            end
+            for j = 1, #newChoicesValues do
+              if newChoicesValues[j] == JackOfAllTrades.savedVariables.category[rawName] then comboBox:SetSelectedItemText(newChoicesName[j]) break end
+            end
+            break
+          end
+        end
+      end
+    end
+  end
+end
+
 -------------------------------------------------------------------------------------------------
 -- Lib Addon Menu Variables --
 -------------------------------------------------------------------------------------------------
@@ -81,8 +163,7 @@ function JackOfAllTrades:InitMenu()
             controls = {
                 {
                     type = "custom",
-                    name = "Riding",
-                    --reference = "MyAddonCustomControl", -- unique name for your control to use as reference (optional)
+                    name = SI_JACK_OF_ALL_TADES_MENU_RIDING,
                     createFunc = function(customControl) 
                         local wm = WINDOW_MANAGER
                         customControl.header = wm:CreateControlFromVirtual(nil, customControl, "ZO_Options_SectionTitleLabel")
@@ -91,11 +172,11 @@ function JackOfAllTrades:InitMenu()
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
                         header:SetText(LAM.util.GetStringFromValue("Riding"))
-                    end, -- function to call when this custom control was created (optional)
-                    refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
+                    end,
+                    refreshFunc = function(customControl) end,
                     width = "full", -- or "half" (optional)
-                    minHeight = function() return 18 end, --or number for the minimum height of this control. Default: 26 (optional)
-                    maxHeight = function() return 18 end, --or number for the maximum height of this control. Default: 4 * minHeight (optional)
+                    minHeight = function() return 18 end,
+                    maxHeight = function() return 18 end,
                 },
                 {
                     type = "checkbox",
@@ -115,7 +196,7 @@ function JackOfAllTrades:InitMenu()
                 },
                 {
                     type = "custom",
-                    name = "Crafting",
+                    name = SI_JACK_OF_ALL_TADES_MENU_CRAFTING,
                     --reference = "MyAddonCustomControl", -- unique name for your control to use as reference (optional)
                     createFunc = function(customControl) 
                         local wm = WINDOW_MANAGER
@@ -157,7 +238,7 @@ function JackOfAllTrades:InitMenu()
                 },
                 {
                     type = "custom",
-                    name = "Looting",
+                    name = SI_JACK_OF_ALL_TADES_MENU_LOOTING,
                     --reference = "MyAddonCustomControl", -- unique name for your control to use as reference (optional)
                     createFunc = function(customControl) 
                         local wm = WINDOW_MANAGER
@@ -191,7 +272,7 @@ function JackOfAllTrades:InitMenu()
                 },
                 {
                     type = "custom",
-                    name = "Fishing",
+                    name = SI_JACK_OF_ALL_TADES_MENU_FISHING,
                     --reference = "MyAddonCustomControl", -- unique name for your control to use as reference (optional)
                     createFunc = function(customControl) 
                         local wm = WINDOW_MANAGER
@@ -225,7 +306,7 @@ function JackOfAllTrades:InitMenu()
                 },
                 {
                     type = "custom",
-                    name = "Thieving",
+                    name = SI_JACK_OF_ALL_TADES_MENU_THIEVING,
                     --reference = "MyAddonCustomControl", -- unique name for your control to use as reference (optional)
                     createFunc = function(customControl) 
                         local wm = WINDOW_MANAGER
@@ -283,7 +364,7 @@ function JackOfAllTrades:InitMenu()
                 },
                 {
                     type = "custom",
-                    name = "Miscellaneous",
+                    name = SI_JACK_OF_ALL_TADES_MENU_MISC,
                     --reference = "MyAddonCustomControl", -- unique name for your control to use as reference (optional)
                     createFunc = function(customControl) 
                         local wm = WINDOW_MANAGER
@@ -978,9 +1059,9 @@ function JackOfAllTrades:InitMenu()
             name = "Change which category skills belong to",
             controls = {
                 {
-                    type = "description",
-                    text = "This is an advanced feature!\nDo not change anything below unless you know what you are doing.\nDo not cause skills that can be slotted together the same skill category!\ni.e. Do not set 'Gifted Rider' and 'War Mount' to the same category.", -- or string id or function returning a string
-                    title = "Warning!", -- or string id or function returning a string (optional)
+                    type = SI_JACK_OF_ALL_TRADES_MENU_CATEGORY,
+                    text = SI_JACK_OF_ALL_TRADES_MENU_ADVANCED, -- or string id or function returning a string
+                    title = SI_JACK_OF_ALL_TRADES_WARNING, -- or string id or function returning a string (optional)
                     width = "full", -- or "half" (optional)
                 },
                 {
@@ -1002,33 +1083,27 @@ function JackOfAllTrades:InitMenu()
                 {
                     type = "dropdown",
                     name = GetFormattedChampionSkillName(self.GetSkillId("giftedRider")),
-                    choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
-                    choicesValues = {1, 2, 3, 4},
+                    choices = choiceConflict("giftedRider", true),
+                    choicesValues = choiceConflict("giftedRider", false),
                     getFunc = function() return self.savedVariables.category.giftedRider end,
-                    setFunc = function(value) 
-                                self.savedVariables.category.giftedRider = value 
-                                JackOfAllTrades.UpdateSkillCategory('giftedRider')
-                            end,
+                    setFunc = function(value) self.savedVariables.category.giftedRider = value refreshConflict("giftedRider") JackOfAllTrades.UpdateSkillCategory("giftedRider") end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("giftedRider"), 1000),
                     sort = "numericvalue-up",
-                    requiresReload = true,
-                    width = "half"
+                    width = "half",
+                    default = 1
                 },
                 {
                     type = "dropdown",
                     name = GetFormattedChampionSkillName(self.GetSkillId("warMount")),
 
-                    choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
-                    choicesValues = {1, 2, 3, 4},
+                    choices = choiceConflict("warMount", true),
+                    choicesValues = choiceConflict("warMount", false),
                     getFunc = function() return self.savedVariables.category.warMount end,
-                    setFunc = function(value) 
-                                self.savedVariables.category.warMount = value 
-                                JackOfAllTrades.UpdateSkillCategory('warMount')
-                            end,
+                    setFunc = function(value) self.savedVariables.category.warMount = value refreshConflict("warMount") JackOfAllTrades.UpdateSkillCategory("warMount") end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("warMount"), 1000),
                     sort = "numericvalue-up",
-                    requiresReload = true,
-                    width = "half"
+                    width = "half",
+                    default = 2
                 },
                 {
                     type = "custom",
@@ -1051,47 +1126,38 @@ function JackOfAllTrades:InitMenu()
                 {
                     type = "dropdown",
                     name = GetFormattedChampionSkillName(self.GetSkillId("masterGatherer")),
-                    choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
-                    choicesValues = {1, 2, 3, 4},
+                    choices = choiceConflict("masterGatherer", true),
+                    choicesValues = choiceConflict("masterGatherer", false),
                     getFunc = function() return self.savedVariables.category.masterGatherer end,
-                    setFunc = function(value) 
-                                self.savedVariables.category.masterGatherer = value 
-                                JackOfAllTrades.UpdateSkillCategory('masterGatherer')
-                            end,
+                    setFunc = function(value) self.savedVariables.category.masterGatherer = value refreshConflict("masterGatherer") JackOfAllTrades.UpdateSkillCategory("masterGatherer")  end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("masterGatherer"), 1000),
                     sort = "numericvalue-up",
-                    requiresReload = true,
-                    width = "half"
+                    width = "half",
+                    default = 2
                 },
                 {
                     type = "dropdown",
                     name = GetFormattedChampionSkillName(self.GetSkillId("plentifulHarvest")),
-                    choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
-                    choicesValues = {1, 2, 3, 4},
+                    choices = choiceConflict("plentifulHarvest", true),
+                    choicesValues = choiceConflict("plentifulHarvest", false),
                     getFunc = function() return self.savedVariables.category.plentifulHarvest end,
-                    setFunc = function(value) 
-                                self.savedVariables.category.plentifulHarvest = value 
-                                JackOfAllTrades.UpdateSkillCategory('plentifulHarvest')
-                            end,
+                    setFunc = function(value) self.savedVariables.category.plentifulHarvest = value refreshConflict("plentifulHarvest") JackOfAllTrades.UpdateSkillCategory("plentifulHarvest")  end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("plentifulHarvest"), 1000),
                     sort = "numericvalue-up",
-                    requiresReload = true,
-                    width = "half"
+                    width = "half",
+                    default = 1
                 },
                 {   
                     type = "dropdown",
                     name = GetFormattedChampionSkillName(self.GetSkillId("meticulousDisassembly")),
-                    choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
-                    choicesValues = {1, 2, 3, 4},
+                    choices = choiceConflict("meticulousDisassembly", true),
+                    choicesValues = choiceConflict("meticulousDisassembly", false),
                     getFunc = function() return self.savedVariables.category.meticulousDisassembly end,
-                    setFunc = function(value) 
-                                self.savedVariables.category.meticulousDisassembly = value 
-                                JackOfAllTrades.UpdateSkillCategory('meticulousDisassembly') 
-                            end,
+                    setFunc = function(value) self.savedVariables.category.meticulousDisassembly = value refreshConflict("meticulousDisassembly") JackOfAllTrades.UpdateSkillCategory("meticulousDisassembly")  end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("meticulousDisassembly"), 1000),
                     sort = "numericvalue-up",
-                    requiresReload = true,
-                    width = "half"
+                    width = "half",
+                    default = 1
                 },
                 {
                     type = "custom",
@@ -1114,32 +1180,26 @@ function JackOfAllTrades:InitMenu()
                 {
                     type = "dropdown",
                     name = GetFormattedChampionSkillName(self.GetSkillId("treasureHunter")),
-                    choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
-                    choicesValues = {1, 2, 3, 4},
+                    choices = choiceConflict("treasureHunter", true),
+                    choicesValues = choiceConflict("treasureHunter", false),
                     getFunc = function() return self.savedVariables.category.treasureHunter end,
-                    setFunc = function(value) 
-                                self.savedVariables.category.treasureHunter = value
-                                JackOfAllTrades.UpdateSkillCategory('treasureHunter') 
-                            end,
+                    setFunc = function(value) self.savedVariables.category.treasureHunter = value refreshConflict("treasureHunter") JackOfAllTrades.UpdateSkillCategory("treasureHunter")  end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("treasureHunter"), 1000),
                     sort = "numericvalue-up",
-                    requiresReload = true,
-                    width = "half"
+                    width = "half",
+                    default = 1
                 },
                 {
                     type = "dropdown",
                     name = GetFormattedChampionSkillName(self.GetSkillId("homemaker")),
-                    choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
-                    choicesValues = {1, 2, 3, 4},
+                    choices = choiceConflict("homemaker", true),
+                    choicesValues = choiceConflict("homemaker", false),
                     getFunc = function() return self.savedVariables.category.homemaker end,
-                    setFunc = function(value) 
-                                self.savedVariables.category.homemaker = value 
-                                JackOfAllTrades.UpdateSkillCategory('homemaker')
-                            end,
+                    setFunc = function(value) self.savedVariables.category.homemaker = value refreshConflict("homemaker") JackOfAllTrades.UpdateSkillCategory("homemaker")  end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("homemaker"), 1000),
                     sort = "numericvalue-up",
-                    requiresReload = true,
-                    width = "half"
+                    width = "half",
+                    default = 2
                 },
                 {
                     type = "custom",
@@ -1162,32 +1222,26 @@ function JackOfAllTrades:InitMenu()
                 {
                     type = "dropdown",
                     name = GetFormattedChampionSkillName(self.GetSkillId("reelTechnique")),
-                    choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
-                    choicesValues = {1, 2, 3, 4},
+                    choices = choiceConflict("reelTechnique", true),
+                    choicesValues = choiceConflict("reelTechnique", false),
                     getFunc = function() return self.savedVariables.category.reelTechnique end,
-                    setFunc = function(value) 
-                                self.savedVariables.category.reelTechnique = value 
-                                JackOfAllTrades.UpdateSkillCategory('reelTechnique')
-                            end,
+                    setFunc = function(value) self.savedVariables.category.reelTechnique = value refreshConflict("reelTechnique") JackOfAllTrades.UpdateSkillCategory("reelTechnique")  end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("reelTechnique"), 1000),
                     sort = "numericvalue-up",
-                    requiresReload = true,
-                    width = "half"
+                    width = "half",
+                    default = 1
                 },
                 {
                     type = "dropdown",
                     name = GetFormattedChampionSkillName(self.GetSkillId("anglersInstincts")),
-                    choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
-                    choicesValues = {1, 2, 3, 4},
+                    choices = choiceConflict("anglersInstincts", true),
+                    choicesValues = choiceConflict("anglersInstincts", false),
                     getFunc = function() return self.savedVariables.category.anglersInstincts end,
-                    setFunc = function(value) 
-                                self.savedVariables.category.anglersInstincts = value 
-                                JackOfAllTrades.UpdateSkillCategory('anglersInstincts')
-                            end,
+                    setFunc = function(value) self.savedVariables.category.anglersInstincts = value refreshConflict("anglersInstincts") JackOfAllTrades.UpdateSkillCategory("anglersInstincts")  end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("anglersInstincts"), 1000),
                     sort = "numericvalue-up",
-                    requiresReload = true,
-                    width = "half"
+                    width = "half",
+                    default = 2
                 },
                 {
                     type = "custom",
@@ -1210,82 +1264,66 @@ function JackOfAllTrades:InitMenu()
                 {
                     type = "dropdown",
                     name = GetFormattedChampionSkillName(self.GetSkillId("infamous")),
-                    choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
-                    choicesValues = {1, 2, 3, 4},
+                    choices = choiceConflict("infamous", true),
+                    choicesValues = choiceConflict("infamous", false),
                     getFunc = function() return self.savedVariables.category.infamous end,
-                    setFunc = function(value) 
-                                self.savedVariables.category.infamous = value 
-                                JackOfAllTrades.UpdateSkillCategory('infamous')
-                            end,
+                    setFunc = function(value) self.savedVariables.category.infamous = value refreshConflict("infamous") JackOfAllTrades.UpdateSkillCategory("infamous")  end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("infamous"), 1000),
                     sort = "numericvalue-up",
-                    requiresReload = true,
-                    width = "half"
+                    width = "half",
+                    default = 2
                 },
                 {
                     type = "dropdown",
                     name = GetFormattedChampionSkillName(self.GetSkillId("cutpursesArt")),
-                    choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
-                    choicesValues = {1, 2, 3, 4},
+                    choices = choiceConflict("cutpursesArt", true),
+                    choicesValues = choiceConflict("cutpursesArt", false),
                     getFunc = function() return self.savedVariables.category.cutpursesArt end,
-                    setFunc = function(value) 
-                                self.savedVariables.category.cutpursesArt = value 
-                                JackOfAllTrades.UpdateSkillCategory('cutpursesArt')
-                            end,
+                    setFunc = function(value) self.savedVariables.category.cutpursesArt = value refreshConflict("cutpursesArt") JackOfAllTrades.UpdateSkillCategory("cutpursesArt")  end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("cutpursesArt"), 1000),
                     sort = "numericvalue-up",
-                    requiresReload = true,
-                    width = "half"
+                    width = "half",
+                    default = 2
                 },
                 {
                     type = "dropdown",
                     name = GetFormattedChampionSkillName(self.GetSkillId("shadowstrike")),
-                    choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
-                    choicesValues = {1, 2, 3, 4},
+                    choices = choiceConflict("shadowstrike", true),
+                    choicesValues = choiceConflict("shadowstrike", false),
                     getFunc = function() return self.savedVariables.category.shadowstrike end,
-                    setFunc = function(value) 
-                                self.savedVariables.category.shadowstrike = value 
-                                JackOfAllTrades.UpdateSkillCategory('shadowstrike')
-                            end,
+                    setFunc = function(value) self.savedVariables.category.shadowstrike = value refreshConflict("shadowstrike") JackOfAllTrades.UpdateSkillCategory("shadowstrike")  end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("shadowstrike"), 1000),
                     sort = "numericvalue-up",
-                    requiresReload = true,
-                    width = "half"
+                    width = "half",
+                    default = 3
                 },
                 {
                     type = "dropdown",
                     name = GetFormattedChampionSkillName(self.GetSkillId("sustainingShadows")),
                     getFunc = function() return self.savedVariables.category.sustainingShadows end,
-                    choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
-                    choicesValues = {1, 2, 3, 4},
-                    setFunc = function(value) 
-                                self.savedVariables.category.sustainingShadows = value 
-                                JackOfAllTrades.UpdateSkillCategory('sustainingShadows')
-                            end,
+                    choices = choiceConflict("sustainingShadows", true),
+                    choicesValues = choiceConflict("sustainingShadows", false),
+                    setFunc = function(value) self.savedVariables.category.sustainingShadows = value refreshConflict("sustainingShadows") JackOfAllTrades.UpdateSkillCategory("sustainingShadows")  end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("sustainingShadows"), 1000),
                     sort = "numericvalue-up",
-                    requiresReload = true,
-                    width = "half"
+                    width = "half",
+                    default = 1
                 },
                 {
                     type = "dropdown",
                     name = GetFormattedChampionSkillName(self.GetSkillId("fadeAway")),
-                    choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
-                    choicesValues = {1, 2, 3, 4},
+                    choices = choiceConflict("fadeAway", true),
+                    choicesValues = choiceConflict("fadeAway", false),
                     getFunc = function() return self.savedVariables.category.fadeAway end,
-                    setFunc = function(value) 
-                                self.savedVariables.category.fadeAway = value 
-                                JackOfAllTrades.UpdateSkillCategory('fadeAway')
-                            end,
+                    setFunc = function(value) self.savedVariables.category.fadeAway = value refreshConflict("fadeAway") JackOfAllTrades.UpdateSkillCategory("fadeAway")  end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("fadeAway"), 1000),
                     sort = "numericvalue-up",
-                    requiresReload = true,
-                    width = "half"
+                    width = "half",
+                    default = 2
                 },
                 {
                     type = "custom",
                     name = "Miscellaneous",
-                    --reference = "MyAddonCustomControl", -- unique name for your control to use as reference (optional)
                     createFunc = function(customControl) 
                         local wm = WINDOW_MANAGER
                         customControl.header = wm:CreateControlFromVirtual(nil, customControl, "ZO_Options_SectionTitleLabel")
@@ -1294,25 +1332,23 @@ function JackOfAllTrades:InitMenu()
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
                         header:SetText(LAM.util.GetStringFromValue("Miscellaneous"))
-                    end, -- function to call when this custom control was created (optional)
-                    refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
-                    width = "full", -- or "half" (optional)
-                    minHeight = function() return 18 end, --or number for the minimum height of this control. Default: 26 (optional)
-                    maxHeight = function() return 18 end, --or number for the maximum height of this control. Default: 4 * minHeight (optional)
+                    end,
+                    refreshFunc = function(customControl) end,
+                    width = "full",
+                    minHeight = function() return 18 end,
+                    maxHeight = function() return 18 end,
                 },
                 {
                     type = "dropdown",
                     name = GetFormattedChampionSkillName(self.GetSkillId("professionalUpkeep")),
-                    choices = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)},
-                    choicesValues = {1, 2, 3, 4},
+                    choices = choiceConflict("professionalUpkeep", true),
+                    choicesValues = choiceConflict("professionalUpkeep", false),
                     getFunc = function() return self.savedVariables.category.professionalUpkeep end,
-                    setFunc = function(value) 
-                                self.savedVariables.category.professionalUpkeep = value 
-                                JackOfAllTrades.UpdateSkillCategory('professionalUpkeep')
-                            end,
+                    setFunc = function(value) self.savedVariables.category.professionalUpkeep = value refreshConflict("professionalUpkeep") JackOfAllTrades.UpdateSkillCategory("professionalUpkeep")  end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("professionalUpkeep"), 1000),
                     sort = "numericvalue-up",
-                    width = "half"
+                    width = "half",
+                    default = 1
                 },
             },
         },
@@ -1326,7 +1362,7 @@ function JackOfAllTrades:InitMenu()
             name = zo_strformat(SI_JACK_OF_ALL_TRADES_ENABLE_MODE, GetString(SI_JACK_OF_ALL_TRADES_DEBUG)),
             getFunc = function() return self.savedVariables.debug end,
             setFunc = function(value) self.savedVariables.debug = value end,
-            width = "full"
+            width = "half"
         },
         {
         type = "button",
@@ -1347,8 +1383,19 @@ function JackOfAllTrades:InitMenu()
         width = "half", -- or "half" (optional
         },
         {
+            type = "button",
+            name = SI_JACK_OF_ALL_TRADES_RESET_CATEGORIES, -- string id or function returning a string
+            func = function() JackOfAllTrades.ResetSkillCategories() end,
+            width = "half", -- or "half" (optional)
+        },
+        {
+            type = "header",
+            name = SI_JACK_OF_ALL_TRADES_THANKS,
+            width = "full"
+        },
+        {
             type = "description",
-            text = "With thanks to\n@MMasing, @Morgannor-ESO, @Lilly-ESO\nFor helping with the translation and testing of this addon. <3",
+            text = SI_JACK_OF_ALL_TRADES_THANKS_MSG,
             width = "full"
         },
     }
