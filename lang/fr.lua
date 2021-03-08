@@ -10,7 +10,7 @@ SafeAddString(SI_JACK_OF_ALL_TRADES_SLOTTED, "actif");
 -------------------------------------------------------------------------------------------------
 -- Menu strings  --
 -------------------------------------------------------------------------------------------------
-SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_TOGGLE, "Vous pouvez choisir par étoile si vous voulez l'activer automatiquement ou pas.");
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_TOGGLE, "Activation automatique par étoile");
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_TOGGLE_DESCRIPTION, "Si vouz désirez vous pouvez désactiver l'activation automatique d'étoiles. \nJe vous conseille de toujours permettre l'activation automatique d'étoiles car vouz ne pouvez pas les activer si vouz n'avez pas dépensé assez de points dans l'étoile.")
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_TOGGLE_GLOBAL, "Activation automatique de toutes les étoiles");
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_TOGGLE_INDIVIDUAL, "Activation automatique des étoiles spécifiques");
@@ -21,17 +21,30 @@ SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_NOTIFICATIONS_INDIVIDUAL, "Pour des ét
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_WARNING_DESCRIPTION, "Il serait utile d'afficher un avertissement quand vous n'avez pas dépensé assez de points dans l'étoile que vous voulez activer.");
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_SKILL_INDEX, "Indice de compétences à remplacer");
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_SKILL_INDEX_DESCRIPTION, "Choisissez quel slot sur la barre de champion sera remplacé automatiquement quand vous n'avez pas de slots vides disponible. \nVotre étoile précédente reviendra automatiquement dans le slot dont vous l'avez supprimé dès que vouz arrêtez de faire l'action à la cause d'activer l'étoile sur la barre de champion.")
-SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_SKILL_INDEX_SLIDER, "<<C:1>> numéro de compétence à remplacer");
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_SKILL_INDEX_SLIDER, "Compétence <<C:1>> à remplacer");
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY, "Primaire")
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY, "Secondaire");
-SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY, "Tertiary");
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY, "Tertiaire");
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY, "Quartiaire")
 SafeAddString(SI_JACK_OF_ALL_TRADES_WARNING, "Avertissement");
 SafeAddString(SI_JACK_OF_ALL_TRADES_NOTIFICATION, "Notification");
 SafeAddString(SI_JACK_OF_ALL_TRADES_TEXT_COLOUR, "<<C:1>> couleur de texte");
 SafeAddString(SI_JACK_OF_ALL_TRADES_DEBUG, "Debug");
 SafeAddString(SI_JACK_OF_ALL_TRADES_ENABLE_MODE, "Activer mode <<z:1>>");
-SafeAddString(SI_JACK_OF_ALL_TRADES_DEBUG_RESET, "Remettre les variables enregistrées");
-SafeAddString(SI_JACK_OF_ALL_TRADES_DEBUG_RESET_SKILLS, "Remettre les dates des compétences précédentes");
+SafeAddString(SI_JACK_OF_ALL_TRADES_SKILLS_ARE, "Compétences <<c:1>>s sont:");
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_CATEGORY, "Modifier la catégorie des compétences");
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_ADVANCED, "Ceci est une fonctionnalité avancée! \nEn cas de comportement inhabituel après échanger les valeurs, vous pouvez les remettre en utilisant le bouton dans la section Debug.");
+-- Categories
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_RIDING, "Équitation");
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_CRAFTING, "Artisanat");
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_LOOTING, "Pillage");
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_FISHING, "Pêche");
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_THIEVING, "Vol")
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_MISC, "Divers");
+-- Buttons
+SafeAddString(SI_JACK_OF_ALL_TRADES_DEBUG_RESET, "Remettre variables");
+SafeAddString(SI_JACK_OF_ALL_TRADES_DEBUG_RESET_SKILLS, "Remettre compétences");
+SafeAddString(SI_JACK_OF_ALL_TRADES_RESET_CATEGORIES, "Remettre catégories")
 
 -------------------------------------------------------------------------------------------------
 -- Interact Text Strings (If you can find these in the files please let me know)  --

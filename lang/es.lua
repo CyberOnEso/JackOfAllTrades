@@ -5,21 +5,20 @@ SafeAddString(SI_JACK_OF_ALL_TRADES_METICULOUS_DISASSEMBLY_BENEFIT, "mejorar los
 SafeAddString(SI_JACK_OF_ALL_TRADES_TREASURE_HUNTER_BENEFIT, "mejor calidad de objetos de coraza");
 SafeAddString(SI_JACK_OF_ALL_TRADES_NOT_ENOUGH_POINTS_WARNING, "No tiene suficientes puntos asignados en la constelacion <<t:1>> para tener <<z:2>>.");
 SafeAddString(SI_JACK_OF_ALL_TRADES_SLOTTED, "asignar");
-
 -------------------------------------------------------------------------------------------------
 -- Menu strings  --
 -------------------------------------------------------------------------------------------------
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_TOGGLE, "Activar asignar constelaciones");
-SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_TOGGLE_DESCRIPTION, "Si desea desactivar automaticamente las constelaciones asignadas. \nI sugerir que se mantengan todas habilitadas ya que solo se asignarán si hay suficientes puntos en la constelación.")
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_TOGGLE_DESCRIPTION, "Si desea desactivar automaticamente las constelaciones asignadas. \nSugerimos que se mantengan todas habilitadas ya que solo se asignarán si hay suficientes puntos en la constelación.")
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_TOGGLE_GLOBAL, "Automaticamente asignar todas las constelaciones");
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_TOGGLE_INDIVIDUAL, "Automaticamente asignar determinadas constelaciones");
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_NOTIFICATIONS, "Notificaciones");
-SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_NOTIFICATIONS_DESCRIPTION_GLOBAL, "Compartir un mensaje en el chat siempre que una constelacion se asigne automaticamente.\n Esto puede causar spam, por lo que se recomienda desabilitar la opción o solo habilitarla para determinadas constelaciones.")
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_NOTIFICATIONS_DESCRIPTION_GLOBAL, "Compartir un mensaje en el chat siempre que una constelacion se asigne automaticamente.\nEsto puede causar spam, por lo que se recomienda desabilitar la opción o solo habilitarla para determinadas constelaciones.")
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_NOTIFICATIONS_GLOBAL, "Para todas las constelaciones");
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_NOTIFICATIONS_INDIVIDUAL, "Para determinadas constelaciones");
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_WARNING_DESCRIPTION, "Mostrar aviso si no hay suficientes puntos disponibles para asignar la constelación escogida.");
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_SKILL_INDEX, "Indice de habilidad a reemplazar");
-SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_SKILL_INDEX_DESCRIPTION, "La nueva constelación ocupara cualquier hueco disponible, en caso de no tener ninguno, predeterminar que hueco de la barra usar. \n  El resto de constelaciones se reasignaran automaticamente al finalizar la acción.")
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_SKILL_INDEX_DESCRIPTION, "La nueva constelación ocupara cualquier hueco disponible, en caso de no tener ninguno, predeterminar que hueco de la barra usar. \nEl resto de constelaciones se reasignaran automaticamente al finalizar la acción.")
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_SKILL_INDEX_SLIDER, "<<C:1>> numero de skill para reemplazar");
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY, "Primario")
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY, "Segundario");

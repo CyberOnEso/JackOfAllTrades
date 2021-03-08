@@ -163,7 +163,7 @@ function JackOfAllTrades:InitMenu()
             controls = {
                 {
                     type = "custom",
-                    name = SI_JACK_OF_ALL_TADES_MENU_RIDING,
+                    name = "Riding",
                     createFunc = function(customControl) 
                         local wm = WINDOW_MANAGER
                         customControl.header = wm:CreateControlFromVirtual(nil, customControl, "ZO_Options_SectionTitleLabel")
@@ -171,7 +171,7 @@ function JackOfAllTrades:InitMenu()
                         --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
-                        header:SetText(LAM.util.GetStringFromValue("Riding"))
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_RIDING))
                     end,
                     refreshFunc = function(customControl) end,
                     width = "full", -- or "half" (optional)
@@ -196,7 +196,7 @@ function JackOfAllTrades:InitMenu()
                 },
                 {
                     type = "custom",
-                    name = SI_JACK_OF_ALL_TADES_MENU_CRAFTING,
+                    name = "Crafting",
                     --reference = "MyAddonCustomControl", -- unique name for your control to use as reference (optional)
                     createFunc = function(customControl) 
                         local wm = WINDOW_MANAGER
@@ -205,7 +205,7 @@ function JackOfAllTrades:InitMenu()
                         --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
-                        header:SetText(LAM.util.GetStringFromValue("Crafting"))
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_CRAFTING))
                     end, -- function to call when this custom control was created (optional)
                     refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
                     width = "full", -- or "half" (optional)
@@ -238,7 +238,7 @@ function JackOfAllTrades:InitMenu()
                 },
                 {
                     type = "custom",
-                    name = SI_JACK_OF_ALL_TADES_MENU_LOOTING,
+                    name = "Looting",
                     --reference = "MyAddonCustomControl", -- unique name for your control to use as reference (optional)
                     createFunc = function(customControl) 
                         local wm = WINDOW_MANAGER
@@ -247,7 +247,7 @@ function JackOfAllTrades:InitMenu()
                         --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
-                        header:SetText(LAM.util.GetStringFromValue("Looting"))
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_LOOTING))
                     end, -- function to call when this custom control was created (optional)
                     refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
                     width = "full", -- or "half" (optional)
@@ -272,7 +272,7 @@ function JackOfAllTrades:InitMenu()
                 },
                 {
                     type = "custom",
-                    name = SI_JACK_OF_ALL_TADES_MENU_FISHING,
+                    name = "Fishing",
                     --reference = "MyAddonCustomControl", -- unique name for your control to use as reference (optional)
                     createFunc = function(customControl) 
                         local wm = WINDOW_MANAGER
@@ -281,7 +281,7 @@ function JackOfAllTrades:InitMenu()
                         --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
-                        header:SetText(LAM.util.GetStringFromValue("Fishing"))
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_FISHING))
                     end, -- function to call when this custom control was created (optional)
                     refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
                     width = "full", -- or "half" (optional)
@@ -306,7 +306,7 @@ function JackOfAllTrades:InitMenu()
                 },
                 {
                     type = "custom",
-                    name = SI_JACK_OF_ALL_TADES_MENU_THIEVING,
+                    name = "Thieving",
                     --reference = "MyAddonCustomControl", -- unique name for your control to use as reference (optional)
                     createFunc = function(customControl) 
                         local wm = WINDOW_MANAGER
@@ -315,7 +315,7 @@ function JackOfAllTrades:InitMenu()
                         --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
-                        header:SetText(LAM.util.GetStringFromValue("Thieving"))
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_THIEVING))
                     end, -- function to call when this custom control was created (optional)
                     refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
                     width = "full", -- or "half" (optional)
@@ -364,7 +364,7 @@ function JackOfAllTrades:InitMenu()
                 },
                 {
                     type = "custom",
-                    name = SI_JACK_OF_ALL_TADES_MENU_MISC,
+                    name = "Miscellaneous",
                     --reference = "MyAddonCustomControl", -- unique name for your control to use as reference (optional)
                     createFunc = function(customControl) 
                         local wm = WINDOW_MANAGER
@@ -373,7 +373,7 @@ function JackOfAllTrades:InitMenu()
                         --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
-                        header:SetText(LAM.util.GetStringFromValue("Miscellaneous"))
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_MISC))
                     end, -- function to call when this custom control was created (optional)
                     refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
                     width = "full", -- or "half" (optional)
@@ -453,7 +453,7 @@ function JackOfAllTrades:InitMenu()
                         --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
-                        header:SetText(LAM.util.GetStringFromValue("Riding"))
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_RIDING))
                     end, -- function to call when this custom control was created (optional)
                     refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
                     width = "full", -- or "half" (optional)
@@ -487,7 +487,7 @@ function JackOfAllTrades:InitMenu()
                         --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
-                        header:SetText(LAM.util.GetStringFromValue("Crafting"))
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_CRAFTING))
                     end, -- function to call when this custom control was created (optional)
                     refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
                     width = "full", -- or "half" (optional)
@@ -529,7 +529,7 @@ function JackOfAllTrades:InitMenu()
                         --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
-                        header:SetText(LAM.util.GetStringFromValue("Looting"))
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_LOOTING))
                     end, -- function to call when this custom control was created (optional)
                     refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
                     width = "full", -- or "half" (optional)
@@ -563,7 +563,7 @@ function JackOfAllTrades:InitMenu()
                         --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
-                        header:SetText(LAM.util.GetStringFromValue("Fishing"))
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_FISHING))
                     end, -- function to call when this custom control was created (optional)
                     refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
                     width = "full", -- or "half" (optional)
@@ -597,7 +597,7 @@ function JackOfAllTrades:InitMenu()
                         --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
-                        header:SetText(LAM.util.GetStringFromValue("Thieving"))
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_THIEVING))
                     end, -- function to call when this custom control was created (optional)
                     refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
                     width = "full", -- or "half" (optional)
@@ -655,7 +655,7 @@ function JackOfAllTrades:InitMenu()
                         --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
-                        header:SetText(LAM.util.GetStringFromValue("Miscellaneous"))
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_MISC))
                     end, -- function to call when this custom control was created (optional)
                     refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
                     width = "full", -- or "half" (optional)
@@ -735,7 +735,7 @@ function JackOfAllTrades:InitMenu()
                         --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
-                        header:SetText(LAM.util.GetStringFromValue("Riding"))
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_RIDING))
                     end, -- function to call when this custom control was created (optional)
                     refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
                     width = "full", -- or "half" (optional)
@@ -769,7 +769,7 @@ function JackOfAllTrades:InitMenu()
                         --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
-                        header:SetText(LAM.util.GetStringFromValue("Crafting"))
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_CRAFTING))
                     end, -- function to call when this custom control was created (optional)
                     refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
                     width = "full", -- or "half" (optional)
@@ -811,7 +811,7 @@ function JackOfAllTrades:InitMenu()
                         --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
-                        header:SetText(LAM.util.GetStringFromValue("Looting"))
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_LOOTING))
                     end, -- function to call when this custom control was created (optional)
                     refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
                     width = "full", -- or "half" (optional)
@@ -845,7 +845,7 @@ function JackOfAllTrades:InitMenu()
                         --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
-                        header:SetText(LAM.util.GetStringFromValue("Fishing"))
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_FISHING))
                     end, -- function to call when this custom control was created (optional)
                     refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
                     width = "full", -- or "half" (optional)
@@ -879,7 +879,7 @@ function JackOfAllTrades:InitMenu()
                         --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
-                        header:SetText(LAM.util.GetStringFromValue("Thieving"))
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_THIEVING))
                     end, -- function to call when this custom control was created (optional)
                     refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
                     width = "full", -- or "half" (optional)
@@ -937,7 +937,7 @@ function JackOfAllTrades:InitMenu()
                         --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
-                        header:SetText(LAM.util.GetStringFromValue("Miscellaneous"))
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_MISC))
                     end, -- function to call when this custom control was created (optional)
                     refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
                     width = "full", -- or "half" (optional)
@@ -990,7 +990,7 @@ function JackOfAllTrades:InitMenu()
             decimals = 0, -- when specified the input value is rounded to the specified number of decimals (optional)
             autoSelect = false, -- boolean, automatically select everything in the text input field when it gains focus (optional)
             readOnly = true, -- boolean, you can use the slider, but you can't insert a value manually (optional)
-            tooltip = zo_strformat(SI_JACK_OF_ALL_TADES_SKILLS_ARE, GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY)) .. JackOfAllTrades.GetStringOfSkillNames(1), -- or string id or function returning a string (optional)
+            tooltip = zo_strformat(SI_JACK_OF_ALL_TRADES_SKILLS_ARE, GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY)) .. JackOfAllTrades.GetStringOfSkillNames(1), -- or string id or function returning a string (optional)
             width = "full", -- or "half" (optional)
             default = 1, -- default value or function that returns the default value (optional)
         },
@@ -1020,7 +1020,7 @@ function JackOfAllTrades:InitMenu()
             decimals = 0, -- when specified the input value is rounded to the specified number of decimals (optional)
             autoSelect = false, -- boolean, automatically select everything in the text input field when it gains focus (optional)
             readOnly = true, -- boolean, you can use the slider, but you can't insert a value manually (optional)
-            tooltip = zo_strformat(SI_JACK_OF_ALL_TADES_SKILLS_ARE, GetString(SI_JACK_OF_ALL_TRADES_MENU)) .. JackOfAllTrades.GetStringOfSkillNames(2), -- or string id or function returning a string (optional)
+            tooltip = zo_strformat(SI_JACK_OF_ALL_TRADES_SKILLS_ARE, GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY)) .. JackOfAllTrades.GetStringOfSkillNames(2), -- or string id or function returning a string (optional)
             width = "full", -- or "half" (optional)
             default = 2, -- default value or function that returns the default value (optional)
         },
@@ -1050,16 +1050,16 @@ function JackOfAllTrades:InitMenu()
             decimals = 0, -- when specified the input value is rounded to the specified number of decimals (optional)
             autoSelect = false, -- boolean, automatically select everything in the text input field when it gains focus (optional)
             readOnly = true, -- boolean, you can use the slider, but you can't insert a value manually (optional)
-            tooltip = zo_strformat(SI_JACK_OF_ALL_TADES_SKILLS_ARE, GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY)) .. JackOfAllTrades.GetStringOfSkillNames(3), -- or string id or function returning a string (optional)
+            tooltip = zo_strformat(SI_JACK_OF_ALL_TRADES_SKILLS_ARE, GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY)) .. JackOfAllTrades.GetStringOfSkillNames(3), -- or string id or function returning a string (optional)
             width = "full", -- or "half" (optional)
             default = 2, -- default value or function that returns the default value (optional)
         },
         {   
             type = "submenu",
-            name = "Change which category skills belong to",
+            name = SI_JACK_OF_ALL_TRADES_MENU_CATEGORY,
             controls = {
                 {
-                    type = SI_JACK_OF_ALL_TRADES_MENU_CATEGORY,
+                    type = "description",
                     text = SI_JACK_OF_ALL_TRADES_MENU_ADVANCED, -- or string id or function returning a string
                     title = SI_JACK_OF_ALL_TRADES_WARNING, -- or string id or function returning a string (optional)
                     width = "full", -- or "half" (optional)
@@ -1073,7 +1073,7 @@ function JackOfAllTrades:InitMenu()
                         local header = customControl.header
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
-                        header:SetText(LAM.util.GetStringFromValue("Riding"))
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_RIDING))
                     end,
                     refreshFunc = function(customControl) end,
                     width = "full",
@@ -1095,7 +1095,6 @@ function JackOfAllTrades:InitMenu()
                 {
                     type = "dropdown",
                     name = GetFormattedChampionSkillName(self.GetSkillId("warMount")),
-
                     choices = choiceConflict("warMount", true),
                     choicesValues = choiceConflict("warMount", false),
                     getFunc = function() return self.savedVariables.category.warMount end,
@@ -1116,7 +1115,7 @@ function JackOfAllTrades:InitMenu()
                         --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
-                        header:SetText(LAM.util.GetStringFromValue("Crafting"))
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_CRAFTING))
                     end, -- function to call when this custom control was created (optional)
                     refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
                     width = "full", -- or "half" (optional)
@@ -1170,7 +1169,7 @@ function JackOfAllTrades:InitMenu()
                         --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
-                        header:SetText(LAM.util.GetStringFromValue("Looting"))
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_LOOTING))
                     end, -- function to call when this custom control was created (optional)
                     refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
                     width = "full", -- or "half" (optional)
@@ -1212,7 +1211,7 @@ function JackOfAllTrades:InitMenu()
                         --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
-                        header:SetText(LAM.util.GetStringFromValue("Fishing"))
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_FISHING))
                     end, -- function to call when this custom control was created (optional)
                     refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
                     width = "full", -- or "half" (optional)
@@ -1254,7 +1253,7 @@ function JackOfAllTrades:InitMenu()
                         --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
-                        header:SetText(LAM.util.GetStringFromValue("Thieving"))
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_THIEVING))
                     end, -- function to call when this custom control was created (optional)
                     refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
                     width = "full", -- or "half" (optional)
@@ -1331,7 +1330,7 @@ function JackOfAllTrades:InitMenu()
                         --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
-                        header:SetText(LAM.util.GetStringFromValue("Miscellaneous"))
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_MISC))
                     end,
                     refreshFunc = function(customControl) end,
                     width = "full",
