@@ -94,15 +94,14 @@ local function AttemptToSlot(self)
 	end
 
 	-- Short circuit logic, will set the slot to the first empty slot if there is one or to the primary slot if there isn't an empty slot.
+	--local skillIndexToReplace = getFirstEmptySlot(self.disciplineIndex) or JackOfAllTrades.savedVariables.skillIndexToReplace[self.skillIndexToReplace]
 	local skillIndexToReplace = getFirstEmptySlot(self.disciplineIndex) or JackOfAllTrades.savedVariables.skillIndexToReplace[self.skillIndexToReplace]
 
 	if not self.isOldSkill then
 		-- If they have a node already in that slot save it so we can restore it later.
-		--local slotIndex = JackOfAllTrades.savedVariables.skillIndexToReplace[self.skillIndexToReplace]
 		local slotIndex = skillIndexToReplace
 		local oldSkillData = championBar:GetSlot(slotIndex).championSkillData
 		if oldSkillData then
-			--JackOfAllTrades.savedVariables.oldSkill[JackOfAllTrades.savedVariables.skillIndexToReplace[self.skillIndexToReplace]] = oldSkillData:GetId()
 			JackOfAllTrades.savedVariables.oldSkill[skillIndexToReplace] = oldSkillData:GetId()
 		end
 	end
@@ -131,7 +130,7 @@ local function AttemptToReturnSlot(self)
 			-- Then we know we have an old skill which isn't currently slotted, so lets slot it
 			if not oldSkill:isCPSkillSlotted() then 
 				if oldSkill:AttemptToSlot() then
-					if JackOfAllTrades.savedVariables.debug then d(string.format("%s added back to slot: %s.", GetChampionSkillName(oldSkill.id), oldSkill.skillIndexToReplace)) end
+					if JackOfAllTrades.savedVariables.debug then d(string.format("%s added back to slot: %s.", ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(oldSkill.id)), oldSkill.skillIndexToReplace)) end
 					-- Now we know the swap was successful we can remove the old skill from savedVariables.
 					JackOfAllTrades.savedVariables.oldSkill[index] = nil
 					wasSlottingSuccessful = true
@@ -156,7 +155,7 @@ function JackOfAllTrades.whenCombatEndsSlotSkill(eventcode, inCombat)
 	-- Itterates across all the old skills we have saved and attemts to slot each of them.
 	for skillIndex, skillId in pairs(JackOfAllTrades.savedVariables.oldSkill) do
 		if skillId then
-			if JackOfAllTrades.savedVariables.debug then d(string.format("Attempting to slot %s as combat has ended.", GetChampionSkillName(skillId))) end
+			if JackOfAllTrades.savedVariables.debug then d(string.format("Attempting to slot %s as combat has ended.", ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(skillId)))) end
 			local oldSkillData = {
 				id = skillId,
 				skillIndexToReplace = skillIndex,
@@ -241,11 +240,25 @@ local function isCPSkillSlotted(self)
 end
 
 -------------------------------------------------------------------------------------------------
+-- Change skill to repace  --
+-------------------------------------------------------------------------------------------------
+local function ChangeSkillCategory(self, newSkillCategory)
+	-- Gets either 1, 5, or 9 depending on which discipline we want to check in.
+	local firstIndex = championBar.firstSlotPerDiscipline[GetChampionDisciplineId(self.disciplineIndex)]
+	if newSkillCategory <= firstIndex and newSkillCategory >= firstIndex+(totalChampionBarSlots/numDisciplines) then
+		self.skillIndexToReplace = newSkillCategory
+	end
+end
+
+-------------------------------------------------------------------------------------------------
 -- Constructor  --
 -------------------------------------------------------------------------------------------------
 function JackOfAllTrades.CreateCPData(championSkillData)
+--[[	if JackOfAllTrades.savedVariables.category[championSkillData.rawName] then
+		championSkillData.skillIndexToReplace = JackOfAllTrades.savedVariables.category[championSkillData.rawName]
+	end--]]
 	return {
-	name = GetChampionSkillName(championSkillData.id),
+	name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(championSkillData.id)),
 	id = championSkillData.id,
 	disciplineIndex = CPData:GetChampionSkillData(championSkillData.id):GetChampionDisciplineData().disciplineIndex,
 	requiredPointsToSlot = requiredPointsToSlot(championSkillData.Id),
@@ -258,6 +271,7 @@ function JackOfAllTrades.CreateCPData(championSkillData)
 	isCPSkillSlotted = isCPSkillSlotted,
 	slotCPNode = slotCPNode,
 	slotOldCPNode = slotOldCPNode,
+	ChangeSkillCategory = ChangeSkillCategory
 	}
 end
 
