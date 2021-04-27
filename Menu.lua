@@ -24,86 +24,8 @@ local function GetFormattedChampionSkillName(skillId)
     return ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(skillId))
 end
 
------------------------------------------------------------------------------------------------------------------------------
--- Ensures that overlapping skills don't get set to the same category --
--- Many thanks to Gabriel_H for suggesting the feature to remap skills and providing the code below to resolve any conflicsts
------------------------------------------------------------------------------------------------------------------------------
-local choiceConflicts = {
-  [1]                 = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(1)),   rawName = "professionalUpkeep",     conNum = {}},
-  [65]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(65)),  rawName = "sustainingShadows",      conNum = {80, 84, 90}},
-  [77]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(77)),  rawName = "infamous",               conNum = {}},
-  [78]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(78)),  rawName = "masterGatherer",         conNum = {81}},
-  [79]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(79)),  rawName = "treasureHunter",         conNum = {91}},
-  [80]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(80)),  rawName = "shadowstrike",           conNum = {65, 90}},
-  [81]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(81)),  rawName = "plentifulHarvest",       conNum = {78}},
-  [82]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(82)),  rawName = "warMount",               conNum = {92}},
-  [83]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(83)),  rawName = "meticulousDisassembly",  conNum = {}},
-  [84]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(84)),  rawName = "fadeAway",               conNum = {65}},
-  [88]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(88)),  rawName = "reelTechnique",          conNum = {89}},
-  [89]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(89)),  rawName = "anglersInstincts",       conNum = {88}},
-  [90]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(90)),  rawName = "cutpursesArt",           conNum = {65, 80}},
-  [91]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(91)),  rawName = "homemaker",              conNum = {79}},
-  [92]                = {Name = ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(92)),  rawName = "giftedRider",            conNum = {82}}}
-
-local function choiceConflict(skillName, string)
-  local choicesValue = {1, 2, 3, 4}
-  local choicesName = {GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY), GetString(SI_JACK_OF_ALL_TRADES_MENU_QUATERNARY)}
-    
-  local skillId = JackOfAllTrades.GetSkillId(skillName)
-  local conNum = choiceConflicts[skillId].conNum
-
-  if #conNum == 0 then
-  else  
-    for i = 1, #conNum do
-      local conflictId = conNum[i]
-      local rawName = choiceConflicts[conflictId].rawName
-      for j = 1, #choicesValue do
-        if choicesValue[j] == JackOfAllTrades.savedVariables.category[rawName] then
-          table.remove(choicesValue, j)
-          table.remove(choicesName, j)
-          break
-        end
-      end
-    end
-  end
-  
-  if string then return choicesName else return choicesValue end
-end
-
-local function refreshConflict(skillName)
-  local controls = LibAddonMenu2.currentAddonPanel.controlsToRefresh
-  local skillId = JackOfAllTrades.GetSkillId(skillName)
-  local conNum = choiceConflicts[skillId].conNum
-
-  if #conNum == 0 then
-  else 
-    for num, control in pairs(controls) do
-      local data = control.data
-      if data.type == "dropdown" then
-        for i = 1, #conNum do
-          local conflictId = conNum[i]
-          local conName = choiceConflicts[conflictId].Name
-          if conName == data.name then
-            local comboBox = control.dropdown
-            local rawName = choiceConflicts[conflictId].rawName
-            local newChoicesName = choiceConflict(rawName, true)
-            local newChoicesValues = choiceConflict(rawName, false)
-            data.choices = newChoicesName
-            data.choicesValues = newChoicesValues
-            comboBox:ClearItems()
-            for i = 1, #newChoicesName do
-              local listItem = comboBox:CreateItemEntry(newChoicesName[i], function() data.setFunc(newChoicesValues[i]) end)
-              comboBox:AddItem(listItem)
-            end
-            for j = 1, #newChoicesValues do
-              if newChoicesValues[j] == JackOfAllTrades.savedVariables.category[rawName] then comboBox:SetSelectedItemText(newChoicesName[j]) break end
-            end
-            break
-          end
-        end
-      end
-    end
-  end
+local function refreshConflict(string)
+    JackOfAllTrades.UpdateSkillSlots()
 end
 
 -------------------------------------------------------------------------------------------------
@@ -127,6 +49,60 @@ function JackOfAllTrades:InitMenu()
 
     local panel = LAM:RegisterAddonPanel(panelName, panelData)
     local optionsData = {
+        {
+            type = "description",
+            text = SI_JACK_OF_ALL_TRADES_MENU_INTRO,
+            --text = "Jack of all Trades will only modify your 3rd and 4th slots on your champion bar.\nThis is due to the new CP slotting cooldown implemented by ZOS, thus skills that need to be changed often like Gifted Rider will not automatically be slotted\nThis leaves you free to slot whatever you like in slots 1 and 2 as they will not be overwritten.\nI recommend you slot Steed's Blessing and Gifted Rider in slots 1 and 2."
+        },
+        {
+            type = "header",
+            name = SI_JACK_OF_ALL_TRADES_MENU_COOLDOWN,
+            width = "full"
+        },
+        {
+            type = "description",
+            text = SI_JACK_OF_ALL_TRADES_MENU_COOLDOWN_DESC,
+            width = "full"
+        },
+        {
+            type = "checkbox",
+            name = SI_JACK_OF_ALL_TRADES_MENU_COOLDOWN_ALERT,
+            getFunc = function() return self.savedVariables.showCooldownError end,
+            setFunc = function(value) self.savedVariables.showCooldownError = value end,
+            tooltip = "This will also prevent your pending changes from being cleared. \nHowever, it may temporarily result in more aggressive cooldown blocking.",
+            width = "full"
+        },
+        {
+            type = "checkbox",
+            name = SI_JACK_OF_ALL_TRADES_MENU_SLOT_AFTER_CD,
+            getFunc = function() return self.savedVariables.slotSkillsAfterCooldownEnds end,
+            setFunc = function(value) self.savedVariables.slotSkillsAfterCooldownEnds = value end,
+            width = "full"
+        },
+        {
+            type = "checkbox",
+            name = SI_JACK_OF_ALL_TRADES_MENU_ALTER_AFTER_CD,
+            getFunc = function() return self.savedVariables.altertedAfterCooldownOver end,
+            setFunc = function(value) 
+                if self.savedVariables.altertedAlwaysAfterCooldownOver then self.savedVariables.altertedAfterCooldownOver = false return end
+                if self.savedVariables.slotSkillsAfterCooldownEnds then self.savedVariables.altertedAfterCooldownOver = false return end
+                self.savedVariables.altertedAfterCooldownOver = value end,
+            tooltip = "Will post 'CP cooldown complete' in chat once the CP cooldown is over if you have done an action that requires a CP node to be slotted.\nIf you have 'Automatically slot stars after the cooldown ends' enabled, this will not do anything as you will already be notified about that skill being slotted regardless.",
+            width = "full",
+            disabled = function() return self.savedVariables.slotSkillsAfterCooldownEnds or self.savedVariables.altertedAlwaysAfterCooldownOver end,            
+        },
+        {
+            type = "checkbox",
+            name = SI_JACK_OF_ALL_TRADES_MENU_ALWAYS_ALERT_AFTER_CD,
+            getFunc = function() return self.savedVariables.altertedAlwaysAfterCooldownOver end,
+            setFunc = function(value) 
+                if self.savedVariables.altertedAfterCooldownOver then self.savedVariables.altertedAlwaysAfterCooldownOver = false return end
+                if self.savedVariables.altertedAfterCooldownOver then self.savedVariables.altertedAlwaysAfterCooldownOver = false end
+                self.savedVariables.altertedAlwaysAfterCooldownOver = value end,
+            tooltip = "Will always post 'CP cooldown complete' in chat once the CP cooldown is over.\nIf you have 'Automatically slot stars after the cooldown ends' enabled, this will not do anything as you will already be notified about that skill being slotted regardless.",
+            width = "full",
+            disabled = function() return self.savedVariables.altertedAfterCooldownOver end,            
+        },
         {
             type = "header",
             name = SI_JACK_OF_ALL_TRADES_MENU_NOTIFICATIONS,
@@ -161,39 +137,6 @@ function JackOfAllTrades:InitMenu()
             type = "submenu",
             name = SI_JACK_OF_ALL_TRADES_MENU_NOTIFICATIONS_INDIVIDUAL,
             controls = {
-                {
-                    type = "custom",
-                    name = "Riding",
-                    createFunc = function(customControl) 
-                        local wm = WINDOW_MANAGER
-                        customControl.header = wm:CreateControlFromVirtual(nil, customControl, "ZO_Options_SectionTitleLabel")
-                        local header = customControl.header
-                        --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
-                        header:SetAnchor(TOPLEFT)
-                        header:SetFont("ZoFontHeader2")
-                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_RIDING))
-                    end,
-                    refreshFunc = function(customControl) end,
-                    width = "full", -- or "half" (optional)
-                    minHeight = function() return 18 end,
-                    maxHeight = function() return 18 end,
-                },
-                {
-                    type = "checkbox",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("giftedRider")),
-                    getFunc = function() return self.savedVariables.notification.giftedRider end,
-                    setFunc = function(value) self.savedVariables.notification.giftedRider = value end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("giftedRider"), 1000),
-                    width = "half"
-                },
-                {
-                    type = "checkbox",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("warMount")),
-                    getFunc = function() return self.savedVariables.notification.warMount end,
-                    setFunc = function(value) self.savedVariables.notification.warMount = value end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("warMount"), 1000),
-                    width = "half"
-                },
                 {
                     type = "custom",
                     name = "Crafting",
@@ -298,10 +241,10 @@ function JackOfAllTrades:InitMenu()
                 },
                 {
                     type = "checkbox",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("anglersInstincts")),
-                    getFunc = function() return self.savedVariables.notification.anglersInstincts end,
-                    setFunc = function(value) self.savedVariables.notification.anglersInstincts = value end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("anglersInstincts"), 1000),
+                    name = GetFormattedChampionSkillName(self.GetSkillId("anglersInstinct")),
+                    getFunc = function() return self.savedVariables.notification.anglersInstinct end,
+                    setFunc = function(value) self.savedVariables.notification.anglersInstinct = value end,
+                    tooltip = GetChampionSkillDescription(self.GetSkillId("anglersInstinct"), 1000),
                     width = "half"
                 },
                 {
@@ -339,27 +282,37 @@ function JackOfAllTrades:InitMenu()
                     width = "half"
                 },
                 {
+                    type = "custom",
+                    name = "Riding",
+                    --reference = "MyAddonCustomControl", -- unique name for your control to use as reference (optional)
+                    createFunc = function(customControl) 
+                        local wm = WINDOW_MANAGER
+                        customControl.header = wm:CreateControlFromVirtual(nil, customControl, "ZO_Options_SectionTitleLabel")
+                        local header = customControl.header
+                        --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
+                        header:SetAnchor(TOPLEFT)
+                        header:SetFont("ZoFontHeader2")
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_RIDING))
+                    end, -- function to call when this custom control was created (optional)
+                    refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
+                    width = "full", -- or "half" (optional)
+                    minHeight = function() return 18 end, --or number for the minimum height of this control. Default: 26 (optional)
+                    maxHeight = function() return 18 end, --or number for the maximum height of this control. Default: 4 * minHeight (optional)
+                },
+                {
                     type = "checkbox",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("shadowstrike")),
-                    getFunc = function() return self.savedVariables.notification.shadowstrike end,
-                    setFunc = function(value) self.savedVariables.notification.shadowstrike = value end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("shadowstrike"), 1000),
+                    name = GetFormattedChampionSkillName(self.GetSkillId("giftedRider")),
+                    getFunc = function() return self.savedVariables.notification.giftedRider end,
+                    setFunc = function(value) self.savedVariables.notification.giftedRider = value end,
+                    tooltip = GetChampionSkillDescription(self.GetSkillId("giftedRider"), 1000),
                     width = "half"
                 },
                 {
                     type = "checkbox",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("sustainingShadows")),
-                    getFunc = function() return self.savedVariables.notification.sustainingShadows end,
-                    setFunc = function(value) self.savedVariables.notification.sustainingShadows = value end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("sustainingShadows"), 1000),
-                    width = "half"
-                },
-                {
-                    type = "checkbox",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("fadeAway")),
-                    getFunc = function() return self.savedVariables.notification.fadeAway end,
-                    setFunc = function(value) self.savedVariables.notification.fadeAway = value end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("fadeAway"), 1000),
+                    name = GetFormattedChampionSkillName(self.GetSkillId("warMount")),
+                    getFunc = function() return self.savedVariables.notification.warMount end,
+                    setFunc = function(value) self.savedVariables.notification.warMount = value end,
+                    tooltip = GetChampionSkillDescription(self.GetSkillId("warMount"), 1000),
                     width = "half"
                 },
                 {
@@ -388,6 +341,22 @@ function JackOfAllTrades:InitMenu()
                     tooltip = GetChampionSkillDescription(self.GetSkillId("professionalUpkeep"), 1000),
                     width = "half"
                 },
+                {
+                    type = "checkbox",
+                    name = GetFormattedChampionSkillName(self.GetSkillId("rationer")),
+                    getFunc = function() return self.savedVariables.notification.rationer end,
+                    setFunc = function(value) self.savedVariables.notification.rationer = value end,
+                    tooltip = GetChampionSkillDescription(self.GetSkillId("rationer"), 1000),
+                    width = "half"
+                },
+                {
+                    type = "checkbox",
+                    name = GetFormattedChampionSkillName(self.GetSkillId("liquidEfficiency")),
+                    getFunc = function() return self.savedVariables.notification.liquidEfficiency end,
+                    setFunc = function(value) self.savedVariables.notification.liquidEfficiency = value end,
+                    tooltip = GetChampionSkillDescription(self.GetSkillId("liquidEfficiency"), 1000),
+                    width = "half"
+                },
             },
         },
         {
@@ -413,11 +382,11 @@ function JackOfAllTrades:InitMenu()
             name = SI_JACK_OF_ALL_TRADES_WARNING,
             width = "full"
         },
-    	{
-    	    type = "description",
-    	    text = SI_JACK_OF_ALL_TRADES_MENU_WARNING_DESCRIPTION,
+        {
+            type = "description",
+            text = SI_JACK_OF_ALL_TRADES_MENU_WARNING_DESCRIPTION,
             width = "full"
-    	},
+        },
         {   
             type = "checkbox",
             name = SI_JACK_OF_ALL_TRADES_MENU_NOTIFICATIONS_GLOBAL,
@@ -442,40 +411,6 @@ function JackOfAllTrades:InitMenu()
             type = "submenu",
             name = SI_JACK_OF_ALL_TRADES_MENU_NOTIFICATIONS_INDIVIDUAL,
             controls = {
-                {
-                    type = "custom",
-                    name = "Riding",
-                    --reference = "MyAddonCustomControl", -- unique name for your control to use as reference (optional)
-                    createFunc = function(customControl) 
-                        local wm = WINDOW_MANAGER
-                        customControl.header = wm:CreateControlFromVirtual(nil, customControl, "ZO_Options_SectionTitleLabel")
-                        local header = customControl.header
-                        --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
-                        header:SetAnchor(TOPLEFT)
-                        header:SetFont("ZoFontHeader2")
-                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_RIDING))
-                    end, -- function to call when this custom control was created (optional)
-                    refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
-                    width = "full", -- or "half" (optional)
-                    minHeight = function() return 18 end, --or number for the minimum height of this control. Default: 26 (optional)
-                    maxHeight = function() return 18 end, --or number for the maximum height of this control. Default: 4 * minHeight (optional)
-                },
-                {
-                    type = "checkbox",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("giftedRider")),
-                    getFunc = function() return self.savedVariables.warnings.giftedRider end,
-                    setFunc = function(value) self.savedVariables.warnings.giftedRider = value end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("giftedRider"), 1000),
-                    width = "half"
-                },
-                {
-                    type = "checkbox",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("warMount")),
-                    getFunc = function() return self.savedVariables.warnings.warMount end,
-                    setFunc = function(value) self.savedVariables.warnings.warMount = value end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("warMount"), 1000),
-                    width = "half"
-                },
                 {
                     type = "custom",
                     name = "Crafting",
@@ -580,10 +515,10 @@ function JackOfAllTrades:InitMenu()
                 },
                 {
                     type = "checkbox",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("anglersInstincts")),
-                    getFunc = function() return self.savedVariables.warnings.anglersInstincts end,
-                    setFunc = function(value) self.savedVariables.warnings.anglersInstincts = value end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("anglersInstincts"), 1000),
+                    name = GetFormattedChampionSkillName(self.GetSkillId("anglersInstinct")),
+                    getFunc = function() return self.savedVariables.warnings.anglersInstinct end,
+                    setFunc = function(value) self.savedVariables.warnings.anglersInstinct = value end,
+                    tooltip = GetChampionSkillDescription(self.GetSkillId("anglersInstinct"), 1000),
                     width = "half"
                 },
                 {
@@ -621,27 +556,37 @@ function JackOfAllTrades:InitMenu()
                     width = "half"
                 },
                 {
+                    type = "custom",
+                    name = "Riding",
+                    --reference = "MyAddonCustomControl", -- unique name for your control to use as reference (optional)
+                    createFunc = function(customControl) 
+                        local wm = WINDOW_MANAGER
+                        customControl.header = wm:CreateControlFromVirtual(nil, customControl, "ZO_Options_SectionTitleLabel")
+                        local header = customControl.header
+                        --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
+                        header:SetAnchor(TOPLEFT)
+                        header:SetFont("ZoFontHeader2")
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_RIDING))
+                    end, -- function to call when this custom control was created (optional)
+                    refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
+                    width = "full", -- or "half" (optional)
+                    minHeight = function() return 18 end, --or number for the minimum height of this control. Default: 26 (optional)
+                    maxHeight = function() return 18 end, --or number for the maximum height of this control. Default: 4 * minHeight (optional)
+                },
+                {
                     type = "checkbox",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("shadowstrike")),
-                    getFunc = function() return self.savedVariables.warnings.shadowstrike end,
-                    setFunc = function(value) self.savedVariables.warnings.shadowstrike = value end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("shadowstrike"), 1000),
+                    name = GetFormattedChampionSkillName(self.GetSkillId("giftedRider")),
+                    getFunc = function() return self.savedVariables.warnings.giftedRider end,
+                    setFunc = function(value) self.savedVariables.warnings.giftedRider = value end,
+                    tooltip = GetChampionSkillDescription(self.GetSkillId("giftedRider"), 1000),
                     width = "half"
                 },
                 {
                     type = "checkbox",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("sustainingShadows")),
-                    getFunc = function() return self.savedVariables.warnings.sustainingShadows end,
-                    setFunc = function(value) self.savedVariables.warnings.sustainingShadows = value end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("sustainingShadows"), 1000),
-                    width = "half"
-                },
-                {
-                    type = "checkbox",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("fadeAway")),
-                    getFunc = function() return self.savedVariables.warnings.fadeAway end,
-                    setFunc = function(value) self.savedVariables.warnings.fadeAway = value end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("fadeAway"), 1000),
+                    name = GetFormattedChampionSkillName(self.GetSkillId("warMount")),
+                    getFunc = function() return self.savedVariables.warnings.warMount end,
+                    setFunc = function(value) self.savedVariables.warnings.warMount = value end,
+                    tooltip = GetChampionSkillDescription(self.GetSkillId("warMount"), 1000),
                     width = "half"
                 },
                 {
@@ -668,6 +613,22 @@ function JackOfAllTrades:InitMenu()
                     getFunc = function() return self.savedVariables.warnings.professionalUpkeep end,
                     setFunc = function(value) self.savedVariables.warnings.professionalUpkeep = value end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("professionalUpkeep"), 1000),
+                    width = "half"
+                },
+                {
+                    type = "checkbox",
+                    name = GetFormattedChampionSkillName(self.GetSkillId("rationer")),
+                    getFunc = function() return self.savedVariables.warnings.rationer end,
+                    setFunc = function(value) self.savedVariables.warnings.rationer = value end,
+                    tooltip = GetChampionSkillDescription(self.GetSkillId("rationer"), 1000),
+                    width = "half"
+                },
+                {
+                    type = "checkbox",
+                    name = GetFormattedChampionSkillName(self.GetSkillId("liquidEfficiency")),
+                    getFunc = function() return self.savedVariables.warnings.liquidEfficiency end,
+                    setFunc = function(value) self.savedVariables.warnings.liquidEfficiency = value end,
+                    tooltip = GetChampionSkillDescription(self.GetSkillId("liquidEfficiency"), 1000),
                     width = "half"
                 },
             },
@@ -724,40 +685,6 @@ function JackOfAllTrades:InitMenu()
             type = "submenu",
             name = SI_JACK_OF_ALL_TRADES_MENU_TOGGLE_INDIVIDUAL,
             controls = {
-                {
-                    type = "custom",
-                    name = "Riding",
-                    --reference = "MyAddonCustomControl", -- unique name for your control to use as reference (optional)
-                    createFunc = function(customControl) 
-                        local wm = WINDOW_MANAGER
-                        customControl.header = wm:CreateControlFromVirtual(nil, customControl, "ZO_Options_SectionTitleLabel")
-                        local header = customControl.header
-                        --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
-                        header:SetAnchor(TOPLEFT)
-                        header:SetFont("ZoFontHeader2")
-                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_RIDING))
-                    end, -- function to call when this custom control was created (optional)
-                    refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
-                    width = "full", -- or "half" (optional)
-                    minHeight = function() return 18 end, --or number for the minimum height of this control. Default: 26 (optional)
-                    maxHeight = function() return 18 end, --or number for the maximum height of this control. Default: 4 * minHeight (optional)
-                },
-                {
-                    type = "checkbox",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("giftedRider")),
-                    getFunc = function() return self.savedVariables.enable.giftedRider end,
-                    setFunc = function(value) self.savedVariables.enable.giftedRider = value end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("giftedRider"), 1000),
-                    width = "half"
-                },
-                {
-                    type = "checkbox",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("warMount")),
-                    getFunc = function() return self.savedVariables.enable.warMount end,
-                    setFunc = function(value) self.savedVariables.enable.warMount = value end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("warMount"), 1000),
-                    width = "half"
-                },
                 {
                     type = "custom",
                     name = "Crafting",
@@ -862,10 +789,10 @@ function JackOfAllTrades:InitMenu()
                 },
                 {
                     type = "checkbox",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("anglersInstincts")),
-                    getFunc = function() return self.savedVariables.enable.anglersInstincts end,
-                    setFunc = function(value) self.savedVariables.enable.anglersInstincts = value end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("anglersInstincts"), 1000),
+                    name = GetFormattedChampionSkillName(self.GetSkillId("anglersInstinct")),
+                    getFunc = function() return self.savedVariables.enable.anglersInstinct end,
+                    setFunc = function(value) self.savedVariables.enable.anglersInstinct = value end,
+                    tooltip = GetChampionSkillDescription(self.GetSkillId("anglersInstinct"), 1000),
                     width = "half"
                 },
                 {
@@ -903,27 +830,37 @@ function JackOfAllTrades:InitMenu()
                     width = "half"
                 },
                 {
+                    type = "custom",
+                    name = "Riding",
+                    --reference = "MyAddonCustomControl", -- unique name for your control to use as reference (optional)
+                    createFunc = function(customControl) 
+                        local wm = WINDOW_MANAGER
+                        customControl.header = wm:CreateControlFromVirtual(nil, customControl, "ZO_Options_SectionTitleLabel")
+                        local header = customControl.header
+                        --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
+                        header:SetAnchor(TOPLEFT)
+                        header:SetFont("ZoFontHeader2")
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_RIDING))
+                    end, -- function to call when this custom control was created (optional)
+                    refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
+                    width = "full", -- or "half" (optional)
+                    minHeight = function() return 18 end, --or number for the minimum height of this control. Default: 26 (optional)
+                    maxHeight = function() return 18 end, --or number for the maximum height of this control. Default: 4 * minHeight (optional)
+                },
+                {
                     type = "checkbox",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("shadowstrike")),
-                    getFunc = function() return self.savedVariables.enable.shadowstrike end,
-                    setFunc = function(value) self.savedVariables.enable.shadowstrike = value end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("shadowstrike"), 1000),
+                    name = GetFormattedChampionSkillName(self.GetSkillId("giftedRider")),
+                    getFunc = function() return self.savedVariables.enable.giftedRider end,
+                    setFunc = function(value) self.savedVariables.enable.giftedRider = value end,
+                    tooltip = GetChampionSkillDescription(self.GetSkillId("giftedRider"), 1000),
                     width = "half"
                 },
                 {
                     type = "checkbox",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("sustainingShadows")),
-                    getFunc = function() return self.savedVariables.enable.sustainingShadows end,
-                    setFunc = function(value) self.savedVariables.enable.sustainingShadows = value end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("sustainingShadows"), 1000),
-                    width = "half"
-                },
-                {
-                    type = "checkbox",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("fadeAway")),
-                    getFunc = function() return self.savedVariables.enable.fadeAway end,
-                    setFunc = function(value) self.savedVariables.enable.fadeAway = value end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("fadeAway"), 1000),
+                    name = GetFormattedChampionSkillName(self.GetSkillId("warMount")),
+                    getFunc = function() return self.savedVariables.enable.warMount end,
+                    setFunc = function(value) self.savedVariables.enable.warMount = value end,
+                    tooltip = GetChampionSkillDescription(self.GetSkillId("warMount"), 1000),
                     width = "half"
                 },
                 {
@@ -952,157 +889,78 @@ function JackOfAllTrades:InitMenu()
                     tooltip = GetChampionSkillDescription(self.GetSkillId("professionalUpkeep"), 1000),
                     width = "half"
                 },
+                {
+                    type = "checkbox",
+                    name = GetFormattedChampionSkillName(self.GetSkillId("rationer")),
+                    getFunc = function() return self.savedVariables.enable.rationer end,
+                    setFunc = function(value) self.savedVariables.enable.rationer = value end,
+                    tooltip = GetChampionSkillDescription(self.GetSkillId("rationer"), 1000),
+                    width = "half"
+                },
+                {
+                    type = "checkbox",
+                    name = GetFormattedChampionSkillName(self.GetSkillId("liquidEfficiency")),
+                    getFunc = function() return self.savedVariables.enable.liquidEfficiency end,
+                    setFunc = function(value) self.savedVariables.enable.liquidEfficiency = value end,
+                    tooltip = GetChampionSkillDescription(self.GetSkillId("liquidEfficiency"), 1000),
+                    width = "half"
+                },
             },
         },
         {
-            type = "header",
-            name = SI_JACK_OF_ALL_TRADES_MENU_SKILL_INDEX,
+            type = "checkbox",
+            name = SI_JACK_OF_ALL_TRADES_MENU_SLOT_HM_CORPSES,
+            getFunc = function() return self.savedVariables.homemakerCorpses end,
+            setFunc = function(value) self.savedVariables.homemakerCorpses = value end,
+            tooltip = "Keeping this off will ensure that homemaker is only slotted when you loot the following:" .. JackOfAllTrades.getHomemakerLootables(),
+            warning = "Only works on English clients for now.",
             width = "full"
         },
         {
-            type = "description",
-            text = SI_JACK_OF_ALL_TRADES_MENU_SKILL_INDEX_DESCRIPTION,
+            type = "checkbox",
+            name = SI_JACK_OF_ALL_TRADES_MENU_SLOT_TH_HM_PAIR,
+            getFunc = function() return self.savedVariables.thHmPair end,
+            setFunc = function(value) self.savedVariables.thHmPair = value end,
+            tooltip = "Turning this on will automatically slot homemaker when you loot a treasure chest and treasure hunter when homemaker is slotted.",
             width = "full"
         },
         {
-            type = "slider",
-            name = zo_strformat(SI_JACK_OF_ALL_TRADES_MENU_SKILL_INDEX_SLIDER, GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY)),
-            getFunc = function() return self.savedVariables.skillIndexToReplace[1] end,
-            setFunc = function(value) 
-                        self.savedVariables.skillIndexToReplace[1] = value 
-                        setFouthSkillIndexToReplace()
-                    end,
-            min = 1,
-            max = 4,
-            step = 1, -- (optional)
-            clampInput = true, -- boolean, if set to false the input won't clamp to min and max and allow any number instead (optional)
-            clampFunction = function(value, min, max) 
-                                if value ~= self.savedVariables.skillIndexToReplace[2] and value ~= self.savedVariables.skillIndexToReplace[3] then
-                                    return math.max(math.min(value, max), min) 
-                                else
-                                    for i=1, 4 do
-                                        if i ~= self.savedVariables.skillIndexToReplace[2] and i ~= self.savedVariables.skillIndexToReplace[3] then
-                                            return i
-                                        end
-                                    end
-                                end
-                            end,  -- function that is called to clamp the value (optional)
-            decimals = 0, -- when specified the input value is rounded to the specified number of decimals (optional)
-            autoSelect = false, -- boolean, automatically select everything in the text input field when it gains focus (optional)
-            readOnly = true, -- boolean, you can use the slider, but you can't insert a value manually (optional)
-            tooltip = zo_strformat(SI_JACK_OF_ALL_TRADES_SKILLS_ARE, GetString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY)) .. JackOfAllTrades.GetStringOfSkillNames(1), -- or string id or function returning a string (optional)
-            width = "full", -- or "half" (optional)
-            default = 1, -- default value or function that returns the default value (optional)
+            type = "checkbox",
+            name = SI_JACK_OF_ALL_TRADES_MENU_SLOT_MD_WRITS,
+            getFunc = function() return self.savedVariables.slotMdWhilstDoingWrits end,
+            setFunc = function(value) self.savedVariables.slotMdWhilstDoingWrits = value end,
+            tooltip = "Turning this off will stop Meticulous Disassembly from being slotted while you have a writ quest active.",
+            width = "full"
         },
         {
-            type = "slider",
-            name = zo_strformat(SI_JACK_OF_ALL_TRADES_MENU_SKILL_INDEX_SLIDER, GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY)),
-            getFunc = function() return self.savedVariables.skillIndexToReplace[2] end,
-            setFunc = function(value) 
-                        self.savedVariables.skillIndexToReplace[2] = value
-                        setFouthSkillIndexToReplace()
-                    end,
-            min = 1,
-            max = 4,
-            step = 1, -- (optional)
-            clampInput = true, -- boolean, if set to false the input won't clamp to min and max and allow any number instead (optional)
-            clampFunction = function(value, min, max) 
-                                if value ~= self.savedVariables.skillIndexToReplace[1] and value ~= self.savedVariables.skillIndexToReplace[3] then
-                                    return math.max(math.min(value, max), min) 
-                                else
-                                    for i=1, 4 do
-                                        if i ~= self.savedVariables.skillIndexToReplace[1] and i ~= self.savedVariables.skillIndexToReplace[3] then
-                                            return i
-                                        end
-                                    end
-                                end
-                            end, -- function that is called to clamp the value (optional)
-            decimals = 0, -- when specified the input value is rounded to the specified number of decimals (optional)
-            autoSelect = false, -- boolean, automatically select everything in the text input field when it gains focus (optional)
-            readOnly = true, -- boolean, you can use the slider, but you can't insert a value manually (optional)
-            tooltip = zo_strformat(SI_JACK_OF_ALL_TRADES_SKILLS_ARE, GetString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY)) .. JackOfAllTrades.GetStringOfSkillNames(2), -- or string id or function returning a string (optional)
-            width = "full", -- or "half" (optional)
-            default = 2, -- default value or function that returns the default value (optional)
+            type = "checkbox",
+            name = SI_JACK_OF_ALL_TRADES_MENU_SLOT_LE_TRASH_POTS,
+            getFunc = function() return self.savedVariables.slotLeTrashPots end,
+            setFunc = function(value) self.savedVariables.slotLeTrashPots = value end,
+            width = "full"
         },
         {
-            type = "slider",
-            name = zo_strformat(SI_JACK_OF_ALL_TRADES_MENU_SKILL_INDEX_SLIDER, GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY)),
-            getFunc = function() return self.savedVariables.skillIndexToReplace[3] end,
-            setFunc = function(value) 
-                        self.savedVariables.skillIndexToReplace[3] = value
-                        setFouthSkillIndexToReplace()
-                    end,
-            min = 1,
-            max = 4,
-            step = 1, -- (optional)
-            clampInput = true, -- boolean, if set to false the input won't clamp to min and max and allow any number instead (optional)
-            clampFunction = function(value, min, max) 
-                                if value ~= self.savedVariables.skillIndexToReplace[1] and value ~= self.savedVariables.skillIndexToReplace[2] then
-                                    return math.max(math.min(value, max), min) 
-                                else
-                                    for i=1, 4 do
-                                        if i ~= self.savedVariables.skillIndexToReplace[1] and i ~= self.savedVariables.skillIndexToReplace[2] then
-                                            return i
-                                        end
-                                    end
-                                end
-                            end, -- function that is called to clamp the value (optional)
-            decimals = 0, -- when specified the input value is rounded to the specified number of decimals (optional)
-            autoSelect = false, -- boolean, automatically select everything in the text input field when it gains focus (optional)
-            readOnly = true, -- boolean, you can use the slider, but you can't insert a value manually (optional)
-            tooltip = zo_strformat(SI_JACK_OF_ALL_TRADES_SKILLS_ARE, GetString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY)) .. JackOfAllTrades.GetStringOfSkillNames(3), -- or string id or function returning a string (optional)
-            width = "full", -- or "half" (optional)
-            default = 2, -- default value or function that returns the default value (optional)
+            type = "checkbox",
+            name = SI_JACK_OF_ALL_TRADES_MENU_SLOT_TH_DUNGEON,
+            getFunc = function() return self.savedVariables.slotThInDungeon end,
+            setFunc = function(value) self.savedVariables.slotThInDungeon = value end,
+            tooltip = "If you have 'Slot treasure hunter and homemaker as a pair' enabled, homemaker will also be slotted when entering a dungeon.",
+            width = "full"
         },
         {   
             type = "submenu",
-            name = SI_JACK_OF_ALL_TRADES_MENU_CATEGORY,
+            name = SI_JACK_OF_ALL_TRADES_MENU_SLOT,
             controls = {
                 {
                     type = "description",
-                    text = SI_JACK_OF_ALL_TRADES_MENU_ADVANCED, -- or string id or function returning a string
-                    title = SI_JACK_OF_ALL_TRADES_WARNING, -- or string id or function returning a string (optional)
-                    width = "full", -- or "half" (optional)
+                    text = SI_JACK_OF_ALL_TRADES_MENU_ADVANCED,
+                    width = "full"
                 },
-                {
-                    type = "custom",
-                    name = "Riding",
-                    createFunc = function(customControl) 
-                        local wm = WINDOW_MANAGER
-                        customControl.header = wm:CreateControlFromVirtual(nil, customControl, "ZO_Options_SectionTitleLabel")
-                        local header = customControl.header
-                        header:SetAnchor(TOPLEFT)
-                        header:SetFont("ZoFontHeader2")
-                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_RIDING))
-                    end,
-                    refreshFunc = function(customControl) end,
-                    width = "full",
-                    minHeight = function() return 18 end,
-                    maxHeight = function() return 18 end,
-                },
-                {
-                    type = "dropdown",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("giftedRider")),
-                    choices = choiceConflict("giftedRider", true),
-                    choicesValues = choiceConflict("giftedRider", false),
-                    getFunc = function() return self.savedVariables.category.giftedRider end,
-                    setFunc = function(value) self.savedVariables.category.giftedRider = value refreshConflict("giftedRider") JackOfAllTrades.UpdateSkillCategory("giftedRider") end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("giftedRider"), 1000),
-                    sort = "numericvalue-up",
-                    width = "half",
-                    default = 1
-                },
-                {
-                    type = "dropdown",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("warMount")),
-                    choices = choiceConflict("warMount", true),
-                    choicesValues = choiceConflict("warMount", false),
-                    getFunc = function() return self.savedVariables.category.warMount end,
-                    setFunc = function(value) self.savedVariables.category.warMount = value refreshConflict("warMount") JackOfAllTrades.UpdateSkillCategory("warMount") end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("warMount"), 1000),
-                    sort = "numericvalue-up",
-                    width = "half",
-                    default = 2
+                {   
+                    type = "button",
+                    name = SI_JACK_OF_ALL_TRADES_RESET_CATEGORIES,
+                    func = function() JackOfAllTrades.resetSkillSlots() end,
+                    width = "half"
                 },
                 {
                     type = "custom",
@@ -1125,38 +983,29 @@ function JackOfAllTrades:InitMenu()
                 {
                     type = "dropdown",
                     name = GetFormattedChampionSkillName(self.GetSkillId("masterGatherer")),
-                    choices = choiceConflict("masterGatherer", true),
-                    choicesValues = choiceConflict("masterGatherer", false),
-                    getFunc = function() return self.savedVariables.category.masterGatherer end,
-                    setFunc = function(value) self.savedVariables.category.masterGatherer = value refreshConflict("masterGatherer") JackOfAllTrades.UpdateSkillCategory("masterGatherer")  end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("masterGatherer"), 1000),
-                    sort = "numericvalue-up",
-                    width = "half",
-                    default = 2
+                    choices = {1,2,3,4},
+                    getFunc = function() return self.savedVariables.slotIndex.masterGatherer end,
+                    setFunc = function(value) self.savedVariables.slotIndex.masterGatherer = value refreshConflict("masterGatherer") end,
+                    sort = "numeric-up",
+                    width = "half"
                 },
                 {
                     type = "dropdown",
                     name = GetFormattedChampionSkillName(self.GetSkillId("plentifulHarvest")),
-                    choices = choiceConflict("plentifulHarvest", true),
-                    choicesValues = choiceConflict("plentifulHarvest", false),
-                    getFunc = function() return self.savedVariables.category.plentifulHarvest end,
-                    setFunc = function(value) self.savedVariables.category.plentifulHarvest = value refreshConflict("plentifulHarvest") JackOfAllTrades.UpdateSkillCategory("plentifulHarvest")  end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("plentifulHarvest"), 1000),
-                    sort = "numericvalue-up",
-                    width = "half",
-                    default = 1
+                    choices = {1,2,3,4},
+                    getFunc = function() return self.savedVariables.slotIndex.plentifulHarvest end,
+                    setFunc = function(value) self.savedVariables.slotIndex.plentifulHarvest = value refreshConflict("plentifulHarvest") end,
+                    sort = "numeric-up",
+                    width = "half"
                 },
-                {   
+                {
                     type = "dropdown",
                     name = GetFormattedChampionSkillName(self.GetSkillId("meticulousDisassembly")),
-                    choices = choiceConflict("meticulousDisassembly", true),
-                    choicesValues = choiceConflict("meticulousDisassembly", false),
-                    getFunc = function() return self.savedVariables.category.meticulousDisassembly end,
-                    setFunc = function(value) self.savedVariables.category.meticulousDisassembly = value refreshConflict("meticulousDisassembly") JackOfAllTrades.UpdateSkillCategory("meticulousDisassembly")  end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("meticulousDisassembly"), 1000),
-                    sort = "numericvalue-up",
-                    width = "half",
-                    default = 1
+                    choices = {1,2,3,4},
+                    getFunc = function() return self.savedVariables.slotIndex.meticulousDisassembly end,
+                    setFunc = function(value) self.savedVariables.slotIndex.meticulousDisassembly = value refreshConflict("meticulousDisassembly") end,
+                    sort = "numeric-up",
+                    width = "half"
                 },
                 {
                     type = "custom",
@@ -1179,26 +1028,20 @@ function JackOfAllTrades:InitMenu()
                 {
                     type = "dropdown",
                     name = GetFormattedChampionSkillName(self.GetSkillId("treasureHunter")),
-                    choices = choiceConflict("treasureHunter", true),
-                    choicesValues = choiceConflict("treasureHunter", false),
-                    getFunc = function() return self.savedVariables.category.treasureHunter end,
-                    setFunc = function(value) self.savedVariables.category.treasureHunter = value refreshConflict("treasureHunter") JackOfAllTrades.UpdateSkillCategory("treasureHunter")  end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("treasureHunter"), 1000),
-                    sort = "numericvalue-up",
-                    width = "half",
-                    default = 1
+                    choices = {1,2,3,4},
+                    getFunc = function() return self.savedVariables.slotIndex.treasureHunter end,
+                    setFunc = function(value) self.savedVariables.slotIndex.treasureHunter = value refreshConflict("treasureHunter") end,
+                    sort = "numeric-up",
+                    width = "half"
                 },
                 {
                     type = "dropdown",
                     name = GetFormattedChampionSkillName(self.GetSkillId("homemaker")),
-                    choices = choiceConflict("homemaker", true),
-                    choicesValues = choiceConflict("homemaker", false),
-                    getFunc = function() return self.savedVariables.category.homemaker end,
-                    setFunc = function(value) self.savedVariables.category.homemaker = value refreshConflict("homemaker") JackOfAllTrades.UpdateSkillCategory("homemaker")  end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("homemaker"), 1000),
-                    sort = "numericvalue-up",
-                    width = "half",
-                    default = 2
+                    choices = {1,2,3,4},
+                    getFunc = function() return self.savedVariables.slotIndex.homemaker end,
+                    setFunc = function(value) self.savedVariables.slotIndex.homemaker = value refreshConflict("homemaker") end,
+                    sort = "numeric-up",
+                    width = "half"
                 },
                 {
                     type = "custom",
@@ -1221,26 +1064,20 @@ function JackOfAllTrades:InitMenu()
                 {
                     type = "dropdown",
                     name = GetFormattedChampionSkillName(self.GetSkillId("reelTechnique")),
-                    choices = choiceConflict("reelTechnique", true),
-                    choicesValues = choiceConflict("reelTechnique", false),
-                    getFunc = function() return self.savedVariables.category.reelTechnique end,
-                    setFunc = function(value) self.savedVariables.category.reelTechnique = value refreshConflict("reelTechnique") JackOfAllTrades.UpdateSkillCategory("reelTechnique")  end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("reelTechnique"), 1000),
-                    sort = "numericvalue-up",
-                    width = "half",
-                    default = 1
+                    choices = {1,2,3,4},
+                    getFunc = function() return self.savedVariables.slotIndex.reelTechnique end,
+                    setFunc = function(value) self.savedVariables.slotIndex.reelTechnique = value refreshConflict("reelTechnique") end,
+                    sort = "numeric-up",
+                    width = "half"
                 },
                 {
                     type = "dropdown",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("anglersInstincts")),
-                    choices = choiceConflict("anglersInstincts", true),
-                    choicesValues = choiceConflict("anglersInstincts", false),
-                    getFunc = function() return self.savedVariables.category.anglersInstincts end,
-                    setFunc = function(value) self.savedVariables.category.anglersInstincts = value refreshConflict("anglersInstincts") JackOfAllTrades.UpdateSkillCategory("anglersInstincts")  end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("anglersInstincts"), 1000),
-                    sort = "numericvalue-up",
-                    width = "half",
-                    default = 2
+                    name = GetFormattedChampionSkillName(self.GetSkillId("anglersInstinct")),
+                    choices = {1,2,3,4},
+                    getFunc = function() return self.savedVariables.slotIndex.anglersInstinct end,
+                    setFunc = function(value) self.savedVariables.slotIndex.anglersInstinct = value refreshConflict("anglersInstinct") end,
+                    sort = "numeric-up",
+                    width = "half"
                 },
                 {
                     type = "custom",
@@ -1263,66 +1100,61 @@ function JackOfAllTrades:InitMenu()
                 {
                     type = "dropdown",
                     name = GetFormattedChampionSkillName(self.GetSkillId("infamous")),
-                    choices = choiceConflict("infamous", true),
-                    choicesValues = choiceConflict("infamous", false),
-                    getFunc = function() return self.savedVariables.category.infamous end,
-                    setFunc = function(value) self.savedVariables.category.infamous = value refreshConflict("infamous") JackOfAllTrades.UpdateSkillCategory("infamous")  end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("infamous"), 1000),
-                    sort = "numericvalue-up",
-                    width = "half",
-                    default = 2
+                    choices = {1,2,3,4},
+                    getFunc = function() return self.savedVariables.slotIndex.infamous end,
+                    setFunc = function(value) self.savedVariables.slotIndex.infamous = value refreshConflict("infamous") end,
+                    sort = "numeric-up",
+                    width = "half"
                 },
                 {
                     type = "dropdown",
                     name = GetFormattedChampionSkillName(self.GetSkillId("cutpursesArt")),
-                    choices = choiceConflict("cutpursesArt", true),
-                    choicesValues = choiceConflict("cutpursesArt", false),
-                    getFunc = function() return self.savedVariables.category.cutpursesArt end,
-                    setFunc = function(value) self.savedVariables.category.cutpursesArt = value refreshConflict("cutpursesArt") JackOfAllTrades.UpdateSkillCategory("cutpursesArt")  end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("cutpursesArt"), 1000),
-                    sort = "numericvalue-up",
-                    width = "half",
-                    default = 2
+                    choices = {1,2,3,4},
+                    getFunc = function() return self.savedVariables.slotIndex.cutpursesArt end,
+                    setFunc = function(value) self.savedVariables.slotIndex.cutpursesArt = value refreshConflict("cutpursesArt") end,
+                    sort = "numeric-up",
+                    width = "half"
+                },
+                {
+                    type = "custom",
+                    name = "Riding",
+                    --reference = "MyAddonCustomControl", -- unique name for your control to use as reference (optional)
+                    createFunc = function(customControl) 
+                        local wm = WINDOW_MANAGER
+                        customControl.header = wm:CreateControlFromVirtual(nil, customControl, "ZO_Options_SectionTitleLabel")
+                        local header = customControl.header
+                        --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
+                        header:SetAnchor(TOPLEFT)
+                        header:SetFont("ZoFontHeader2")
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_RIDING))
+                    end, -- function to call when this custom control was created (optional)
+                    refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
+                    width = "full", -- or "half" (optional)
+                    minHeight = function() return 18 end, --or number for the minimum height of this control. Default: 26 (optional)
+                    maxHeight = function() return 18 end, --or number for the maximum height of this control. Default: 4 * minHeight (optional)
                 },
                 {
                     type = "dropdown",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("shadowstrike")),
-                    choices = choiceConflict("shadowstrike", true),
-                    choicesValues = choiceConflict("shadowstrike", false),
-                    getFunc = function() return self.savedVariables.category.shadowstrike end,
-                    setFunc = function(value) self.savedVariables.category.shadowstrike = value refreshConflict("shadowstrike") JackOfAllTrades.UpdateSkillCategory("shadowstrike")  end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("shadowstrike"), 1000),
-                    sort = "numericvalue-up",
-                    width = "half",
-                    default = 3
+                    name = GetFormattedChampionSkillName(self.GetSkillId("giftedRider")),
+                    choices = {1,2,3,4},
+                    getFunc = function() return self.savedVariables.slotIndex.giftedRider end,
+                    setFunc = function(value) self.savedVariables.slotIndex.giftedRider = value refreshConflict("giftedRider") end,
+                    sort = "numeric-up",
+                    width = "half"
                 },
                 {
                     type = "dropdown",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("sustainingShadows")),
-                    getFunc = function() return self.savedVariables.category.sustainingShadows end,
-                    choices = choiceConflict("sustainingShadows", true),
-                    choicesValues = choiceConflict("sustainingShadows", false),
-                    setFunc = function(value) self.savedVariables.category.sustainingShadows = value refreshConflict("sustainingShadows") JackOfAllTrades.UpdateSkillCategory("sustainingShadows")  end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("sustainingShadows"), 1000),
-                    sort = "numericvalue-up",
-                    width = "half",
-                    default = 1
-                },
-                {
-                    type = "dropdown",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("fadeAway")),
-                    choices = choiceConflict("fadeAway", true),
-                    choicesValues = choiceConflict("fadeAway", false),
-                    getFunc = function() return self.savedVariables.category.fadeAway end,
-                    setFunc = function(value) self.savedVariables.category.fadeAway = value refreshConflict("fadeAway") JackOfAllTrades.UpdateSkillCategory("fadeAway")  end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("fadeAway"), 1000),
-                    sort = "numericvalue-up",
-                    width = "half",
-                    default = 2
+                    name = GetFormattedChampionSkillName(self.GetSkillId("warMount")),
+                    choices = {1,2,3,4},
+                    getFunc = function() return self.savedVariables.slotIndex.warMount end,
+                    setFunc = function(value) self.savedVariables.slotIndex.warMount = value refreshConflict("warMount") end,
+                    sort = "numeric-up",
+                    width = "half"
                 },
                 {
                     type = "custom",
                     name = "Miscellaneous",
+                    --reference = "MyAddonCustomControl", -- unique name for your control to use as reference (optional)
                     createFunc = function(customControl) 
                         local wm = WINDOW_MANAGER
                         customControl.header = wm:CreateControlFromVirtual(nil, customControl, "ZO_Options_SectionTitleLabel")
@@ -1331,23 +1163,38 @@ function JackOfAllTrades:InitMenu()
                         header:SetAnchor(TOPLEFT)
                         header:SetFont("ZoFontHeader2")
                         header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_MISC))
-                    end,
-                    refreshFunc = function(customControl) end,
-                    width = "full",
-                    minHeight = function() return 18 end,
-                    maxHeight = function() return 18 end,
+                    end, -- function to call when this custom control was created (optional)
+                    refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
+                    width = "full", -- or "half" (optional)
+                    minHeight = function() return 18 end, --or number for the minimum height of this control. Default: 26 (optional)
+                    maxHeight = function() return 18 end, --or number for the maximum height of this control. Default: 4 * minHeight (optional)
                 },
                 {
                     type = "dropdown",
                     name = GetFormattedChampionSkillName(self.GetSkillId("professionalUpkeep")),
-                    choices = choiceConflict("professionalUpkeep", true),
-                    choicesValues = choiceConflict("professionalUpkeep", false),
-                    getFunc = function() return self.savedVariables.category.professionalUpkeep end,
-                    setFunc = function(value) self.savedVariables.category.professionalUpkeep = value refreshConflict("professionalUpkeep") JackOfAllTrades.UpdateSkillCategory("professionalUpkeep")  end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("professionalUpkeep"), 1000),
-                    sort = "numericvalue-up",
-                    width = "half",
-                    default = 1
+                    choices = {1,2,3,4},
+                    getFunc = function() return self.savedVariables.slotIndex.professionalUpkeep end,
+                    setFunc = function(value) self.savedVariables.slotIndex.professionalUpkeep = value refreshConflict("professionalUpkeep") end,
+                    sort = "numeric-up",
+                    width = "half"
+                },
+                {
+                    type = "dropdown",
+                    name = GetFormattedChampionSkillName(self.GetSkillId("rationer")),
+                    choices = {1,2,3,4},
+                    getFunc = function() return self.savedVariables.slotIndex.rationer end,
+                    setFunc = function(value) self.savedVariables.slotIndex.rationer = value refreshConflict("rationer") end,
+                    sort = "numeric-up",
+                    width = "half"
+                },
+                {
+                    type = "dropdown",
+                    name = GetFormattedChampionSkillName(self.GetSkillId("liquidEfficiency")),
+                    choices = {1,2,3,4},
+                    getFunc = function() return self.savedVariables.slotIndex.liquidEfficiency end,
+                    setFunc = function(value) self.savedVariables.slotIndex.liquidEfficiency = value refreshConflict("liquidEfficiency") end,
+                    sort = "numeric-up",
+                    width = "half"
                 },
             },
         },
@@ -1361,7 +1208,7 @@ function JackOfAllTrades:InitMenu()
             name = zo_strformat(SI_JACK_OF_ALL_TRADES_ENABLE_MODE, GetString(SI_JACK_OF_ALL_TRADES_DEBUG)),
             getFunc = function() return self.savedVariables.debug end,
             setFunc = function(value) self.savedVariables.debug = value end,
-            width = "half"
+            width = "full"
         },
         {
         type = "button",
@@ -1382,12 +1229,6 @@ function JackOfAllTrades:InitMenu()
         width = "half", -- or "half" (optional
         },
         {
-            type = "button",
-            name = SI_JACK_OF_ALL_TRADES_RESET_CATEGORIES, -- string id or function returning a string
-            func = function() JackOfAllTrades.ResetSkillCategories() end,
-            width = "half", -- or "half" (optional)
-        },
-        {
             type = "header",
             name = SI_JACK_OF_ALL_TRADES_THANKS,
             width = "full"
@@ -1399,5 +1240,5 @@ function JackOfAllTrades:InitMenu()
         },
     }
     
-	LAM:RegisterOptionControls(panelName, optionsData)
+    LAM:RegisterOptionControls(panelName, optionsData)
 end

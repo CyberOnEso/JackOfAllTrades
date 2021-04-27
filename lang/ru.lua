@@ -1,41 +1,41 @@
 -------------------------------------------------------------------------------------------------
 -- Chat strings  --
 -------------------------------------------------------------------------------------------------
-SafeAddString(SI_JACK_OF_ALL_TRADES_METICULOUS_DISASSEMBLY_BENEFIT, "improved refining results");
-SafeAddString(SI_JACK_OF_ALL_TRADES_TREASURE_HUNTER_BENEFIT, "higher quality chest items");
-SafeAddString(SI_JACK_OF_ALL_TRADES_NOT_ENOUGH_POINTS_WARNING, "You don't have enough points allocated into the <<t:1>> star to get <<z:2");
-SafeAddString(SI_JACK_OF_ALL_TRADES_SLOTTED, "slotted");
+SafeAddString(SI_JACK_OF_ALL_TRADES_METICULOUS_DISASSEMBLY_BENEFIT, "улучшенная переработка материалов");
+SafeAddString(SI_JACK_OF_ALL_TRADES_TREASURE_HUNTER_BENEFIT, " улучшенное качество предметов в сундуках сокровищ");
+SafeAddString(SI_JACK_OF_ALL_TRADES_NOT_ENOUGH_POINTS_WARNING, "У вас вложено недостаточно очков в звезду <<t:1>> чтобы получить <<z:2>>.");
+SafeAddString(SI_JACK_OF_ALL_TRADES_SLOTTED, "активные");
 
 -------------------------------------------------------------------------------------------------
 -- Menu strings  --
 -------------------------------------------------------------------------------------------------
-SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_TOGGLE, "Toggle slotting stars");
-SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_TOGGLE_DESCRIPTION, "Si vouz désirez vous pouvez désactiver l'activation automatique d'étoiles. \nJe vous conseille de toujours permettre l'activation automatique d'étoiles car vouz ne pouvez pas les activer si vouz n'avez pas dépensé assez de points dans l'étoile.")
-SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_TOGGLE_GLOBAL, "Activation automatique de toutes les étoiles");
-SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_TOGGLE_INDIVIDUAL, "Activation automatique des étoiles spécifiques");
-SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_NOTIFICATIONS, "Notifications");
-SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_NOTIFICATIONS_DESCRIPTION_GLOBAL, "Afficher un message quand une étoile est automatiquement activée? \nJe vous conseille de le désactiver ou de l'activer que pour certaines étoiles afin d'éviter spam.")
-SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_NOTIFICATIONS_GLOBAL, "Pour toutes les étoiles");
-SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_NOTIFICATIONS_INDIVIDUAL, "Pour des étoiles spécifiques");
-SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_WARNING_DESCRIPTION, "Il serait utile d'afficher un avertissement quand vous n'avez pas dépensé assez de points dans l'étoile que vous voulez activer.");
-SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_SKILL_INDEX, "Indice de compétences à remplacer");
-SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_SKILL_INDEX_DESCRIPTION, "Choisissez quel slot sur la barre de champion sera remplacé automatiquement quand vous n'avez pas de slots vides disponible. \nVotre étoile précédente reviendra automatiquement dans le slot dont vous l'avez supprimé dès que vouz arrêtez de faire l'action à la cause d'activer l'étoile sur la barre de champion.")
-SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_SKILL_INDEX_SLIDER, "<<C:1>> numéro de compétence à remplacer");
-SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY, "Primaire")
-SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY, "Secondaire");
-SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY, "Tertiary");
-SafeAddString(SI_JACK_OF_ALL_TRADES_WARNING, "Avertissement");
-SafeAddString(SI_JACK_OF_ALL_TRADES_NOTIFICATION, "Notification");
-SafeAddString(SI_JACK_OF_ALL_TRADES_TEXT_COLOUR, "<<C:1>> couleur de texte");
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_TOGGLE, "Автоматическая активация звёзд");
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_TOGGLE_DESCRIPTION, "Если вы хотите, вы можете отключить автоматическую активацию звёзд. \nЯ предлагаю оставить эту функцию включённой, так как звёзды будут активированы только в том случае, если в них вложено достаточно очков.")
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_TOGGLE_GLOBAL, "Автоматически активировать все звезды");
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_TOGGLE_INDIVIDUAL, "Автоматически активировать определённые звезды");
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_NOTIFICATIONS, "Уведомления");
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_NOTIFICATIONS_DESCRIPTION_GLOBAL, "Отправлять сообщение в чат каждый раз, когда звезда автоматически активируется. \nЭто может привести к большому количеству сообщений в чате, поэтому я рекомендую отключить эту функцию или использовать её для определённых звёзд.")
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_NOTIFICATIONS_GLOBAL, "Для всех звёзд");
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_NOTIFICATIONS_INDIVIDUAL, "Для определённых звёзд");
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_WARNING_DESCRIPTION, "Показывать предупреждение, если во время активации звезды в неё вложено недостаточно очков для того, чтобы она была полезной.");
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_SKILL_INDEX, "Список способностей для замены");
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_SKILL_INDEX_DESCRIPTION, "Выбрать, какая ячейка на панели героя будет использована для замены, если у вас нет свободных ячеек. \n Ваша предыдущая способность будет автоматически возвращена в эту ячейку, как только вы завершите действие, которое добавило новую способность на панель героя.")
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_SKILL_INDEX_SLIDER, "<<<C:1>> номер способности для замены");
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_PRIMARY, "Первичная")
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_SECONDARY, "Вторичная");
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_TERTIARY, "Третичная");
+SafeAddString(SI_JACK_OF_ALL_TRADES_WARNING, "Предупреждение");
+SafeAddString(SI_JACK_OF_ALL_TRADES_NOTIFICATION, "Уведомление");
+SafeAddString(SI_JACK_OF_ALL_TRADES_TEXT_COLOUR, "<<C:1>> цвет текста");
 SafeAddString(SI_JACK_OF_ALL_TRADES_DEBUG, "Debug");
-SafeAddString(SI_JACK_OF_ALL_TRADES_ENABLE_MODE, "Activer mode <<z:1>>");
-SafeAddString(SI_JACK_OF_ALL_TRADES_DEBUG_RESET, "Remettre les variables enregistrées");
-SafeAddString(SI_JACK_OF_ALL_TRADES_DEBUG_RESET_SKILLS, "Remettre les dates des compétences précédentes");
-SafeAddString(SI_JACK_OF_ALL_TRADES_RESET_CATEGORIES, "Reset skill categories")
+SafeAddString(SI_JACK_OF_ALL_TRADES_ENABLE_MODE, "Включить режим <<z:1>>");
+SafeAddString(SI_JACK_OF_ALL_TRADES_DEBUG_RESET, "Восстановить сохранённые параметры");
+SafeAddString(SI_JACK_OF_ALL_TRADES_DEBUG_RESET_SKILLS, "Восстановить предыдущие характеристики способностей");
+SafeAddString(SI_JACK_OF_ALL_TRADES_RESET_CATEGORIES, "Сбросить категории способностей")
 SafeAddString(SI_JACK_OF_ALL_TRADES_THANKS, "With thanks to")
 SafeAddString(SI_JACK_OF_ALL_TRADES_THANKS_MSG, "MMasing, Morgannor-ESO and Lilly-ESO for helping with the translation and testing of this addon.\nThanks to Gabriel_H for suggesting remapping of stars and providing code to prevent skill collisions.\nThanks for Fennwitty for suggesting disabling automatically slotting stars.\nThanks to Votan and Beartram for testing and suggesting imrprovements.")
-SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_CATEGORY, "Change which category skills belong to")
-SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_ADVANCED, "This is an advanced feature!\nIf you experience weird behaviour after changing these values then please reset them using the button in the debug section.")
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_CATEGORY, "Изменить катерогии способностей")
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_ADVANCED, "Это расширенные настройки. \nЕсли вы заметили изменения в нормальной работе аддона после изменения этих значений, пожалуйста, сбросьте их кнопкой в разделе Debug.")
 -------------------------------------------------------------------------------------------------
 -- Interact Text Strings (If you can find these in the files please let me know)  --
 -------------------------------------------------------------------------------------------------
@@ -55,10 +55,10 @@ SafeAddString(SI_JACK_OF_ALL_TRADES_INTERACT_BOOKSHELF, "Книжная полк
 
 
 -- Categories
-SafeAddString(SI_JACK_OF_ALL_TADES_MENU_RIDING, "Riding")
-SafeAddString(SI_JACK_OF_ALL_TADES_MENU_CRAFTING, "Crafting")
-SafeAddString(SI_JACK_OF_ALL_TADES_MENU_LOOTING, "Looting")
-SafeAddString(SI_JACK_OF_ALL_TADES_MENU_FISHING, "Fishing")
-SafeAddString(SI_JACK_OF_ALL_TADES_MENU_THIEVING, "Thieving")
-SafeAddString(SI_JACK_OF_ALL_TADES_MENU_MISC, "Miscellaneous")
+SafeAddString(SI_JACK_OF_ALL_TADES_MENU_RIDING, "Верховая езда")
+SafeAddString(SI_JACK_OF_ALL_TADES_MENU_CRAFTING, "Ремесла")
+SafeAddString(SI_JACK_OF_ALL_TADES_MENU_LOOTING, "Добыча")
+SafeAddString(SI_JACK_OF_ALL_TADES_MENU_FISHING, "Рыбалка")
+SafeAddString(SI_JACK_OF_ALL_TADES_MENU_THIEVING, "Воровство")
+SafeAddString(SI_JACK_OF_ALL_TADES_MENU_MISC, "Разное")
 

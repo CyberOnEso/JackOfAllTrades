@@ -1,91 +1,88 @@
 -------------------------------------------------------------------------------------------------
 -- Variable Version, update if we need to overwrite the users files --
 -------------------------------------------------------------------------------------------------
-JackOfAllTrades.variableVersion = 1
+JackOfAllTrades.variableVersion = 2
 -------------------------------------------------------------------------------------------------
 -- Default Data --
 -------------------------------------------------------------------------------------------------
 local defaultData = {
 	debug = false,
+	showCooldownError = true,
+	homemakerCorpses = false,
+	thHmPair = false,
+	slotSkillsAfterCooldownEnds = true,
+	slotMdWhilstDoingWrits = true,
+	slotLeTrashPots = true,
+	slotThInDungeon = false,
+	altertedAfterCooldownOver = false,
 	colour = {
 		warnings = "|cba6a1a",
 		notifications = "|c638C29"
 	},
-	skillIndexToReplace = {
-		[1] = 1,
-		[2] = 2,
-		[3] = 3,
-		[4] = 4
-	},
 	warnings = {
 		meticulousDisassembly = false,
 		treasureHunter = false,
-		giftedRider = false,
-		warMount = false,
 		professionalUpkeep = false,
 		reelTechnique = false,
-		anglersInstincts = false,
+		anglersInstinct = false,
 		masterGatherer = false,
 		plentifulHarvest = false,
 		cutpursesArt = false,
-		shadowstrike = false,
 		infamous = false,
 		homemaker = false,
-		sustainingShadows = false,
-		fadeAway = false
+		rationer = false,
+		liquidEfficiency = false,
+		giftedRider = false,
+		warMount = false
 	},
 	enable = {
 		meticulousDisassembly = true,
 		treasureHunter = true,
-		giftedRider = true,
-		warMount = true,
 		professionalUpkeep = true,
 		reelTechnique = true,
-		anglersInstincts = true,
+		anglersInstinct = true,
 		masterGatherer = true,
 		plentifulHarvest = true,
 		cutpursesArt = true,
-		shadowstrike = true,
 		infamous = true,
 		homemaker = true,
-		sustainingShadows = true,
-		fadeAway = true
+		rationer = true,
+		liquidEfficiency = true,
+		giftedRider = false,
+		warMount = false
 	},
 	notification = {
-		meticulousDisassembly = false,
-		treasureHunter = false,
-		giftedRider = false,
-		warMount = false,
-		professionalUpkeep = false,
-		reelTechnique = false,
-		anglersInstincts = false,
-		masterGatherer = false,
-		plentifulHarvest = false,
-		cutpursesArt = false,
-		shadowstrike = false,
-		infamous = false,
-		homemaker = false,
-		sustainingShadows = false,
-		fadeAway = false
+		meticulousDisassembly = true,
+		treasureHunter = true,
+		professionalUpkeep = true,
+		reelTechnique = true,
+		anglersInstinct = true,
+		masterGatherer = true,
+		plentifulHarvest = true,
+		cutpursesArt = true,
+		infamous = true,
+		homemaker = true,
+		rationer = true,
+		liquidEfficiency = true,
+		giftedRider = true,
+		warMount = true
 	},
-	category = {
-		meticulousDisassembly = 1,
-		treasureHunter = 1,
-		giftedRider = 1,
-		warMount = 2,
-		professionalUpkeep = 1,
-		reelTechnique = 1,
-		anglersInstincts = 2,
-		masterGatherer = 2,
-		plentifulHarvest = 1,
-		cutpursesArt = 2,
-		shadowstrike = 3,
-		infamous = 1,
-		homemaker = 2,
-		sustainingShadows = 1,
-		fadeAway = 2
+	slotIndex = {
+		meticulousDisassembly = 4,
+		treasureHunter = 4,
+		professionalUpkeep = 4,
+		reelTechnique = 4,
+		anglersInstinct = 3,
+		masterGatherer = 4,
+		plentifulHarvest = 3,
+		cutpursesArt = 4,
+		infamous = 4,
+		homemaker = 3,
+		rationer = 4,
+		liquidEfficiency = 3,
+		giftedRider = 4,
+		warMount = 3
 	},
-	oldSkill = {}
 }
 
 -------------------------------------------------------------------------------------------------
@@ -108,6 +105,6 @@ function JackOfAllTrades.ResetSavedVariables()
 	JackOfAllTrades.savedVariables = defaultData
 end
 
-function JackOfAllTrades.ResetSkillCategories()
-	JackOfAllTrades.savedVariables.category = defaultData.category
+function JackOfAllTrades.resetSkillSlots()
+	JackOfAllTrades.savedVariables.slotIndex = defaultData.slotIndex
 end

@@ -44,7 +44,32 @@ SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_MISC, "Verschiedenes");
 -- Buttons - ~20 chars max
 SafeAddString(SI_JACK_OF_ALL_TRADES_DEBUG_RESET_SKILLS, "Fähigkeiten zurücksetzen");
 SafeAddString(SI_JACK_OF_ALL_TRADES_DEBUG_RESET, "Varianten zurücksetzen");
-SafeAddString(SI_JACK_OF_ALL_TRADES_RESET_CATEGORIES, "Kategorien zurücksetzen")
+SafeAddString(SI_JACK_OF_ALL_TRADES_RESET_CATEGORIES, "Kategorien zurücksetzen");
+
+-- Homemaker Lootables
+SafeAddString(SI_JACK_OF_ALL_TRADES_HM_BACKPACK, "Rucksack");
+SafeAddString(SI_JACK_OF_ALL_TRADES_HM_BARREL, "Fass");
+SafeAddString(SI_JACK_OF_ALL_TRADES_HM_BARRELS, "Fässer");
+SafeAddString(SI_JACK_OF_ALL_TRADES_HM_BASKET, "Korb");
+SafeAddString(SI_JACK_OF_ALL_TRADES_HM_CHEST, "Truhe");
+SafeAddString(SI_JACK_OF_ALL_TRADES_HM_CRATE, "Kiste");
+SafeAddString(SI_JACK_OF_ALL_TRADES_HM_CRATES, "Kisten");
+SafeAddString(SI_JACK_OF_ALL_TRADES_HM_CUPBOARD, "Schrank");
+SafeAddString(SI_JACK_OF_ALL_TRADES_HM_DRAWERS, "Schublade");
+SafeAddString(SI_JACK_OF_ALL_TRADES_HM_NIGHTSTAND, "Beistelltisch");
+SafeAddString(SI_JACK_OF_ALL_TRADES_HM_URN, "Urne");
+SafeAddString(SI_JACK_OF_ALL_TRADES_HM_WARDROBE, "Garderobe");
+SafeAddString(SI_JACK_OF_ALL_TRADES_HM_DRESSER, "Kommode");
+SafeAddString(SI_JACK_OF_ALL_TRADES_HM_DESK, "Schreibtisch");
+SafeAddString(SI_JACK_OF_ALL_TRADES_HM_TRUNK, "Truhe");
+-- From DeadSoon
+SafeAddString(SI_JACK_OF_ALL_TRADES_HM_CABINET, "Wandschrank");
+SafeAddString(SI_JACK_OF_ALL_TRADES_HM_D_JUG, "Dwemerkrug");
+SafeAddString(SI_JACK_OF_ALL_TRADES_HM_D_JUG_L, "großer Dwemerkrug");
+SafeAddString(SI_JACK_OF_ALL_TRADES_HM_D_POT, "Dwemertopf");
+SafeAddString(SI_JACK_OF_ALL_TRADES_HM_THIEVES_T, "Diebesgut");
+SafeAddString(SI_JACK_OF_ALL_TRADES_HM_SAFEBOX, "Wertkasette");
+SafeAddString(SI_JACK_OF_ALL_TRADES_HM_COFFER, "Kasette");
 
 -------------------------------------------------------------------------------------------------
 -- Interact Text Strings (If you can find these in the files please let me know)  --
@@ -56,6 +81,7 @@ SafeAddString(SI_JACK_OF_ALL_TRADES_INTERACT_HARVEST, "Nehmen");
 SafeAddString(SI_JACK_OF_ALL_TRADES_INTERACT_LOOT, "Durchsuchen");
 SafeAddString(SI_JACK_OF_ALL_TRADES_INTERACT_UNLOCK, "Aufschließen");
 SafeAddString(SI_JACK_OF_ALL_TRADES_INTERACT_CHEST, "Truhe");
+SafeAddString(SI_JACK_OF_ALL_TRADES_INTERACT_CHEST_HIDDEN, "Versteckter Schatz");
 SafeAddString(SI_JACK_OF_ALL_TRADES_INTERACT_USE, "Benutzen");
 SafeAddString(SI_JACK_OF_ALL_TRADES_INTERACT_STEALFROM, "Inhalt stehlen");
 SafeAddString(SI_JACK_OF_ALL_TRADES_INTERACT_SEARCH, "Search");

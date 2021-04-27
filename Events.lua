@@ -1,145 +1,79 @@
+local EM = EVENT_MANAGER
 local name = JackOfAllTrades.name
 
-local EM = EVENT_MANAGER
-
 local skillData = {
-	-------------------------------------------------------------------------------------------------
-	-- Constants for Meticulous Dissambly --
-	-------------------------------------------------------------------------------------------------
-	meticulousDisassembly = {
-		rawName = 'meticulousDisassembly',
-		id = 83,
-		skillIndexToReplace = 1,
-		isOldSkill = false,
-		stations = {1,2,6,7}
-	},
-	-------------------------------------------------------------------------------------------------
-	-- Constants for Treasure Hunter --
-	-------------------------------------------------------------------------------------------------
-	treasureHunter = {
-		rawName = 'treasureHunter',
-		id = 79,
-		isOldSkill = false,
-		skillIndexToReplace = 1
-	},
-	-------------------------------------------------------------------------------------------------
-	-- Constants for Gifted Rider --
-	-------------------------------------------------------------------------------------------------
-	giftedRider = {
-		rawName = 'giftedRider',
-		id = 92,
-		isOldSkill = false,
-		skillIndexToReplace = 1
-	},
-	-------------------------------------------------------------------------------------------------
-	-- Constants for War Mount --
-	-------------------------------------------------------------------------------------------------
-	warMount = {
-		rawName = 'warMount',
-		id = 82,
-		isOldSkill = false,
-		skillIndexToReplace = 2
-	},
-	-------------------------------------------------------------------------------------------------
-	-- Constants for Professional Upkeep --
-	-------------------------------------------------------------------------------------------------
 	professionalUpkeep = {
-		rawName = 'professionalUpkeep',
 		id = 1,
-		isOldSkill = false,
-		skillIndexToReplace = 1
+		index = 4
 	},
-	-------------------------------------------------------------------------------------------------
-	-- Constants for Sustaining Shadows --
-	-------------------------------------------------------------------------------------------------
-	sustainingShadows = {
-		rawName = 'sustainingShadows',
-		id = 65,
-		isOldSkill = false,
-		skillIndexToReplace = 1
+	meticulousDisassembly = {
+		id = 83,
+		index = 4
 	},
-	-------------------------------------------------------------------------------------------------
-	-- Constants for Reel Technique --
-	-------------------------------------------------------------------------------------------------
-	reelTechnique = {
-		rawName = 'reelTechnique',
-		id = 88,
-		isOldSkill = false,
-		skillIndexToReplace = 1
-	},
-	-------------------------------------------------------------------------------------------------
-	-- Constants for Angler's Instinct --
-	-------------------------------------------------------------------------------------------------
-	anglersInstincts = {
-		rawName = 'anglersInstincts',
-		id = 89,
-		isOldSkill = false,
-		skillIndexToReplace = 2
-	},
-	-------------------------------------------------------------------------------------------------
-	-- Constants for Master Gatherer --
-	-------------------------------------------------------------------------------------------------
 	masterGatherer = {
-		rawName = 'masterGatherer',
 		id = 78,
-		isOldSkill = false,
-		skillIndexToReplace = 2
+		index = 4
 	},
-	-------------------------------------------------------------------------------------------------
-	-- Constants for Plentiful Harvest --
-	-------------------------------------------------------------------------------------------------
 	plentifulHarvest = {
-		rawName = 'plentifulHarvest',
 		id = 81,
-		isOldSkill = false,
-		skillIndexToReplace = 1
+		index = 3
 	},
-	-------------------------------------------------------------------------------------------------
-	-- Constants for Cutpurses --
-	-------------------------------------------------------------------------------------------------
-	cutpursesArt = {
-		rawName = 'cutpursesArt',
-		id = 90,
-		isOldSkill = false,
-		skillIndexToReplace = 2
+	treasureHunter = {
+		id = 79,
+		index = 4
 	},
-	-------------------------------------------------------------------------------------------------
-	-- Constants for Shadowstrike --
-	-------------------------------------------------------------------------------------------------
-	shadowstrike = {
-		rawName = 'shadowstrike',
-		id = 80,
-		isOldSkill = false,
-		skillIndexToReplace = 3
-	},
-	-------------------------------------------------------------------------------------------------
-	-- Constants for Infamous --
-	-------------------------------------------------------------------------------------------------
-	infamous = {
-		rawName = 'infamous',
-		id = 77,
-		isOldSkill = false,
-		skillIndexToReplace = 1 -- You cannot repair your gear at a fence so will not conflict with Professional Upkeep
-	},
-	-------------------------------------------------------------------------------------------------
-	-- Constants for Homemaker --
-	-------------------------------------------------------------------------------------------------
 	homemaker = {
-		rawName = 'homemaker',
 		id = 91,
-		isOldSkill = false,
-		skillIndexToReplace = 2 -- Secondary skill as when you loot a chest the Treasure Hunter perk will be the primary star
+		index = 3
 	},
-	-------------------------------------------------------------------------------------------------
-	-- Constants for Fade Away --
-	-------------------------------------------------------------------------------------------------
-	fadeAway = {
-		rawName = 'fadeAway',
-		id = 84,
-		isOldSkill = false,
-		skillIndexToReplace = 2
+	reelTechnique = {
+		id = 88,
+		index = 4
+	},
+	anglersInstinct = {
+		id = 89,
+		index = 3
+	},
+	cutpursesArt = {
+		id = 90,
+		index = 4
+	},
+	infamous = {
+		id = 77,
+		index = 4
+	},
+	rationer = {
+		id = 85,
+		index = 4
+	},
+	liquidEfficiency = {
+		id = 86,
+		index = 3
+	},
+	giftedRider = {
+		id = 92,
+		index = 4
+	},
+	warMount = {
+		id = 82,
+		index = 3
 	}
 }
+
+local professionalUpkeep = skillData.professionalUpkeep
+local meticulousDisassembly = skillData.meticulousDisassembly
+local masterGatherer = skillData.masterGatherer
+local plentifulHarvest = skillData.plentifulHarvest
+local treasureHunter = skillData.treasureHunter
+local homemaker = skillData.homemaker
+local reelTechnique = skillData.reelTechnique
+local anglersInstinct = skillData.anglersInstinct
+local cutpursesArt = skillData.cutpursesArt
+local infamous = skillData.infamous
+local rationer = skillData.rationer
+local liquidEfficiency = skillData.liquidEfficiency
+local giftedRider = skillData.giftedRider
+local warMount = skillData.warMount
 
 local CPTexture = {
 	craft = "|t24:24:esoui/art/champion/champion_points_stamina_icon-hud-32.dds|t",
@@ -147,179 +81,260 @@ local CPTexture = {
 	fitness = "|t24:24:esoui/art/champion/champion_points_health_icon-hud-32|t",
 }
 
-function JackOfAllTrades.GetStringOfSkillNames(skillIndexToReplace)
-    local output = ""
-    for _, skill in pairs(skillData) do
-    	if skill.skillIndexToReplace == skillIndexToReplace then
-    		output = output .. "\n" .. ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(skill.id))
-    	end
-    end
-    return output
-end
-
--------------------------------------------------------------------------------------------------
--- Utility to check if table has value  --
--------------------------------------------------------------------------------------------------
-local function has_value (val, tab)
-    for index, value in ipairs(tab) do
-        if value == val then
-            return true
-        end
-    end
-    return false
-end
-
--------------------------------------------------------------------------------------------------
--- Load in skill data  --
-------------------------------------------------------------------------------------------------- 
-local skill = {
-	meticulousDisassembly = JackOfAllTrades.CreateCPData(skillData.meticulousDisassembly),
-	treasureHunter = JackOfAllTrades.CreateCPData(skillData.treasureHunter),
-
-	giftedRider = JackOfAllTrades.CreateCPData(skillData.giftedRider),
-	warMount = JackOfAllTrades.CreateCPData(skillData.warMount),
-
-	professionalUpkeep = JackOfAllTrades.CreateCPData(skillData.professionalUpkeep),
-	infamous = JackOfAllTrades.CreateCPData(skillData.infamous),
-
-	reelTechnique = JackOfAllTrades.CreateCPData(skillData.reelTechnique),
-	anglersInstincts = JackOfAllTrades.CreateCPData(skillData.anglersInstincts),
-
-	masterGatherer = JackOfAllTrades.CreateCPData(skillData.masterGatherer),
-	plentifulHarvest = JackOfAllTrades.CreateCPData(skillData.plentifulHarvest),
-
-	cutpursesArt = JackOfAllTrades.CreateCPData(skillData.cutpursesArt),
-	shadowstrike = JackOfAllTrades.CreateCPData(skillData.shadowstrike),
-
-	homemaker = JackOfAllTrades.CreateCPData(skillData.homemaker),
-
-	sustainingShadows = JackOfAllTrades.CreateCPData(skillData.sustainingShadows),
-
-	fadeAway = JackOfAllTrades.CreateCPData(skillData.fadeAway)
-}
-
--------------------------------------------------------------------------------------------------
--- Assign skill category data, this has to be called after addon has been initzilized  --
-------------------------------------------------------------------------------------------------- 
-local function AssignSkillCategoryData()
-	for _, star in pairs(skillData) do
-		skill[star.rawName].skillIndexToReplace = JackOfAllTrades.savedVariables.category[star.rawName]
-	end
-end
-
--------------------------------------------------------------------------------------------------
--- Update skill category data, this will be called when the user alters the menu --
-------------------------------------------------------------------------------------------------- 
-function JackOfAllTrades.UpdateSkillCategory(rawName)
-	skill[rawName].skillIndexToReplace = JackOfAllTrades.savedVariables.category[rawName]
-end
-
--------------------------------------------------------------------------------------------------
--- Get id of a known skill rawName  --
--------------------------------------------------------------------------------------------------
-function JackOfAllTrades.GetSkillId(str) -- TODO: Use a for loop + pairs and a lookup table.
-	return skillData[str].id
-end
-
-local function SendNotification(variableSkillName)
-	if JackOfAllTrades.savedVariables.notification[variableSkillName] then 
-		local texture = CPTexture.craft
-		CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.notifications .. texture .. ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(skillData[variableSkillName].id)) .. " " .. GetString(SI_JACK_OF_ALL_TRADES_SLOTTED) .. ".") 
+function JackOfAllTrades.GetSkillId(rawSkillName)
+	if skillData[rawSkillName] then 
+		return skillData[rawSkillName].id
 	end
 end
 
 local function SendWarning(variableSkillName)
 	if JackOfAllTrades.savedVariables.warnings[variableSkillName] then
 		local texture = CPTexture.craft 
-		CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.warnings .. texture .. zo_strformat(SI_JACK_OF_ALL_TRADES_NOT_ENOUGH_POINTS_WARNING, ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(skillData[variableSkillName].id)), GetString(SI_JACK_OF_ALL_TRADES_METICULOUS_DISASSEMBLY_BENEFIT)))
+		CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.warnings .. texture .. zo_strformat(SI_JACK_OF_ALL_TRADES_NOT_ENOUGH_POINTS_WARNING, ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(skillData[variableSkillName].id))))
 	end
 end
 
--------------------------------------------------------------------------------------------------
--- Meticulous Dissambly  --
--------------------------------------------------------------------------------------------------
-function JackOfAllTrades.openCraftingStation(eventcode, station)
-	if not JackOfAllTrades.savedVariables.enable.meticulousDisassembly then return end
-	-- Check if we are a station that Meticulous Disassembly will affect
-	if not has_value(station, skillData.meticulousDisassembly.stations) then return end
-	local result = skill.meticulousDisassembly:AttemptToSlot()
-	if result then 
-		SendNotification('meticulousDisassembly')
-	elseif JackOfAllTrades.savedVariables.warnings.meticulousDisassembly then 
-		SendWarning('meticulousDisassembly')
+local skillNotificationMessageQueue = {
+	professionalUpkeep = false,
+	meticulousDisassembly = false,
+	masterGatherer = false,
+	plentifulHarvest = false,
+ 	treasureHunter = false,
+	homemaker = false,
+ 	reelTechnique = false,
+ 	anglersInstinct = false,
+ 	cutpursesArt = false,
+ 	infamous = false,
+ 	rationer = false,
+ 	liquidEfficiency = false,
+ 	giftedRider = false,
+ 	warMount = false
+}
+
+local cooldownOverMsgQueued = false
+
+function JackOfAllTrades.sendCooldownOverMessage()
+	local texture = CPTexture.craft
+	CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.notifications .. texture .. GetString(SI_JACK_OF_ALL_TRADES_COOLDOWN_OVER) .. ".") 
+end
+
+local function SendNotification(variableSkillName)
+	if JackOfAllTrades.savedVariables.notification[variableSkillName] then 
+		local texture = CPTexture.craft
+		if JackOfAllTrades.GetCurrentCooldown() == 30 or JackOfAllTrades.GetCurrentCooldown() == 0 then
+			CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.notifications .. texture .. ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(skillData[variableSkillName].id)) .. " " .. GetString(SI_JACK_OF_ALL_TRADES_SLOTTED) .. ".") 
+			return
+		else
+			if JackOfAllTrades.savedVariables.slotSkillsAfterCooldownEnds then
+				CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.notifications .. texture .. ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(skillData[variableSkillName].id)) .. " " .. zo_strformat(SI_JACK_OF_ALL_TRADES_DELAYED_SLOTTED, JackOfAllTrades.GetCurrentCooldown()) .. ".") 
+				if skillNotificationMessageQueue[variableSkillName] then return end
+				skillNotificationMessageQueue[variableSkillName] = true
+				return
+			else
+				CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.notifications .. texture .. ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(skillData[variableSkillName].id)) .. " " .. zo_strformat(SI_JACK_OF_ALL_TRADES_COOLDOWN_DISABLED, JackOfAllTrades.GetCurrentCooldown()) .. ".") 
+				if JackOfAllTrades.savedVariables.altertedAfterCooldownOver and not cooldownOverMsgQueued then 
+					cooldownOverMsgQueued = true
+					zo_callLater(function() 
+						cooldownOverMsgQueued = false 
+						CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.notifications .. texture .. GetString(SI_JACK_OF_ALL_TRADES_COOLDOWN_OVER) .. ".")  end, JackOfAllTrades.GetCurrentCooldown()*1000) 
+				end 
+				JackOfAllTrades.resetSkillQueue() -- If we don't want to slot the skill after the cooldown ends then we don't want anything in the skill queue.
+				return
+			end
+		end
 	end
 end
 
-function JackOfAllTrades.closeCraftingStation(eventcode, station)
-	-- Check if we are a station that Meticulous Disassembly will affect
-	if not has_value(station, skillData.meticulousDisassembly.stations) then return end
-	skill.meticulousDisassembly:AttemptToReturnSlot()
+local function resetSkillNotificationMessageQueue()
+	skillNotificationMessageQueue = {
+		professionalUpkeep = false,
+		meticulousDisassembly = false,
+		masterGatherer = false,
+		plentifulHarvest = false,
+	 	treasureHunter = false,
+		homemaker = false,
+	 	reelTechnique = false,
+	 	anglersInstinct = false,
+	 	cutpursesArt = false,
+	 	infamous = false,
+	 	rationer = false,
+	 	liquidEfficiency = false,
+	 	giftedRider = false,
+ 		warMount = false
+	}
+end	
+
+function JackOfAllTrades.SendQueuedNotifcations()
+	for skill, value in pairs(skillNotificationMessageQueue) do
+		if value then
+			SendNotification(skill)
+		end
+	end
+	resetSkillNotificationMessageQueue()
 end
 
--------------------------------------------------------------------------------------------------
--- Treasure Hunter  --
--------------------------------------------------------------------------------------------------
-local function StopOpeningChest()
-	--[[ If the player is mounted we don't want to replace their nodes with their standard ones again otherwise their mount speed would go down.
-	This function is called 3 seconds after harvesting begins, so in theory players could start gathering, cancel the action and then mount. --]]
-	if IsMounted() then return end
-	skill.treasureHunter:AttemptToReturnSlot()
+local function GetDesiredSlot(skillId, pairedSkillId, desiredSlot)
+	if GetSlotBoundId(desiredSlot, HOTBAR_CATEGORY_CHAMPION) == pairedSkillId then
+		if desiredSlot == 3 then 
+			if JackOfAllTrades.savedVariables.debug then d("Paired skill already slotted in slot " .. desiredSlot) end
+			return 4 
+		elseif desiredSlot == 4 then 
+			if JackOfAllTrades.savedVariables.debug then d("Paired skill already slotted in slot " .. desiredSlot) end
+			return 3 
+		else 
+			if JackOfAllTrades.savedVariables.debug then d("GetDesiredSlot got a slot that is not 3 or 4") end
+			return false 
+		end
+	end
+	return desiredSlot
+end
+
+local function OpenStore(e)
+	if not CanStoreRepair() then return false end
+	if GetRepairAllCost() == 0 then return false end
+	if not JackOfAllTrades.savedVariables.enable.professionalUpkeep then return false end
+	local result = JackOfAllTrades.AddCPNodeToQueue(professionalUpkeep.id, professionalUpkeep.index)
+	if result then
+		local slotResult = JackOfAllTrades.SlotAllStarsInQueue()
+		if slotResult ~= false then
+			SendNotification("professionalUpkeep")
+		end
+	elseif result == nil then
+		SendWarning("professionalUpkeep")
+	end
+end
+
+local function StartGathering()
+	if not JackOfAllTrades.savedVariables.enable.masterGatherer and not JackOfAllTrades.savedVariables.enable.plentifulHarvest then return end
+
+	local masterGathererResult = false
+	local plentifulHarvestResult = false
+
+	if JackOfAllTrades.savedVariables.enable.masterGatherer then 
+		masterGathererResult = JackOfAllTrades.AddCPNodeToQueue(masterGatherer.id, GetDesiredSlot(masterGatherer.id, plentifulHarvest.id, masterGatherer.index))
+	end
+
+	if JackOfAllTrades.savedVariables.enable.plentifulHarvest then 
+		plentifulHarvestResult = JackOfAllTrades.AddCPNodeToQueue(plentifulHarvest.id, GetDesiredSlot(plentifulHarvest.id, masterGatherer.id, plentifulHarvest.index))
+	end
+
+	if masterGathererResult or plentifulHarvestResult then
+		local slotResult = JackOfAllTrades.SlotAllStarsInQueue()
+		if slotResult ~= false then
+			if masterGathererResult then SendNotification("masterGatherer") end
+			if plentifulHarvestResult then SendNotification("plentifulHarvest") end
+		end
+	end
+
+	if masterGathererResult == nil then SendWarning("masterGatherer") end
+	if plentifulHarvestResult == nil then SendWarning("plentifulHarvest") end
+end
+
+local function SlotThHmPair()
+	if not JackOfAllTrades.savedVariables.enable.treasureHunter and not JackOfAllTrades.savedVariables.enable.homemaker then return end
+	local treasureHunterResult = false
+	local homemakerResult = false
+	if JackOfAllTrades.savedVariables.enable.treasureHunter then 
+		treasureHunterResult = JackOfAllTrades.AddCPNodeToQueue(treasureHunter.id, GetDesiredSlot(treasureHunter.id, homemaker.id, treasureHunter.index))
+	end
+	if JackOfAllTrades.savedVariables.enable.homemaker then 
+		homemakerResult = JackOfAllTrades.AddCPNodeToQueue(homemaker.id, GetDesiredSlot(homemaker.id, treasureHunter.id, homemaker.index))
+	end
+	if treasureHunterResult or homemakerResult then
+		local slotResult = JackOfAllTrades.SlotAllStarsInQueue()
+		if slotResult ~= false then
+			if treasureHunterResult then SendNotification("treasureHunter") end
+			if homemakerResult then SendNotification("homemaker") end
+		end
+	end
+	if treasureHunterResult == nil then SendWarning("treasureHunter") end
+	if homemakerResult == nil then SendWarning("homemaker") end
+end
+
+local function StartLooting()
+	if JackOfAllTrades.savedVariables.thHmPair then SlotThHmPair() return false end
+	if not JackOfAllTrades.savedVariables.enable.homemaker then return false end
+	local result = JackOfAllTrades.AddCPNodeToQueue(homemaker.id, homemaker.index)
+	if result then
+		local slotResult = JackOfAllTrades.SlotAllStarsInQueue()
+		if slotResult ~= false then
+			SendNotification("homemaker")
+		end
+	elseif result == nil then
+		SendWarning("homemaker")
+	end
 end
 
 local function StartOpeningChest()
-	if not JackOfAllTrades.savedVariables.enable.treasureHunter then return end
-	local result = skill.treasureHunter:AttemptToSlot()
+	if JackOfAllTrades.savedVariables.thHmPair then SlotThHmPair() return false end
+	if not JackOfAllTrades.savedVariables.enable.treasureHunter then return false end
+	local result = JackOfAllTrades.AddCPNodeToQueue(treasureHunter.id, treasureHunter.index)
 	if result then
-		SendNotification('treasureHunter')
-		zo_callLater(StopOpeningChest, 3000)
-	elseif result == nil then 
-		if JackOfAllTrades.savedVariables.warnings.treasureHunter then 
-			SendWarning('meticulousDisassembly')
-		end	
-	end
-end
-
--------------------------------------------------------------------------------------------------
--- Gifted Rider & War Mount  --
--------------------------------------------------------------------------------------------------
-function JackOfAllTrades.mountStateChanged(eventcode, mounted)
-	if mounted then
-		if JackOfAllTrades.savedVariables.enable.giftedRider then 
-			local giftedRiderResult = skill.giftedRider:AttemptToSlot()
-			if giftedRiderResult then
-				SendNotification('giftedRider')
-			elseif giftedRiderResult == nil then
-				SendWarning('giftedRider')
-			end
+		local slotResult = JackOfAllTrades.SlotAllStarsInQueue()
+		if slotResult ~= false then
+			SendNotification("treasureHunter")
 		end
-		if JackOfAllTrades.savedVariables.enable.warMount then 
-			local warMountResult = skill.warMount:AttemptToSlot()
-			if warMountResult then
-				SendNotification('warMount')
-			elseif warMountResult == nil then
-				SendWarning('warMount')
-			end
-		end
-	else
-		skill.giftedRider:AttemptToReturnSlot()
-	end
-end
-
--------------------------------------------------------------------------------------------------
--- Professional Upkeep  --
--------------------------------------------------------------------------------------------------
-function JackOfAllTrades.openStore(eventcode)
-	if not JackOfAllTrades.savedVariables.enable.professionalUpkeep then return end
-	local result = skill.professionalUpkeep:AttemptToSlot()
-	if result then 
-		SendNotification('professionalUpkeep')
 	elseif result == nil then
-		SendWarning('professionalUpkeep')
+		SendWarning("treasureHunter")
 	end
 end
 
-function JackOfAllTrades.closeStore(eventcode)
-	skill.professionalUpkeep:AttemptToReturnSlot()
+local function StartPickpocketing()
+	if not JackOfAllTrades.savedVariables.enable.cutpursesArt then return false end
+	local result = JackOfAllTrades.AddCPNodeToQueue(cutpursesArt.id, cutpursesArt.index)
+	if result then
+		local slotResult = JackOfAllTrades.SlotAllStarsInQueue()
+		if slotResult ~= false then
+			SendNotification("cutpursesArt")
+		end
+	elseif result == nil then
+		SendWarning("cutpursesArt")
+	end
+end
+
+local function OpenFence()
+	if not JackOfAllTrades.savedVariables.enable.infamous then return false end
+	local result = JackOfAllTrades.AddCPNodeToQueue(infamous.id, infamous.index)
+	if result then
+		local slotResult = JackOfAllTrades.SlotAllStarsInQueue()
+		if slotResult ~= false then
+			SendNotification("infamous")
+		end
+	elseif result == nil then
+		SendWarning("infamous")
+	end
+end
+
+local function DoesPlayerHaveAWritQuest()
+	for quest=1, GetNumJournalQuests() do
+		if GetJournalQuestType(quest) == QUEST_TYPE_CRAFTING then return true end
+	end
+	return false
+end
+
+local function OpenCraftingStation(e, table)
+	-- Check the crafting table supports MD
+	if table ~= 1 and table ~= 2 and table ~= 6 and table ~= 7 then return end
+
+	if not JackOfAllTrades.savedVariables.enable.meticulousDisassembly then return false end
+
+	if not JackOfAllTrades.savedVariables.slotMdWhilstDoingWrits then 
+		if DoesPlayerHaveAWritQuest() then
+			return false 
+		end
+	end
+
+	local result = JackOfAllTrades.AddCPNodeToQueue(meticulousDisassembly.id, meticulousDisassembly.index)
+	
+	if result then
+		local slotResult = JackOfAllTrades.SlotAllStarsInQueue()
+		if slotResult ~= false then 
+			SendNotification("meticulousDisassembly")
+		end
+	elseif result == nil then
+
+		SendWarning("meticulousDisassembly")
+	end
 end
 
 -------------------------------------------------------------------------------------------------
@@ -327,292 +342,164 @@ end
 -------------------------------------------------------------------------------------------------
 local delay = 2000 -- Delay so we don't have to check if we need to change CP 200 times a second
 
-local function startFishing()
-	local isReelTechniqueEnabled = JackOfAllTrades.savedVariables.enable.reelTechnique
-	local isAnglersInstinctsEnabled = JackOfAllTrades.savedVariables.enable.anglersInstincts
-	if not reelTechnique and not anglersInstincts then return end
-	if isReelTechniqueEnabled then 
-		local reelTechniqueResult = skill.reelTechnique:AttemptToSlot()
-		if reelTechniqueResult then
-			SendNotification('reelTechnique')
-		elseif reelTechniqueResult == nil then
-			SendWarning('reelTechnique')
+local function StartFishing()
+	if not JackOfAllTrades.savedVariables.enable.reelTechnique and not JackOfAllTrades.savedVariables.enable.anglersInstinct then return end
+	local reelTechniqueResult = false
+	local anglersInstinctResult = false
+	if JackOfAllTrades.savedVariables.enable.reelTechnique then 
+		reelTechniqueResult = JackOfAllTrades.AddCPNodeToQueue(reelTechnique.id, GetDesiredSlot(reelTechnique.id, anglersInstinct.id, reelTechnique.index))
+	end
+	if JackOfAllTrades.savedVariables.enable.anglersInstinct then 
+		anglersInstinctResult = JackOfAllTrades.AddCPNodeToQueue(anglersInstinct.id, GetDesiredSlot(anglersInstinct.id, reelTechnique.id, anglersInstinct.index))
+	end
+	if reelTechniqueResult or anglersInstinctResult then
+		local slotResult = JackOfAllTrades.SlotAllStarsInQueue()
+		if slotResult ~= false then
+			if reelTechniqueResult then SendNotification("reelTechnique") end
+			if anglersInstinctResult then SendNotification("anglersInstinct") end
 		end
 	end
-    if isAnglersInstinctsEnabled then 
-    	local anglersInstinctsResult = skill.anglersInstincts:AttemptToSlot()
-    	if anglersInstinctsResult then
-    		SendNotification('anglersInstincts')
-    	elseif anglersInstinctsResult == nil then 
-    		SendWarning('anglersInstincts')
-    	end
-    end
-    -- This will check every 2 seconds if we are still fishing, if we are not then return the CP
-    -- If you know a better way of doing this please let me know Cyber#0042 on discord.
-
-    EM:RegisterForUpdate(name .. "FishingCheck", delay, function()
-    	local interactText = select(1, GetGameCameraInteractableActionInfo())
-    	if interactText ~= GetString(SI_GAMECAMERAACTIONTYPE17) then
-    		skill.reelTechnique:AttemptToReturnSlot()
-    		EM:UnregisterForUpdate(name .. "FishingCheck")
-    	end
-    end)
+	if reelTechniqueResult == nil then SendWarning("reelTechnique") end
+	if anglersInstinctResult == nil then SendWarning("anglersInstinct") end
 end
 
--------------------------------------------------------------------------------------------------
--- Gathering --
--------------------------------------------------------------------------------------------------
-local function stopGathering()
-	--[[ If the player is mounted we don't want to replace their nodes with their standard ones again otherwise their mount speed would go down.
-	This function is called 3 seconds after harvesting begins, so in theory players could start gathering, cancel the action and then mount. --]]
-	if IsMounted() then return end
-	skill.masterGatherer:AttemptToReturnSlot()
+local trashPots = {
+	'|H0:item:27038:307:50:0:0:0:0:0:0:0:0:0:0:0:0:36:0:0:0:0:0|h|h',
+	'|H0:item:27037:307:50:0:0:0:0:0:0:0:0:0:0:0:0:36:0:0:0:0:0|h|h',
+	'|H0:item:27036:307:50:0:0:0:0:0:0:0:0:0:0:0:0:36:0:0:0:0:0|h|h'
+}
+
+local function isTrashPotion(itemLink)
+	for _, link in pairs(trashPots) do
+		if link == itemLink then return true end
+	end
+	return false
 end
 
-local function startGathering()
-	local isMasterGathererEnabled = JackOfAllTrades.savedVariables.enable.masterGatherer
-	local isPlentifulHarvestEnabled = JackOfAllTrades.savedVariables.enable.plentifulHarvest
+local function QuickSlotChanged(e, slot)
+	itemLink = GetSlotItemLink(slot)
 
-	if not isMasterGathererEnabled and not isPlentifulHarvestEnabled then return end
+	-- Trash pot check
+	if not JackOfAllTrades.savedVariables.slotLeTrashPots and isTrashPotion(itemLink) then return false end
 
-	if isMasterGathererEnabled then 
-		local masterGathererResult = skill.masterGatherer:AttemptToSlot()
-		if masterGathererResult then 
-			SendNotification('masterGatherer')
-		elseif masterGathererResult == nil then
-			SendWarning('masterGatherer')
+	consumableType, _ = GetItemLinkItemType(itemLink)
+	-- Check if we need to do anything
+	if consumableType ~= ITEMTYPE_FOOD and consumableType ~= ITEMTYPE_DRINK and consumableType ~= ITEMTYPE_POTION and consumableType ~= ITEMTYPE_POTION_BASE then return false end
+	if not JackOfAllTrades.savedVariables.enable.rationer and not JackOfAllTrades.savedVariables.enable.liquidEfficiency then return end
+
+	local rationerResult = false
+	local liquidEfficiencyResult = false
+
+	if JackOfAllTrades.savedVariables.enable.rationer and (consumableType == ITEMTYPE_FOOD or consumableType == ITEMTYPE_DRINK) then
+		rationerResult = JackOfAllTrades.AddCPNodeToQueue(rationer.id, rationer.index)
+	end
+
+	if JackOfAllTrades.savedVariables.enable.liquidEfficiency and (consumableType == ITEMTYPE_POTION or consumableType == ITEMTYPE_POTION_BASE) then
+		liquidEfficiencyResult = JackOfAllTrades.AddCPNodeToQueue(liquidEfficiency.id, liquidEfficiency.index)
+	end
+
+	if rationerResult or liquidEfficiencyResult then
+		local slotResult = JackOfAllTrades.SlotAllStarsInQueue()
+		if slotResult ~= false then 
+			if rationerResult then SendNotification("rationer") end
+			if liquidEfficiencyResult then SendNotification("liquidEfficiency") end
+		end
+	end	
+
+	if rationerResult == nil then SendWarning("rationer") end
+	if liquidEfficiencyResult == nil then SendWarning("liquidEfficiency") end
+end
+
+
+local function MountStateChanged(e, mounted)
+	if not mounted then return end
+
+	if not JackOfAllTrades.savedVariables.enable.giftedRider and not JackOfAllTrades.savedVariables.enable.warMount then return end
+
+	local giftedRiderResult = false
+	local warMountResult = false
+
+	if JackOfAllTrades.savedVariables.enable.giftedRider then
+		giftedRiderResult = JackOfAllTrades.AddCPNodeToQueue(giftedRider.id, giftedRider.index)
+	end
+
+	if JackOfAllTrades.savedVariables.enable.warMount then
+		warMountResult = JackOfAllTrades.AddCPNodeToQueue(warMount.id, warMount.index)
+	end 
+
+	if giftedRiderResult or warMountResult then
+		local slotResult = JackOfAllTrades.SlotAllStarsInQueue()
+		if slotResult ~= false then
+			if giftedRiderResult then SendNotification("giftedRider") end
+			if warMountResult then SendNotification("warMount") end
 		end
 	end
-    if isPlentifulHarvestEnabled then 
-    	local plentifulHarvestResult = skill.plentifulHarvest:AttemptToSlot()
-    	if plentifulHarvestResult then 
-			SendNotification('plentifulHarvest')
-    	elseif plentifulHarvestResult == nil then
-    		SendWarning('plentifulHarvest')
-    	end
-    end
-    
-	-- If we have enough points into either of them 
-	if skill.masterGatherer:AttemptToSlot() or skill.plentifulHarvest:AttemptToSlot() then
-		zo_callLater(stopGathering, 3000)
+
+	if giftedRiderResult == nil then SendWarning("giftedRider") end
+	if warMountResult == nil then SendWarning("warMount") end
+end
+
+local function IsHomemakerBenefical(text)
+	local homemakerSlottables = {
+		SI_JACK_OF_ALL_TRADES_HM_BACKPACK,
+		SI_JACK_OF_ALL_TRADES_HM_BARREL,
+		SI_JACK_OF_ALL_TRADES_HM_BARRELS,
+		SI_JACK_OF_ALL_TRADES_HM_BASKET,
+		SI_JACK_OF_ALL_TRADES_HM_CHEST,
+		SI_JACK_OF_ALL_TRADES_HM_CRATE,
+		SI_JACK_OF_ALL_TRADES_HM_CRATES,
+		SI_JACK_OF_ALL_TRADES_HM_CUPBOARD,
+		SI_JACK_OF_ALL_TRADES_HM_DRAWERS,
+		SI_JACK_OF_ALL_TRADES_HM_NIGHTSTAND,
+		SI_JACK_OF_ALL_TRADES_HM_URN,
+		SI_JACK_OF_ALL_TRADES_HM_WARDROBE,
+		SI_JACK_OF_ALL_TRADES_HM_DRESSER,
+		SI_JACK_OF_ALL_TRADES_HM_DESK,
+		SI_JACK_OF_ALL_TRADES_HM_TRUNK,
+		SI_JACK_OF_ALL_TRADES_HM_CABINET,
+		SI_JACK_OF_ALL_TRADES_HM_D_JUG,
+		SI_JACK_OF_ALL_TRADES_HM_D_JUG_L,
+		SI_JACK_OF_ALL_TRADES_HM_D_POT,
+		SI_JACK_OF_ALL_TRADES_HM_THIEVES_T,
+		SI_JACK_OF_ALL_TRADES_HM_SAFEBOX,
+		SI_JACK_OF_ALL_TRADES_HM_COFFER
+	}
+
+	for _, item in pairs(homemakerSlottables) do
+		if text == GetString(item) then return true end
 	end
 end
 
--------------------------------------------------------------------------------------------------
--- Pickpocket  --
--------------------------------------------------------------------------------------------------
-local function StopPickpocketing()
-	--[[ If the player is mounted we don't want to replace their nodes with their standard ones again otherwise their mount speed would go down.
-	This function is called 3 seconds after harvesting begins, so in theory players could start gathering, cancel the action and then mount. --]]
-	if IsMounted() then return end
-	skill.cutpursesArt:AttemptToReturnSlot()
-end
-
-local function StartPickpocketing()
-	if not JackOfAllTrades.savedVariables.enable.cutpursesArt then return end
-	local result = skill.cutpursesArt:AttemptToSlot()
-	if result then
-		SendNotification('cutpursesArt')
-		zo_callLater(StopPickpocketing, 3000)
-	elseif result == nil then 
-		if JackOfAllTrades.savedVariables.warnings.cutpursesArt then 
-			SendWarning('cutpursesArt')
-		end	
+function JackOfAllTrades.getHomemakerLootables()
+	local homemakerSlottables = {
+		SI_JACK_OF_ALL_TRADES_HM_BACKPACK,
+		SI_JACK_OF_ALL_TRADES_HM_BARREL,
+		SI_JACK_OF_ALL_TRADES_HM_BARRELS,
+		SI_JACK_OF_ALL_TRADES_HM_BASKET,
+		SI_JACK_OF_ALL_TRADES_HM_CHEST,
+		SI_JACK_OF_ALL_TRADES_HM_CRATE,
+		SI_JACK_OF_ALL_TRADES_HM_CRATES,
+		SI_JACK_OF_ALL_TRADES_HM_CUPBOARD,
+		SI_JACK_OF_ALL_TRADES_HM_DRAWERS,
+		SI_JACK_OF_ALL_TRADES_HM_NIGHTSTAND,
+		SI_JACK_OF_ALL_TRADES_HM_URN,
+		SI_JACK_OF_ALL_TRADES_HM_WARDROBE,
+		SI_JACK_OF_ALL_TRADES_HM_DRESSER,
+		SI_JACK_OF_ALL_TRADES_HM_DESK,
+		SI_JACK_OF_ALL_TRADES_HM_TRUNK,
+		SI_JACK_OF_ALL_TRADES_HM_CABINET,
+		SI_JACK_OF_ALL_TRADES_HM_D_JUG,
+		SI_JACK_OF_ALL_TRADES_HM_D_JUG_L,
+		SI_JACK_OF_ALL_TRADES_HM_D_POT,
+		SI_JACK_OF_ALL_TRADES_HM_THIEVES_T,
+		SI_JACK_OF_ALL_TRADES_HM_SAFEBOX,
+		SI_JACK_OF_ALL_TRADES_HM_COFFER
+	}
+	output = ''
+	for _, text in pairs(homemakerSlottables) do
+		output = output .. '\n' .. GetString(text)
 	end
-end
-
--------------------------------------------------------------------------------------------------
--- Synergy Changed - Blade of Woe star  --
--------------------------------------------------------------------------------------------------
-local isBladeOfWoeSlotted = false -- This is only for if the addon has slotted it
-local bladeOfWoECheckCountdown = 10 -- Check if we should reslot the players old skill after 10 seconds
-
-local function StopBladeOfWoe()
-	if skill.shadowstrike:AttemptToReturnSlot() then 
-		isBladeOfWoeSlotted = false 
-	end
-end
-
-local function StartBladeOfWoe()
-	if not JackOfAllTrades.savedVariables.enable.shadowstrike then return end
-	local result = skill.shadowstrike:AttemptToSlot()
-	if result then
-		SendNotification('shadowstrike')
-		isBladeOfWoeSlotted = true
-	elseif result == nil then 
-		if JackOfAllTrades.savedVariables.warnings.shadowstrike then 
-			SendWarning('shadowstrike')
-		end	
-	end
-end
-
-function JackOfAllTrades.SynergyChanged(eventcode)
-	local _, iconPath, _ = GetSynergyInfo()
-	if iconPath == "/esoui/art/icons/achievement_darkbrotherhood_003.dds" then
-		if isBladeOfWoeSlotted then return end
-		StartBladeOfWoe()
-		EM:RegisterForUpdate(name .. "BladeOfWoeCheck", 1000, function()
-		   	bladeOfWoECheckCountdown = bladeOfWoECheckCountdown - 1
-		   	if bladeOfWoECheckCountdown > 1 then 
-		   		StopBladeOfWoe()
-		   		EM:UnregisterForUpdate(name .. "BladeOfWoeCheck")
-			end
-	    end)
-	end
-end
-
--------------------------------------------------------------------------------------------------
--- Infamous  --
--------------------------------------------------------------------------------------------------
-function JackOfAllTrades.OpenFence(_, _, _)
-	if not JackOfAllTrades.savedVariables.enable.infamous then return end
-	local result = skill.infamous:AttemptToSlot()
-	if result then 
-		SendNotification('infamous')
-	elseif result == nil then
-		SendWarning('infamous')
-	end
-end
-
--------------------------------------------------------------------------------------------------
--- Looting - Homemaker  --
--------------------------------------------------------------------------------------------------
-local homemakerSlotted = false
-
-local function StopLooting()
-	--[[ If the player is mounted we don't want to replace their nodes with their standard ones again otherwise their mount speed would go down.
-	This function is called 3 seconds after harvesting begins, so in theory players could start gathering, cancel the action and then mount. --]]
-	if IsMounted() then
-		homemakerSlotted = false
-		return 
-	end
-	if skill.homemaker:AttemptToReturnSlot() then
-		homemakerSlotted = false
-	else 
-		EM:RegisterForUpdate(name .. "HomemakerCombatCheck", 5000, function()
-    	if not JackOfAllTrades.homemaker:isCPSkillSlotted() then 
-    		homemakerSlotted = false
-    		EM:UnregisterForUpdate(name .. "HomemakerCombatCheck")
-    	end
-    end)
-
-	end
-end
-
-
-local function StartLooting()
-	if not JackOfAllTrades.savedVariables.enable.homemaker then return end
-	local result = skill.homemaker:AttemptToSlot()
-	if result then
-		SendNotification('homemaker')
-		if not homemakerSlotted then
-			homemakerSlotted = true
-			zo_callLater(StopLooting, 1000)
-		end
-	elseif result == nil then 
-		if JackOfAllTrades.savedVariables.warnings.homemaker then 
-			SendWarning('homemaker')
-		end	
-	end
-end
-
--------------------------------------------------------------------------------------------------
--- Stealth State Changed  --
--------------------------------------------------------------------------------------------------
-local isSustainingShadowsSlotted = false
-
-local isBeingArrested = false -- This will be set true for a few seconds if we are being arrested to prevent Sustaing Shadows from being unslotted, as we are likely to sneak again after fleeing from a guard
-
-function JackOfAllTrades.stealthStateChanged(eventcode, unitTag, stealth)
-	if unitTag ~= 'player' then return end
-		if JackOfAllTrades.savedVariables.enable.giftedRider then 
-			if stealth ~= 0 then
-				local sustainingShadowsResult = skill.sustainingShadows:AttemptToSlot()
-				if sustainingShadowsResult then
-					isSustainingShadowsSlotted = true
-					SendNotification('sustainingShadows')
-				elseif sustainingShadowsResult == nil then
-					SendWarning('sustainingShadows')
-				end
-			elseif isSustainingShadowsSlotted then
-				if not isBeingArrested then
-					if skill.sustainingShadows:AttemptToReturnSlot() then
-						isSustainingShadowsSlotted = false
-					end
-				end
-			end
-		end
-end
-
--------------------------------------------------------------------------------------------------
--- Thieving - Fade Away  --
--------------------------------------------------------------------------------------------------
-local fadeAwaySlotted = false
-
-local function StopFadeAway()
-	if not fadeAwaySlotted then return end
-	--[[ If the player is mounted we don't want to replace their nodes with their standard ones again otherwise their mount speed would go down.
-	This function is called 3 seconds after harvesting begins, so in theory players could start gathering, cancel the action and then mount. --]]
-	if IsMounted() then
-		fadeAwaySlotted = false
-		return 
-	end
-	if skill.fadeAway:AttemptToReturnSlot() then
-		fadeAwaySlotted = false
-	else 
-		EM:RegisterForUpdate(name .. "FadeAwayCombatCheck", 5000, function()
-    	if not skill.fadeAway:isCPSkillSlotted() then 
-    		fadeAwaySlotted = false
-    		EM:UnregisterForUpdate(name .. "FadeAwayCombatCheck")
-    	end
-    end)
-
-	end
-end
-
-
-local function StartFadeAway()
-	if not JackOfAllTrades.savedVariables.enable.fadeAway then return end
-	local result = skill.fadeAway:AttemptToSlot()
-	if result then
-		SendNotification('fadeAway')
-		if not fadeAwaySlotted then
-			fadeAwaySlotted = true
-		end
-	elseif result == nil then 
-		if JackOfAllTrades.savedVariables.warnings.fadeAway then 
-			SendWarning('fadeAway')
-		end	
-	end
-end
-
-local clemencyCheckTime = 16 -- You can only stay in the window for 15 seconds
-local sustainingShadowsCheckTime = 20 -- Unsure of this value but going to go with it for now. Let me know if you think it should be reduced/ increased
-
-function JackOfAllTrades.BeingArrested(e, quitGame)
-	-- Prevent Sustaing Shadows from being unlslotted for 20 seconds.
-	isBeingArrested = true
-	zo_callLater(function() isBeingArrested = false end, sustainingShadowsCheckTime*1000)
-
-	StartFadeAway()
-	if GetTimeToClemencyResetInSeconds() == 0 then
-		EM:RegisterForUpdate(name .. "ClemancyCheck", 1000, function() 
-			if GetTimeToClemencyResetInSeconds() > 0 then
-				StopFadeAway()
-				EM:UnregisterForUpdate(name .. "ClemancyCheck")
-			end
-			clemencyCheckTime = clemencyCheckTime - 1
-			if clemencyCheckTime < 0 then
-				EM:UnregisterForUpdate(name .. "ClemancyCheck")
-			end
-		end)
-	end
-end
-
-function JackOfAllTrades.InfamyUpdated(e, old, new, oldThreshold, newThreshold)
-	if new < old then
-		StopFadeAway()
-	end
+	return output
 end
 
 -------------------------------------------------------------------------------------------------
@@ -620,65 +507,100 @@ end
 -------------------------------------------------------------------------------------------------
 -- Pre Hook for whenever the player presses the interact key
 local function OnInteractKeyPressed() 
-	local interactText, mainText, looted, _, additionalInfo, _, _, _ = GetGameCameraInteractableActionInfo()
+
+	local zoneId, _, _, _ =  GetUnitWorldPosition('player')
+
+	local interactText, mainText, looted, isOwned, additionalInfo, _, _, _ = GetGameCameraInteractableActionInfo()
 	-- FISHING
-	if additionalInfo == ADDITIONAL_INTERACT_INFO_FISHING_NODE then startFishing() return end
-	-- LOOTING
-	if (interactText == GetString(SI_JACK_OF_ALL_TRADES_INTERACT_SEARCH) or interactText == GetString(SI_JACK_OF_ALL_TRADES_INTERACT_STEALFROM)) and mainText ~= "Bookshelf" and not looted then
-		StartLooting()
-	end
+	if additionalInfo == ADDITIONAL_INTERACT_INFO_FISHING_NODE then StartFishing() return end
 	-- GATHERING
-	if interactText == GetString(SI_JACK_OF_ALL_TRADES_INTERACT_COLLECT) or interactText == GetString(SI_JACK_OF_ALL_TRADES_INTERACT_CUT) or interactText == GetString(SI_JACK_OF_ALL_TRADES_INTERACT_MINE) or interactText == GetString(SI_JACK_OF_ALL_TRADES_INTERACT_HARVEST) or interactText == GetString(SI_JACK_OF_ALL_TRADES_INTERACT_LOOT) then 
-		startGathering() 
+	if (interactText == GetString(SI_JACK_OF_ALL_TRADES_INTERACT_COLLECT) or interactText == GetString(SI_JACK_OF_ALL_TRADES_INTERACT_CUT) or interactText == GetString(SI_JACK_OF_ALL_TRADES_INTERACT_MINE) or interactText == GetString(SI_JACK_OF_ALL_TRADES_INTERACT_HARVEST)) then 
+		if zoneId == 1197 then return false end -- Check if we are in Stone Garden, if we are we don't want to slot gathering passives.
+		StartGathering() 
 	-- TREASURE HUNTER
-	elseif interactText == GetString(SI_JACK_OF_ALL_TRADES_INTERACT_UNLOCK) or (mainText == GetString(SI_JACK_OF_ALL_TRADES_INTERACT_CHEST) and interactText == GetString(SI_JACK_OF_ALL_TRADES_INTERACT_USE)) then 
-		StartOpeningChest()
+	elseif interactText == GetString(SI_JACK_OF_ALL_TRADES_INTERACT_UNLOCK) or ((mainText == GetString(SI_JACK_OF_ALL_TRADES_INTERACT_CHEST) or mainText == GetString(SI_JACK_OF_ALL_TRADES_INTERACT_CHEST_HIDDEN)) and interactText == GetString(SI_JACK_OF_ALL_TRADES_INTERACT_USE)) then 
+		if not isOwned then -- This is to stop it slotting on doors.
+			StartOpeningChest()
+		end
 	-- PICKPOCKETTING
 	elseif interactText == GetString(SI_JACK_OF_ALL_TRADES_INTERACT_PICKPOCKET) then 
 		StartPickpocketing()
+	-- LOOTING
+	else
+		if (interactText == GetString(SI_JACK_OF_ALL_TRADES_INTERACT_SEARCH) or interactText == GetString(SI_JACK_OF_ALL_TRADES_INTERACT_STEALFROM)) and mainText ~= "Bookshelf" and not looted then
+			if JackOfAllTrades.savedVariables.homemakerCorpses then
+				StartLooting()
+			else
+				if IsHomemakerBenefical(mainText) then
+					StartLooting()
+				end
+			end
+		end
 	end
+end
+
+local function SlotThInDungeon()
+	if JackOfAllTrades.savedVariables.slotThInDungeon then
+		if JackOfAllTrades.savedVariables.thHmPair then SlotThHmPair() return false end
+		if not JackOfAllTrades.savedVariables.enable.treasureHunter then return false end
+		local result = JackOfAllTrades.AddCPNodeToQueue(treasureHunter.id, treasureHunter.index)
+		if result then
+			local slotResult = JackOfAllTrades.SlotAllStarsInQueue()
+			if slotResult ~= false then
+				SendNotification("treasureHunter")
+			end
+		elseif result == nil then
+			SendWarning("treasureHunter")
+		end
+	end
+end
+
+local function OnPlayerActivated(_, _)
+	if IsUnitInDungeon('player') then SlotThInDungeon() end
+end
+
+local function LoadInSavedVariables()
+	for star, index in pairs(JackOfAllTrades.savedVariables.slotIndex) do
+		skillData[star].index = index
+	end
+	professionalUpkeep = skillData.professionalUpkeep
+	meticulousDisassembly = skillData.meticulousDisassembly
+	masterGatherer = skillData.masterGatherer
+	plentifulHarvest = skillData.plentifulHarvest
+	treasureHunter = skillData.treasureHunter
+	homemaker = skillData.homemaker
+	reelTechnique = skillData.reelTechnique
+	anglersInstinct = skillData.anglersInstinct
+	cutpursesArt = skillData.cutpursesArt
+	infamous = skillData.infamous
+	rationer = skillData.rationer
+	liquidEfficiency = skillData.liquidEfficiency
+	giftedRider = skillData.giftedRider
+	warMount = skillData.warMount
+end
+
+function JackOfAllTrades.UpdateSkillSlots()
+	LoadInSavedVariables()
 end
 
 -------------------------------------------------------------------------------------------------
 -- Register for events, we only want to do so if the API version is high enough  --
 -------------------------------------------------------------------------------------------------
-local function RegisterEvents()
-	-- Meticulous Dissambly Events
-	EM:RegisterForEvent(name, EVENT_CRAFTING_STATION_INTERACT, JackOfAllTrades.openCraftingStation)
-	EM:RegisterForEvent(name, EVENT_END_CRAFTING_STATION_INTERACT, JackOfAllTrades.closeCraftingStation)
+function JackOfAllTrades.InitEvents()
+	LoadInSavedVariables()
 
-	-- Gifted Rider & War Mount Events
-	EM:RegisterForEvent(name, EVENT_MOUNTED_STATE_CHANGED, JackOfAllTrades.mountStateChanged)
+	EM:RegisterForEvent(name, EVENT_OPEN_STORE, OpenStore)
+	EM:RegisterForEvent(name, EVENT_CRAFTING_STATION_INTERACT, OpenCraftingStation)
+	EM:RegisterForEvent(name, EVENT_OPEN_FENCE, OpenFence)
+	EM:RegisterForEvent(name, EVENT_ACTIVE_QUICKSLOT_CHANGED, QuickSlotChanged)
 
-	-- Professional Upkeep Events
-	EM:RegisterForEvent(name, EVENT_OPEN_STORE, JackOfAllTrades.openStore)
-	EM:RegisterForEvent(name, EVENT_CLOSE_STORE, JackOfAllTrades.closeStore)
+	EM:RegisterForEvent(name, EVENT_MOUNTED_STATE_CHANGED, MountStateChanged)
 
 	-- Is called whenever you press 'E'
 	-- For fishing, treasureHunter, gathering nodes etc.
 	ZO_PreHook(FISHING_MANAGER, "StartInteraction", OnInteractKeyPressed)
 
-	-- Blade of WoE events
-	EM:RegisterForEvent(name, EVENT_SYNERGY_ABILITY_CHANGED, JackOfAllTrades.SynergyChanged)
 
-	-- Infamous Events
-	EM:RegisterForEvent(name, EVENT_OPEN_FENCE, JackOfAllTrades.OpenFence)
-
-	-- Sustaining Shadows Events
-	EM:RegisterForEvent(name, EVENT_STEALTH_STATE_CHANGED, JackOfAllTrades.stealthStateChanged)
-
-	EM:RegisterForEvent(name, EVENT_JUSTICE_BEING_ARRESTED, JackOfAllTrades.BeingArrested)
-	EM:RegisterForEvent(name,  EVENT_JUSTICE_INFAMY_UPDATED, JackOfAllTrades.InfamyUpdated)
+	-- To check if the player is in a dungeon, so we can automatically slot Treasure Hunter, if required
+	EM:RegisterForEvent(name, EVENT_PLAYER_ACTIVATED, OnPlayerActivated)
 end
-
-
-function JackOfAllTrades.InitEvents()
-	RegisterEvents()
-	AssignSkillCategoryData()
-end
-
--------------------------------------------------------------------------------------------------
--- Register for General Events  --
--------------------------------------------------------------------------------------------------
-EM:RegisterForEvent(JackOfAllTrades.name, EVENT_ADD_ON_LOADED, JackOfAllTrades.AddonLoaded)
-EM:RegisterForEvent(JackOfAllTrades.name, EVENT_PLAYER_ACTIVATED, JackOfAllTrades.playerActivated)
