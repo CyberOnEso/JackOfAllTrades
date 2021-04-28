@@ -16,6 +16,7 @@ JackOfAllTrades.colours = {
 local name = JackOfAllTrades.name
 local EM = EVENT_MANAGER
 
+-- Constants from the game
 local CP = CHAMPION_PERKS
 local championBar = CHAMPION_PERKS.championBar
 local CPData = CHAMPION_DATA_MANAGER
@@ -26,6 +27,7 @@ local currentCPCooldown = 30
 
 JackOfAllTrades.isOnCooldown = false
 
+-- If the user is waiting for the cooldown to end then we can assign the queued CP after the cooldown ends
 local isWaitingForCooldownToEnd = false
 
 function JackOfAllTrades.GetCurrentCooldown()
@@ -121,6 +123,7 @@ function JackOfAllTrades.GetSkillQueue()
 	return skillQueue
 end
 
+-- Checks to see if the CP skill is slotted, only checks the green CP slots.
 local function isCPSlotted(skillId)
 	for index=1, 4 do
 		if GetSlotBoundId(index, HOTBAR_CATEGORY_CHAMPION) == skillId then
