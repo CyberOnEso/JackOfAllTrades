@@ -4,7 +4,7 @@
 JackOfAllTrades = {
 	name = "JackOfAllTrades",
 	author = '@CyberOnEso, @MMasing',
-	version = '1.2.8',
+	version = '1.2.9',
 	requiredAPIVersion = 100034
 }
 
@@ -32,6 +32,26 @@ function JackOfAllTrades.GetCurrentCooldown()
 	return currentCPCooldown 
 end
 
+local function EndCooldown()
+	if not JackOfAllTrades.isOnCooldown then return false end
+	currentCPCooldown = 0 
+	JackOfAllTrades.isOnCooldown = false 
+
+	if JackOfAllTrades.savedVariables.altertedAlwaysAfterCooldownOver then 
+		JackOfAllTrades.sendCooldownOverMessage()
+	end
+
+	EVENT_MANAGER:UnregisterForUpdate(JackOfAllTrades.name.."CooldownTimer") 
+
+	if JackOfAllTrades.savedVariables.debug then d("Cooldown over") end
+	-- If we are waiting for the cooldown to end to slot skills we can slot them now.
+	if isWaitingForCooldownToEnd then
+		JackOfAllTrades.SlotAllStarsInQueue()
+	end
+
+	return true
+end
+
 local function StartCooldown() 
 	-- If we are already on cooldown then we don't want to start the countdown again
 	if JackOfAllTrades.isOnCooldown == true then return false end
@@ -45,24 +65,13 @@ local function StartCooldown()
 		currentCPCooldown = currentCPCooldown - 1
 		-- If the cooldown is over
 		if currentCPCooldown <= 0 then 
-			currentCPCooldown = 0 
-			JackOfAllTrades.isOnCooldown = false 
-
-			if JackOfAllTrades.savedVariables.altertedAlwaysAfterCooldownOver then 
-				JackOfAllTrades.sendCooldownOverMessage()
-			end
-
-			EVENT_MANAGER:UnregisterForUpdate(JackOfAllTrades.name.."CooldownTimer") 
-
-			if JackOfAllTrades.savedVariables.debug then d("Cooldown over") end
-			-- If we are waiting for the cooldown to end to slot skills we can slot them now.
-			if isWaitingForCooldownToEnd then
-				JackOfAllTrades.SlotAllStarsInQueue()
-			end
+			EndCooldown()
 		end
 	end)
 	return true
 end
+
+
 
 -- The current skill queue, since we only want to ever slot two stars at a time it is two long.
 -- It stores both the skillId's and the skillIndexes
@@ -202,8 +211,26 @@ function AddonLoaded(e, addonName)
 	Initialize()
 end
 
+local oldZoneId = 0
+
+local function DidZoneChange()
+	newZoneId = GetZoneId(GetUnitZoneIndex('player'))
+	if newZoneId == oldZoneId then
+		return false
+	end
+	oldZoneId = GetZoneId(GetUnitZoneIndex('player'))
+	return true
+end
+
+local function PlayerActivated()
+	if DidZoneChange() then
+		EndCooldown()
+	end
+end
+
 EM:RegisterForEvent(name, EVENT_ADD_ON_LOADED, AddonLoaded)
-EVENT_MANAGER:RegisterForEvent(name, EVENT_CHAMPION_PURCHASE_RESULT, ChampionPurchase)
+EM:RegisterForEvent(name, EVENT_CHAMPION_PURCHASE_RESULT, ChampionPurchase)
+EM:RegisterForEvent(name, EVENT_PLAYER_ACTIVATED, PlayerActivated)
 
 -- Whenever the user confirms reassining champion points via the ingame GUI
 ZO_PreHook(CHAMPION_PERKS, "SpendPointsConfirmed", function()
