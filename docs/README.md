@@ -16,10 +16,10 @@ Whenever you mount it will automatically equip the Gifted Rider & War Mount skil
 ### Professional Upkeep
 Whenever you interact with a merchant it will automatically equip Professional Upkeep, allowing you to always get the lowest repair cost on your gear.
 
-## Reel Technique & Angler's Instinct
+### Reel Technique & Angler's Instinct
 Whenever you start fishing will equip these stars thus giving you faster fishing speed and increases the chance of catching higher quality fish.
 
-## Master Gatherer & Plentiful Harvest
+### Master Gatherer & Plentiful Harvest
 Whenever you start gatering a crafting node will equip these stars thus giving you faster harvesting speeds and double drop chances.
 
 This addon will not respec your champion points, and will not charge you 3000 gold etc.
