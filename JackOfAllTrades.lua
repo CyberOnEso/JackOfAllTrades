@@ -4,8 +4,8 @@
 JackOfAllTrades = {
 	name = "JackOfAllTrades",
 	author = '@CyberOnEso, @MMasing',
-	version = '1.2.9',
-	requiredAPIVersion = 100034
+	version = '1.2.11',
+	requiredAPIVersion = 100035
 }
 
 JackOfAllTrades.colours = {

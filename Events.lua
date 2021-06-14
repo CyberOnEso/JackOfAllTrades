@@ -90,7 +90,8 @@ end
 local function SendWarning(variableSkillName)
 	if JackOfAllTrades.savedVariables.warnings[variableSkillName] then
 		local texture = CPTexture.craft 
-		CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.warnings .. texture .. zo_strformat(SI_JACK_OF_ALL_TRADES_NOT_ENOUGH_POINTS_WARNING, ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(skillData[variableSkillName].id))))
+		if JackOfAllTrades.savedVariables.alertWarning then zo_alert(ERROR, nil ,JackOfAllTrades.savedVariables.colour.warnings .. texture .. zo_strformat(SI_JACK_OF_ALL_TRADES_NOT_ENOUGH_POINTS_WARNING, ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(skillData[variableSkillName].id))))
+		else CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.warnings .. texture .. zo_strformat(SI_JACK_OF_ALL_TRADES_NOT_ENOUGH_POINTS_WARNING, ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(skillData[variableSkillName].id)))) end
 	end
 end
 
@@ -119,19 +120,27 @@ function JackOfAllTrades.sendCooldownOverMessage()
 end
 
 local function SendNotification(variableSkillName)
+	local alertNotification = JackOfAllTrades.savedVariables.alertNotification
 	if JackOfAllTrades.savedVariables.notification[variableSkillName] then 
-		local texture = CPTexture.craft
+		local texture = ''
+		if JackOfAllTrades.savedVariables.textureNotification then texture = CPTexture.craft end
 		if JackOfAllTrades.GetCurrentCooldown() == 30 or JackOfAllTrades.GetCurrentCooldown() == 0 then
+			if alertNotification then ZO_Alert(ERROR, nil, (JackOfAllTrades.savedVariables.colour.notifications .. texture .. ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(skillData[variableSkillName].id)) .. " " .. GetString(SI_JACK_OF_ALL_TRADES_SLOTTED) .. ".")) return end
 			CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.notifications .. texture .. ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(skillData[variableSkillName].id)) .. " " .. GetString(SI_JACK_OF_ALL_TRADES_SLOTTED) .. ".") 
 			return
 		else
 			if JackOfAllTrades.savedVariables.slotSkillsAfterCooldownEnds then
-				CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.notifications .. texture .. ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(skillData[variableSkillName].id)) .. " " .. zo_strformat(SI_JACK_OF_ALL_TRADES_DELAYED_SLOTTED, JackOfAllTrades.GetCurrentCooldown()) .. ".") 
+				if alertNotification then 
+					ZO_Alert(ERROR, nil, JackOfAllTrades.savedVariables.colour.notifications .. texture .. ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(skillData[variableSkillName].id)) .. " " .. zo_strformat(SI_JACK_OF_ALL_TRADES_DELAYED_SLOTTED, JackOfAllTrades.GetCurrentCooldown()) .. ".") 
+				else
+					CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.notifications .. texture .. ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(skillData[variableSkillName].id)) .. " " .. zo_strformat(SI_JACK_OF_ALL_TRADES_DELAYED_SLOTTED, JackOfAllTrades.GetCurrentCooldown()) .. ".") 
+				end
 				if skillNotificationMessageQueue[variableSkillName] then return end
 				skillNotificationMessageQueue[variableSkillName] = true
 				return
 			else
-				CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.notifications .. texture .. ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(skillData[variableSkillName].id)) .. " " .. zo_strformat(SI_JACK_OF_ALL_TRADES_COOLDOWN_DISABLED, JackOfAllTrades.GetCurrentCooldown()) .. ".") 
+				if alertNotification then ZO_Alert(ERROR, nil, JackOfAllTrades.savedVariables.colour.notifications .. texture .. ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(skillData[variableSkillName].id)) .. " " .. zo_strformat(SI_JACK_OF_ALL_TRADES_COOLDOWN_DISABLED, JackOfAllTrades.GetCurrentCooldown()) .. ".")
+				else CHAT_SYSTEM:AddMessage(JackOfAllTrades.savedVariables.colour.notifications .. texture .. ZO_CachedStrFormat(SI_CHAMPION_STAR_NAME, GetChampionSkillName(skillData[variableSkillName].id)) .. " " .. zo_strformat(SI_JACK_OF_ALL_TRADES_COOLDOWN_DISABLED, JackOfAllTrades.GetCurrentCooldown()) .. ".")  end
 				if JackOfAllTrades.savedVariables.altertedAfterCooldownOver and not cooldownOverMsgQueued then 
 					cooldownOverMsgQueued = true
 					zo_callLater(function() 

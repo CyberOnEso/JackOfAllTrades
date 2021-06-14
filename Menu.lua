@@ -378,6 +378,22 @@ function JackOfAllTrades:InitMenu()
                     end
         },
         {
+            type = "checkbox",
+            name = SI_JACK_OF_ALL_TRADES_MENU_ALERT_NOTIFICATION,
+            getFunc = function() return self.savedVariables.alertNotification end,
+            setFunc = function(value) self.savedVariables.alertNotification = value end,
+            tooltip = SI_JACK_OF_ALL_TRADES_MENU_ALERT_NOTIFICATION_TOOLTIP,
+            width = "full"
+        },
+        {
+            type = "checkbox",
+            name = SI_JACK_OF_ALL_TRADES_MENU_TEXTURE_NOTIFICATION,
+            getFunc = function() return self.savedVariables.textureNotification end,
+            setFunc = function(value) self.savedVariables.textureNotification = value end,
+            tooltip = SI_JACK_OF_ALL_TRADES_MENU_TEXTURE_NOTIFICATION_TOOLTIP,
+            width = "full"
+        },
+        {
             type = "header",
             name = SI_JACK_OF_ALL_TRADES_WARNING,
             width = "full"
@@ -650,6 +666,14 @@ function JackOfAllTrades:InitMenu()
                         end 
                         return true
                     end
+        },
+        {
+            type = "checkbox",
+            name = SI_JACK_OF_ALL_TRADES_MENU_ALERT_WARNING,
+            getFunc = function() return self.savedVariables.alertWarning end,
+            setFunc = function(value) self.savedVariables.alertWarning = value end,
+            tooltip = SI_JACK_OF_ALL_TRADES_MENU_ALERT_WARNING_TOOLTIP,
+            width = "full"
         },
         {
             type = "header",
