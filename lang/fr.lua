@@ -56,6 +56,7 @@ SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_SLOT_TH_DUNGEON, "Active Chasseur de tr
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_COOLDOWN,"Temps de recharge")
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_RIDING, "Équitation");
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_CRAFTING, "Artisanat");
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_HARVESTING, "Cosecha");
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_LOOTING, "Pillage");
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_FISHING, "Pêche");
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_THIEVING, "Vol")

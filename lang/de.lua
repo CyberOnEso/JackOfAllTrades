@@ -37,6 +37,7 @@ SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_ADVANCED, "Das ist eine erweiterte Verb
 -- Categories
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_RIDING, "Reiten");
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_CRAFTING, "Herstellen");
+SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_HARVESTING, "Ernte");
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_LOOTING, "Erbeuten");
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_FISHING, "Fischen");
 SafeAddString(SI_JACK_OF_ALL_TRADES_MENU_THIEVING, "Stehlen");
