@@ -4,7 +4,7 @@
 JackOfAllTrades = {
 	name = "JackOfAllTrades",
 	author = '@CyberOnEso, @MMasing',
-	version = '1.2.11',
+	version = '1.2.12',
 	requiredAPIVersion = 100035
 }
 
