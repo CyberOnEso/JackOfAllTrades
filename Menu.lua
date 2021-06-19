@@ -155,6 +155,32 @@ function JackOfAllTrades:InitMenu()
                     minHeight = function() return 18 end, --or number for the minimum height of this control. Default: 26 (optional)
                     maxHeight = function() return 18 end, --or number for the maximum height of this control. Default: 4 * minHeight (optional)
                 },
+                {   
+                    type = "checkbox",
+                    name = GetFormattedChampionSkillName(self.GetSkillId("meticulousDisassembly")),
+                    getFunc = function() return self.savedVariables.notification.meticulousDisassembly end,
+                    setFunc = function(value) self.savedVariables.notification.meticulousDisassembly = value end,
+                    tooltip = GetChampionSkillDescription(self.GetSkillId("meticulousDisassembly"), 1000),
+                    width = "half"
+                },
+                {
+                    type = "custom",
+                    name = "Harvesting",
+                    --reference = "MyAddonCustomControl", -- unique name for your control to use as reference (optional)
+                    createFunc = function(customControl) 
+                        local wm = WINDOW_MANAGER
+                        customControl.header = wm:CreateControlFromVirtual(nil, customControl, "ZO_Options_SectionTitleLabel")
+                        local header = customControl.header
+                        --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
+                        header:SetAnchor(TOPLEFT)
+                        header:SetFont("ZoFontHeader2")
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_HARVESTING))
+                    end, -- function to call when this custom control was created (optional)
+                    refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
+                    width = "full", -- or "half" (optional)
+                    minHeight = function() return 18 end, --or number for the minimum height of this control. Default: 26 (optional)
+                    maxHeight = function() return 18 end, --or number for the maximum height of this control. Default: 4 * minHeight (optional)
+                },
                 {
                     type = "checkbox",
                     name = GetFormattedChampionSkillName(self.GetSkillId("masterGatherer")),
@@ -169,14 +195,6 @@ function JackOfAllTrades:InitMenu()
                     getFunc = function() return self.savedVariables.notification.plentifulHarvest end,
                     setFunc = function(value) self.savedVariables.notification.plentifulHarvest = value end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("plentifulHarvest"), 1000),
-                    width = "half"
-                },
-                {   
-                    type = "checkbox",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("meticulousDisassembly")),
-                    getFunc = function() return self.savedVariables.notification.meticulousDisassembly end,
-                    setFunc = function(value) self.savedVariables.notification.meticulousDisassembly = value end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("meticulousDisassembly"), 1000),
                     width = "half"
                 },
                 {
@@ -445,6 +463,32 @@ function JackOfAllTrades:InitMenu()
                     minHeight = function() return 18 end, --or number for the minimum height of this control. Default: 26 (optional)
                     maxHeight = function() return 18 end, --or number for the maximum height of this control. Default: 4 * minHeight (optional)
                 },
+                {   
+                    type = "checkbox",
+                    name = GetFormattedChampionSkillName(self.GetSkillId("meticulousDisassembly")),
+                    getFunc = function() return self.savedVariables.warnings.meticulousDisassembly end,
+                    setFunc = function(value) self.savedVariables.warnings.meticulousDisassembly = value end,
+                    tooltip = GetChampionSkillDescription(self.GetSkillId("meticulousDisassembly"), 1000),
+                    width = "half"
+                },
+                {
+                    type = "custom",
+                    name = "Harvesting",
+                    --reference = "MyAddonCustomControl", -- unique name for your control to use as reference (optional)
+                    createFunc = function(customControl) 
+                        local wm = WINDOW_MANAGER
+                        customControl.header = wm:CreateControlFromVirtual(nil, customControl, "ZO_Options_SectionTitleLabel")
+                        local header = customControl.header
+                        --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
+                        header:SetAnchor(TOPLEFT)
+                        header:SetFont("ZoFontHeader2")
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_HARVESTING))
+                    end, -- function to call when this custom control was created (optional)
+                    refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
+                    width = "full", -- or "half" (optional)
+                    minHeight = function() return 18 end, --or number for the minimum height of this control. Default: 26 (optional)
+                    maxHeight = function() return 18 end, --or number for the maximum height of this control. Default: 4 * minHeight (optional)
+                },
                 {
                     type = "checkbox",
                     name = GetFormattedChampionSkillName(self.GetSkillId("masterGatherer")),
@@ -459,14 +503,6 @@ function JackOfAllTrades:InitMenu()
                     getFunc = function() return self.savedVariables.warnings.plentifulHarvest end,
                     setFunc = function(value) self.savedVariables.warnings.plentifulHarvest = value end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("plentifulHarvest"), 1000),
-                    width = "half"
-                },
-                {   
-                    type = "checkbox",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("meticulousDisassembly")),
-                    getFunc = function() return self.savedVariables.warnings.meticulousDisassembly end,
-                    setFunc = function(value) self.savedVariables.warnings.meticulousDisassembly = value end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("meticulousDisassembly"), 1000),
                     width = "half"
                 },
                 {
@@ -727,6 +763,32 @@ function JackOfAllTrades:InitMenu()
                     minHeight = function() return 18 end, --or number for the minimum height of this control. Default: 26 (optional)
                     maxHeight = function() return 18 end, --or number for the maximum height of this control. Default: 4 * minHeight (optional)
                 },
+                {   
+                    type = "checkbox",
+                    name = GetFormattedChampionSkillName(self.GetSkillId("meticulousDisassembly")),
+                    getFunc = function() return self.savedVariables.enable.meticulousDisassembly end,
+                    setFunc = function(value) self.savedVariables.enable.meticulousDisassembly = value end,
+                    tooltip = GetChampionSkillDescription(self.GetSkillId("meticulousDisassembly"), 1000),
+                    width = "half"
+                },
+                {
+                    type = "custom",
+                    name = "Harvesting",
+                    --reference = "MyAddonCustomControl", -- unique name for your control to use as reference (optional)
+                    createFunc = function(customControl) 
+                        local wm = WINDOW_MANAGER
+                        customControl.header = wm:CreateControlFromVirtual(nil, customControl, "ZO_Options_SectionTitleLabel")
+                        local header = customControl.header
+                        --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
+                        header:SetAnchor(TOPLEFT)
+                        header:SetFont("ZoFontHeader2")
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_HARVESTING))
+                    end, -- function to call when this custom control was created (optional)
+                    refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
+                    width = "full", -- or "half" (optional)
+                    minHeight = function() return 18 end, --or number for the minimum height of this control. Default: 26 (optional)
+                    maxHeight = function() return 18 end, --or number for the maximum height of this control. Default: 4 * minHeight (optional)
+                },
                 {
                     type = "checkbox",
                     name = GetFormattedChampionSkillName(self.GetSkillId("masterGatherer")),
@@ -741,14 +803,6 @@ function JackOfAllTrades:InitMenu()
                     getFunc = function() return self.savedVariables.enable.plentifulHarvest end,
                     setFunc = function(value) self.savedVariables.enable.plentifulHarvest = value end,
                     tooltip = GetChampionSkillDescription(self.GetSkillId("plentifulHarvest"), 1000),
-                    width = "half"
-                },
-                {   
-                    type = "checkbox",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("meticulousDisassembly")),
-                    getFunc = function() return self.savedVariables.enable.meticulousDisassembly end,
-                    setFunc = function(value) self.savedVariables.enable.meticulousDisassembly = value end,
-                    tooltip = GetChampionSkillDescription(self.GetSkillId("meticulousDisassembly"), 1000),
                     width = "half"
                 },
                 {
@@ -1006,6 +1060,33 @@ function JackOfAllTrades:InitMenu()
                 },
                 {
                     type = "dropdown",
+                    name = GetFormattedChampionSkillName(self.GetSkillId("meticulousDisassembly")),
+                    choices = {1,2,3,4},
+                    getFunc = function() return self.savedVariables.slotIndex.meticulousDisassembly end,
+                    setFunc = function(value) self.savedVariables.slotIndex.meticulousDisassembly = value refreshConflict("meticulousDisassembly") end,
+                    sort = "numeric-up",
+                    width = "half"
+                },
+                {
+                    type = "custom",
+                    name = "Harvesting",
+                    --reference = "MyAddonCustomControl", -- unique name for your control to use as reference (optional)
+                    createFunc = function(customControl) 
+                        local wm = WINDOW_MANAGER
+                        customControl.header = wm:CreateControlFromVirtual(nil, customControl, "ZO_Options_SectionTitleLabel")
+                        local header = customControl.header
+                        --header:SetAnchor(TOPLEFT, divider, BOTTOMLEFT)
+                        header:SetAnchor(TOPLEFT)
+                        header:SetFont("ZoFontHeader2")
+                        header:SetText(GetString(SI_JACK_OF_ALL_TRADES_MENU_HARVESTING))
+                    end, -- function to call when this custom control was created (optional)
+                    refreshFunc = function(customControl) end, -- function to call when panel/controls refresh (optional)
+                    width = "full", -- or "half" (optional)
+                    minHeight = function() return 18 end, --or number for the minimum height of this control. Default: 26 (optional)
+                    maxHeight = function() return 18 end, --or number for the maximum height of this control. Default: 4 * minHeight (optional)
+                },
+                {
+                    type = "dropdown",
                     name = GetFormattedChampionSkillName(self.GetSkillId("masterGatherer")),
                     choices = {1,2,3,4},
                     getFunc = function() return self.savedVariables.slotIndex.masterGatherer end,
@@ -1019,15 +1100,6 @@ function JackOfAllTrades:InitMenu()
                     choices = {1,2,3,4},
                     getFunc = function() return self.savedVariables.slotIndex.plentifulHarvest end,
                     setFunc = function(value) self.savedVariables.slotIndex.plentifulHarvest = value refreshConflict("plentifulHarvest") end,
-                    sort = "numeric-up",
-                    width = "half"
-                },
-                {
-                    type = "dropdown",
-                    name = GetFormattedChampionSkillName(self.GetSkillId("meticulousDisassembly")),
-                    choices = {1,2,3,4},
-                    getFunc = function() return self.savedVariables.slotIndex.meticulousDisassembly end,
-                    setFunc = function(value) self.savedVariables.slotIndex.meticulousDisassembly = value refreshConflict("meticulousDisassembly") end,
                     sort = "numeric-up",
                     width = "half"
                 },

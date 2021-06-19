@@ -60,6 +60,7 @@ ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_MENU_SLOT_TH_DUNGEON", "Slot treasure h
 -- Categories
 ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_MENU_RIDING", "Riding")
 ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_MENU_CRAFTING", "Crafting")
+ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_MENU_HARVESTING", "Harvesting")
 ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_MENU_LOOTING", "Looting")
 ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_MENU_FISHING", "Fishing")
 ZO_CreateStringId("SI_JACK_OF_ALL_TRADES_MENU_THIEVING", "Thieving")
